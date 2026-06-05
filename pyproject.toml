@@ -1,9 +1,0 @@
-[project]
-name = "qaira-semantic-compiler"
-version = "60.0.0"
-description = "QAira Semantic Compiler Platform"
-requires-python = ">=3.11"
-dependencies = ["pyyaml"]
-
-[tool.setuptools.packages.find]
-where = ["src"]

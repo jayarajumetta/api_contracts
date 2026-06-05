@@ -1,46 +1,38 @@
-# QAira Semantic Compiler Platform V63 — Accuracy Restore
+# QAira Semantic Compiler — Clean Production Runtime
 
-V63 is based on the stable V61 runtime, not the V62 no-hang branch.
-
-## What V63 fixes
-
-Your V61 run completed, but accuracy regressed:
+This package intentionally has **one orchestrator only**:
 
 ```text
-bodyDetected: 1 / 123
-bodyDetectionRate: 0.81%
+src/qaira_semantic_compiler/orchestrator.py
 ```
 
-Root cause:
+Every stage is a separate agent file:
 
 ```text
-old regex parser stopped at async (req, reply)
-rawHandler became only "async (req"
+agents/source_detection_agent.py
+agents/route_discovery_agent.py
+agents/body_discovery_agent.py
+agents/params_discovery_agent.py
+agents/param_type_discovery_agent.py
+agents/validation_schema_agent.py
+agents/import_graph_agent.py
+agents/service_graph_agent.py
+agents/schema_attachment_agent.py
+agents/response_discovery_agent.py
+agents/contract_builder_agent.py
+agents/relationship_agent.py
+agents/test_generation_agent.py
+agents/quality_gate_agent.py
+agents/llm_gateway_agent.py
+agents/artifact_manifest_agent.py
 ```
 
-V63 replaces the old route regex with a balanced parenthesis route-call scanner.
-
-## Expected result
-
-The route handler body should no longer truncate at `async (req`.
-
-You should see parser type:
-
-```text
-regex-balanced-v63
-```
-
-in:
-
-```text
-/output/ast/parser_capability_report.json
-/output/diagnostics/body_detection_detail.json
-```
+Generated output files do not include release/version names.
 
 ## Build
 
 ```bash
-docker build -t qaira/semantic-compiler:v63 .
+docker build -t qaira/semantic-compiler:clean .
 ```
 
 ## Run
@@ -49,9 +41,11 @@ docker build -t qaira/semantic-compiler:v63 .
 docker run --rm \
   -e PYTHONUNBUFFERED=1 \
   -e OPENAI_API_KEY="$OPENAI_API_KEY" \
+  -e GIT_USERNAME="$GIT_USERNAME" \
+  -e GIT_TOKEN="$GIT_TOKEN" \
   -v /Users/jayarajumetta/MJ/qaira:/repo:ro \
   -v /Users/jayarajumetta/Downloads/volume/output:/output \
   -v /Users/jayarajumetta/Downloads/volume/config.yaml:/config/config.yaml:ro \
   -v /Users/jayarajumetta/Downloads/volume/learning:/learning \
-  qaira/semantic-compiler:v63
+  qaira/semantic-compiler:clean
 ```
