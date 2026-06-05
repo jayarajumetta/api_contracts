@@ -16,6 +16,8 @@ class GitFinalizationAgent:
             "enabled":bool(cfg.get("enabled",False)),
             "executeGit":bool(cfg.get("execute_git",False)),
             "pushRequested":bool(cfg.get("push",False)),
+            "gitBinaryAvailable":False,
+            "gitVersion":"",
             "gitExecuted":False,
             "committed":False,
             "pushed":False,
@@ -23,6 +25,10 @@ class GitFinalizationAgent:
             "prNetworkEnabled":bool(pr_cfg.get("execute_network_calls",False)),
             "prCreated":False
         }
+
+        git_check=self.git_preflight()
+        report.update(git_check)
+        self.ctx.write_json("git/preflight_report.json",git_check)
 
         if not cfg.get("enabled",False):
             report["reason"]="git_finalization_disabled"
@@ -34,9 +40,15 @@ class GitFinalizationAgent:
             self.ctx.write_json("git/finalization_report.json",report)
             return AgentResult(self.name,"success",0.85,report,report)
 
+        if not git_check.get("gitBinaryAvailable"):
+            report["reason"]="git_binary_missing"
+            self.ctx.write_json("git/finalization_report.json",report)
+            return AgentResult(self.name,"failed_open",0.25,report,report)
+
         repo_url=cfg.get("repo_url","")
         token=os.environ.get(cfg.get("token_env","GIT_TOKEN"),"")
         username=os.environ.get(cfg.get("username_env","GIT_USERNAME"),"")
+
         if not repo_url:
             report["reason"]="repo_url_missing"
             self.ctx.write_json("git/finalization_report.json",report)
@@ -56,8 +68,11 @@ class GitFinalizationAgent:
         try:
             if clone_dir.exists():
                 shutil.rmtree(clone_dir)
-            auth_url=repo_url.replace("https://",f"https://{username}:{token}@") if username else repo_url.replace("https://",f"https://x-access-token:{token}@")
+
+            auth_url=self.auth_url(repo_url,username,token)
             subprocess.run(["git","clone",auth_url,str(clone_dir)],check=True,timeout=600)
+            report["gitExecuted"]=True
+
             subprocess.run(["git","checkout",base_branch],cwd=clone_dir,check=False,timeout=120)
             if work_branch!=base_branch:
                 subprocess.run(["git","checkout","-b",work_branch],cwd=clone_dir,check=True,timeout=120)
@@ -77,7 +92,6 @@ class GitFinalizationAgent:
 
             subprocess.run(["git","add","qaira-generated"],cwd=clone_dir,check=True,timeout=120)
             status=subprocess.check_output(["git","status","--porcelain"],cwd=clone_dir,timeout=120).decode()
-            report["gitExecuted"]=True
             report["copied"]=copied
             report["branch"]=work_branch
 
@@ -92,12 +106,14 @@ class GitFinalizationAgent:
                 if cfg.get("push",False):
                     subprocess.run(["git","push","origin",work_branch],cwd=clone_dir,check=True,timeout=300)
                     report["pushed"]=True
+
                     if pr_cfg.get("enabled",False):
                         pr=self.create_pr(repo_url,token,work_branch,base_branch,pr_cfg)
                         report["pullRequest"]=pr
                         report["prCreated"]=bool(pr.get("created"))
                 else:
                     report["reason"]="committed_locally_push_false"
+
         except Exception as e:
             report.update({"error":str(e),"failedOpen":True})
 
@@ -109,6 +125,20 @@ class GitFinalizationAgent:
             report,
             report
         )
+
+    def git_preflight(self):
+        try:
+            out=subprocess.check_output(["git","--version"],timeout=10).decode().strip()
+            return {"gitBinaryAvailable":True,"gitVersion":out}
+        except Exception as e:
+            return {"gitBinaryAvailable":False,"gitVersion":"","gitError":str(e)}
+
+    def auth_url(self,repo_url,username,token):
+        if repo_url.startswith("https://"):
+            if username:
+                return repo_url.replace("https://",f"https://{username}:{token}@")
+            return repo_url.replace("https://",f"https://x-access-token:{token}@")
+        return repo_url
 
     def create_pr(self,repo_url,token,head,base_branch,pr_cfg):
         if not pr_cfg.get("execute_network_calls",False):

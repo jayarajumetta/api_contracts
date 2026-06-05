@@ -21,7 +21,8 @@ class ResultsAnalyzerAgent:
             "accepted":accepted,
             "issues":issues,
             "nextRemediations":self.remediations(issues),
-            "summary":summary
+            "summary":summary,
+            "reactSafety":{"strictJsonTransport":True,"malformedQuoteEscapeFailOpen":True}
         }
         llm=LLMClient(self.ctx,self.logger).review("ResultsAnalyzerAgent",result,default={"accepted":accepted,"suggestions":result["nextRemediations"]})
         result["llmReview"]=llm

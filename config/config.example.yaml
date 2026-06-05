@@ -161,3 +161,17 @@ compatibility:
   - test_generation
   uploaded_config_mode: final-agentic-quality-runtime
   uploaded_config_agent_name: qaira-semantic-compiler-platform
+
+
+react_safety:
+  enabled: true
+  strict_json_transport: true
+  escape_prompt_payloads: true
+  tolerate_malformed_json: true
+  fail_open_on_parse_error: true
+  save_raw_llm_text: true
+
+git_diagnostics:
+  enabled: true
+  require_git_binary: true
+  write_preflight_report: true

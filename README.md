@@ -1,96 +1,50 @@
-# QAira Semantic Compiler — Final Compatible Auto-Iterative Runtime
+# QAira Semantic Compiler — Final Git + LLM Safe Runtime
 
-This is the final package built for your current config style.
-
-It preserves the stable `contract-quality` baseline and wires the same interactive loop we followed manually:
+This package keeps the stable final-compatible contract engine and fixes the two issues from the latest run:
 
 ```text
-run agents
-analyze results
-rank top issues
-save / optionally call LLM review
-apply known deterministic remediation
-run again
-preserve best iteration
-finalize artifacts
-optionally git commit / push / PR
+1. git was missing inside Docker
+2. malformed quote/escape text in LLM/ReAct-style output should never crash the run
 ```
 
-## One orchestrator only
+## Docker Git fix
+
+The image now installs:
 
 ```text
-src/qaira_semantic_compiler/orchestrator.py
+git
+ca-certificates
+openssh-client
 ```
 
-## Supported config styles
+So `git clone`, `git commit`, `git push`, and GitHub PR preparation can run when enabled.
 
-This package accepts both:
+## LLM / ReAct safety fix
+
+LLM review now uses strict JSON transport:
 
 ```text
-auto_iteration + git_finalization + llm_review
+json.dumps prompt payload
+response_format json_object
+safe JSON parsing
+markdown/ReAct wrapper extraction
+malformed quote/escape fail-open
+raw LLM text saved
 ```
 
-and your current uploaded style:
+If malformed output occurs:
 
 ```text
-agentic_runtime + git_push + llm
+llm/responses/<agent>.json
+llm/raw/<agent>.txt
 ```
 
-A compatibility report is written here:
-
-```text
-runtime/config_compatibility_report.json
-```
-
-## Important Git / PR behavior
-
-Your uploaded config had:
-
-```yaml
-git_push:
-  enabled: true
-  execute_git: true
-  push: false
-```
-
-That means the agent may clone/commit locally inside the container, but it will not push unless:
-
-```yaml
-git_push:
-  push: true
-```
-
-For GitHub PR creation you must also set:
-
-```yaml
-pull_request:
-  enabled: true
-  execute_network_calls: true
-```
-
-## LLM behavior
-
-Your uploaded config had LLM enabled, but this package keeps actual network calls off by default for safety.
-
-To allow actual LLM calls:
-
-```yaml
-llm_review:
-  execute_network_calls: true
-```
-
-or add this compatible section:
-
-```yaml
-llm_review:
-  enabled: true
-  execute_network_calls: true
-```
+will capture it, and the run continues.
 
 ## Build
 
 ```bash
-docker build -t qaira/semantic-compiler:final .
+docker build -t qaira/semantic-compiler:final-git-safe .
 ```
 
 ## Run
@@ -105,21 +59,31 @@ docker run --rm \
   -v /Users/jayarajumetta/Downloads/volume/output:/output \
   -v /Users/jayarajumetta/Downloads/volume/config.yaml:/config/config.yaml:ro \
   -v /Users/jayarajumetta/Downloads/volume/learning:/learning \
-  qaira/semantic-compiler:final
+  qaira/semantic-compiler:final-git-safe
 ```
 
-## Key outputs
+## To actually push and create PR
+
+Your config must explicitly allow it:
+
+```yaml
+git_push:
+  enabled: true
+  execute_git: true
+  push: true
+
+pull_request:
+  enabled: true
+  execute_network_calls: true
+```
+
+## Verification files
 
 ```text
-summary/scan_summary.json
-quality/quality_gate_report.json
-analysis/results_analysis.json
-analysis/remediation_report.json
-iterations/iteration_*/...
-runtime/best_iteration.json
-runtime/final_run_report.json
-runtime/config_compatibility_report.json
+git/preflight_report.json
 git/finalization_report.json
-llm/prompts/*.json
-llm/responses/*.json
+llm/prompts/
+llm/responses/
+llm/raw/
+runtime/final_run_report.json
 ```
