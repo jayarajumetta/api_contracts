@@ -1,43 +1,42 @@
-# QAira Semantic Compiler — Pattern Establishment Runtime
+# QAira Semantic Compiler — Field Inference Runtime
 
-Continues from clean-enhanced.
+Continues from pattern-establishment.
 
-## Added pattern establishment agents
+## Fix focus
+
+The last run was stable:
 
 ```text
-ServiceBodyFieldAgent
-DbWriteFieldAgent
-ServiceBodyPropagationAgent
-InferredSchemaRegistryAgent
+apiContracts        241
+bodyDetected        114
+bodyFieldsKnown     58
+serviceEdges        959
+inferredSchemas     58
+quality             84.23
 ```
 
-## Purpose
-
-Move from:
+Remaining weak points:
 
 ```text
-body detected but fields unknown
+ServiceBodyPatterns 1
+DbWritePatterns     0
 ```
 
-to:
+This package improves:
 
 ```text
-fields inferred from service usage and DB write patterns
-```
-
-Expected improvement:
-
-```text
-bodyFieldsKnown increases
-inferredSchemas increases
-schemaAttachments increases
-OpenAPI request body fields improve
+service call argument capture
+service method parameter mapping
+body alias propagation
+SQL INSERT/UPDATE field extraction
+Prisma/Knex/repository object write extraction
+false field filtering such as equals/length
 ```
 
 ## Build
 
 ```bash
-docker build -t qaira/semantic-compiler:patterns .
+docker build -t qaira/semantic-compiler:field-inference .
 ```
 
 ## Run
@@ -52,5 +51,5 @@ docker run --rm \
   -v /Users/jayarajumetta/Downloads/volume/output:/output \
   -v /Users/jayarajumetta/Downloads/volume/config.yaml:/config/config.yaml:ro \
   -v /Users/jayarajumetta/Downloads/volume/learning:/learning \
-  qaira/semantic-compiler:patterns
+  qaira/semantic-compiler:field-inference
 ```
