@@ -31,6 +31,8 @@ from qaira_semantic_compiler.agents.llm_gateway_agent import LLMGatewayAgent
 from qaira_semantic_compiler.agents.artifact_manifest_agent import ArtifactManifestAgent
 from qaira_semantic_compiler.agents.api_documentation_agent import ApiDocumentationAgent
 from qaira_semantic_compiler.agents.self_healing_code_delta_agent import SelfHealingCodeDeltaAgent
+from qaira_semantic_compiler.agents.patch_library_agent import PatchLibraryAgent
+from qaira_semantic_compiler.agents.patch_effectiveness_agent import PatchEffectivenessAgent
 from qaira_semantic_compiler.agents.self_healing_llm_advisor_agent import SelfHealingLLMAdvisorAgent
 from qaira_semantic_compiler.agents.agent_performance_evaluator_agent import AgentPerformanceEvaluatorAgent
 from qaira_semantic_compiler.agents.results_analyzer_agent import ResultsAnalyzerAgent
@@ -111,6 +113,8 @@ class Orchestrator:
             AgentPerformanceEvaluatorAgent,
             SelfHealingLLMAdvisorAgent,
             SelfHealingCodeDeltaAgent,
+            PatchLibraryAgent,
+            PatchEffectivenessAgent,
             ApiDocumentationAgent,
             LLMGatewayAgent,
             ArtifactManifestAgent,

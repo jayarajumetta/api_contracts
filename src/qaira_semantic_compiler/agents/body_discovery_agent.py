@@ -24,6 +24,7 @@ class BodyDiscoveryAgent:
                 aliases.add("body")
 
             # Common business variable names.
+            aliases |= set((self.ctx.config.get("pattern_registry", {}) or {}).get("body_aliases", []))
             aliases |= {"payload","data","input","dto","requestBody","body"}
 
             fields=set()

@@ -291,3 +291,75 @@ artifact_quality:
     include_negative_tests: true
     include_edge_tests: true
     use_collection_variables: true
+
+
+patch_library:
+  enabled: true
+  apply_patches_during_iteration: true
+  max_patches_per_iteration: 5
+  min_confidence: 0.60
+  allow_source_file_modification: false
+  allow_runtime_config_mutation: true
+  allow_pattern_registry_mutation: true
+  require_pre_post_score_tracking: true
+  rollback_if_score_drops: true
+  rollback_drop_tolerance: 1.0
+  approved_actions:
+    RouteDiscoveryAgent:
+      - ROUTE_ENABLE_GLOBAL_JS_TS_SCAN
+      - ROUTE_ENABLE_BALANCED_CALL_SCANNER
+      - ROUTE_ENABLE_PREFIX_MOUNT_DISCOVERY
+    BodyDiscoveryAgent:
+      - BODY_ADD_COMMON_ALIASES
+      - BODY_ENABLE_SERVICE_ARG_BODY_DETECTION
+      - BODY_ENABLE_DESTRUCTURING_DETECTION
+      - BODY_ENABLE_NESTED_FIELD_DETECTION
+    ParamsDiscoveryAgent:
+      - PARAM_ENABLE_QUERY_DESTRUCTURING
+      - PARAM_ENABLE_HEADER_DETECTION
+    ServiceGraphAgent:
+      - SERVICE_ENABLE_CALL_ARGUMENT_CAPTURE
+      - SERVICE_ENABLE_IMPORT_FALLBACK_BY_STEM
+      - SERVICE_ENABLE_DEFAULT_EXPORT_RESOLUTION
+    ServiceBodyFieldAgent:
+      - SERVICE_BODY_ENABLE_PARAM_POSITION_MAPPING
+      - SERVICE_BODY_ENABLE_OBJECT_LITERAL_EXTRACTION
+      - SERVICE_BODY_ENABLE_NESTED_OBJECT_KEYS
+    DbWriteFieldAgent:
+      - DB_ENABLE_SQL_INSERT_UPDATE
+      - DB_ENABLE_PRISMA_DATA_OBJECT
+      - DB_ENABLE_KNEX_REPOSITORY_WRITES
+      - DB_SCOPE_TO_CALLED_METHOD
+    InferredSchemaRegistryAgent:
+      - SCHEMA_ENABLE_INFERRED_REQUEST_SCHEMA
+      - SCHEMA_ENABLE_REQUIRED_FIELD_HEURISTICS
+    TestGenerationAgent:
+      - TEST_ENABLE_STATUS_ASSERTIONS
+      - TEST_ENABLE_RESPONSE_ASSERTIONS
+      - TEST_ENABLE_EXTRACTORS
+      - TEST_ENABLE_DATA_REFERENCES
+      - TEST_ENABLE_NEGATIVE_EDGE_TESTS
+
+pattern_registry:
+  body_aliases:
+    - body
+    - payload
+    - data
+    - input
+    - dto
+    - requestBody
+    - form
+    - values
+  id_field_hints:
+    - id
+    - _id
+    - uuid
+    - guid
+  required_field_hints:
+    - name
+    - title
+    - email
+    - password
+    - username
+    - type
+    - status
