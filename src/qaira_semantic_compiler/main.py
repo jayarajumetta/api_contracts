@@ -25,7 +25,7 @@ EXCLUDED_DIRS={".git","node_modules","dist","build","target","bin","obj","covera
 SOURCE_EXTENSIONS={".js",".jsx",".ts",".tsx",".json",".yaml",".yml",".prisma",".sql",".md",".env"}
 
 DEFAULT_CONFIG={
- "agent":{"name":"qaira-semantic-compiler-platform","version":"v56","mode":"prebuild"},
+ "agent":{"name":"qaira-semantic-compiler-platform","version":"v57","mode":"prebuild"},
  "paths":{"source_dir":"/repo","output_dir":"/output","learning_dir":"/learning","changed_files":""},
  "logging":{"verbose_console":True},
  "parsing":{"prefer_tree_sitter":True,"fallback_regex_parser":True,"max_file_size_kb":4096},
@@ -2776,7 +2776,7 @@ class ArtifactGenerator:
         store.text("generated/generated_curls.sh",self.curls(contracts))
         store.json("generated/openapi.json",self.openapi(contracts))
         store.json("generated/postman_collection.json",self.postman(contracts))
-        store.json("generated/qaira_api_repository.json",{"version":"56.0","apis":[safe_json(c) for c in contracts]})
+        store.json("generated/qaira_api_repository.json",{"version":"57.0","apis":[safe_json(c) for c in contracts]})
     def curls(self,contracts):
         lines=["#!/usr/bin/env bash","set -euo pipefail",': "${baseUrl:=http://localhost:3000}"',': "${token:=CHANGE_ME}"',""]
         for c in contracts: lines += [f"echo '### {c.method} {c.path}'",c.curl.replace("{{baseUrl}}","${baseUrl}").replace("{{token}}","${token}"),""]
@@ -2788,14 +2788,14 @@ class ArtifactGenerator:
             if c.request_body: op["requestBody"]={"required":bool(c.request_body.get("required")),"content":{"application/json":{"schema":c.request_body}}}
             if c.auth.get("required"): op["security"]=[{"bearerAuth":[]}]
             paths.setdefault(c.path,{})[c.method.lower()]=op
-        return {"openapi":"3.1.0","info":{"title":"QAira Semantic Compiler V56 API","version":"56.0.0"},"paths":paths,"components":{"securitySchemes":{"bearerAuth":{"type":"http","scheme":"bearer","bearerFormat":"JWT"}}}}
+        return {"openapi":"3.1.0","info":{"title":"QAira Semantic Compiler V57 API","version":"57.0.0"},"paths":paths,"components":{"securitySchemes":{"bearerAuth":{"type":"http","scheme":"bearer","bearerFormat":"JWT"}}}}
     def postman(self,contracts):
         items=[]
         for c in contracts:
             req={"method":c.method,"header":[{"key":k,"value":v} for k,v in headers(c.auth).items()],"url":{"raw":"{{baseUrl}}"+c.path,"host":["{{baseUrl}}"],"path":c.path.strip("/").split("/"),"query":[{"key":p.get("name"),"value":""} for p in (c.parameters or []) if p.get("in")=="query"]}}
             if c.request_body: req["body"]={"mode":"raw","raw":json.dumps(sample(c.request_body),indent=2),"options":{"raw":{"language":"json"}}}
             items.append({"name":c.api_id,"request":req})
-        return {"info":{"name":"QAira V56 API Collection","schema":"https://schema.getpostman.com/json/collection/v2.1.0/collection.json"},"variable":[{"key":"baseUrl","value":"http://localhost:3000"},{"key":"token","value":""}],"item":items}
+        return {"info":{"name":"QAira V57 API Collection","schema":"https://schema.getpostman.com/json/collection/v2.1.0/collection.json"},"variable":[{"key":"baseUrl","value":"http://localhost:3000"},{"key":"token","value":""}],"item":items}
 
 
 class V53Governance:
@@ -3092,7 +3092,7 @@ class TestGeneratorAgentV54:
                 lines.append(f"curl -X {c.method} \"$BASE_URL{path}\"")
         return "\n".join(lines)+"\n"
     def generate_qaira(self,contracts,relationship):
-        return json.dumps({"version":"v56","sequence":relationship.get("sequence",[]),"tests":[{"id":c.api_id,"method":c.method,"path":c.path,"payload":self.payload_for(c),"params":self.params_for(c)} for c in contracts]},indent=2)
+        return json.dumps({"version":"v57","sequence":relationship.get("sequence",[]),"tests":[{"id":c.api_id,"method":c.method,"path":c.path,"payload":self.payload_for(c),"params":self.params_for(c)} for c in contracts]},indent=2)
     def generate_rest_assured(self,contracts):
         body=["import io.restassured.RestAssured;","public class GeneratedApiTests {","  String baseUrl = System.getProperty(\"baseUrl\", \"http://localhost:3000\");"]
         for i,c in enumerate(contracts[:200]):
@@ -3632,6 +3632,238 @@ def safe_name_v56(s):
     return re.sub(r"[^a-zA-Z0-9_.-]+","_",str(s))[:120]
 
 
+
+class ImportHydrationAgentV57:
+    def __init__(self,cfg,store):
+        self.cfg=cfg or {}; self.store=store; self.report=[]
+        self.exts=[".js",".ts",".jsx",".tsx",".mjs",".cjs"]
+        self.indexes=["index.js","index.ts","index.jsx","index.tsx"]
+    def run(self,fs,import_registry):
+        imports=import_registry.get("imports",[]) if isinstance(import_registry,dict) else []
+        hydrated=0; checked=0
+        for im in imports:
+            checked+=1
+            if im.get("resolvedFile"): continue
+            module=im.get("module",""); file=im.get("file","")
+            resolved=self.resolve_service_module(fs,file,module)
+            if resolved:
+                im["resolvedFile"]=resolved
+                im["x-qaira-v57-hydrated"]=True
+                hydrated+=1
+            self.report.append({"file":file,"module":module,"resolvedFile":im.get("resolvedFile",""),"hydrated":bool(resolved),"attempts":getattr(self,"last_attempts",[])})
+        result={"checked":checked,"hydrated":hydrated,"stillUnresolved":len([x for x in imports if not x.get("resolvedFile")]),"items":self.report}
+        self.store.json("graph_completion/import_hydration_v57_report.json",result)
+        return result
+    def resolve_service_module(self,fs,from_file,module):
+        self.last_attempts=[]
+        if not module or not from_file: return ""
+        base=(fs.src/from_file).parent
+        candidates=[]
+        if module.startswith("."):
+            raw=(base/module).resolve()
+            candidates.append(raw)
+            for ext in self.exts:
+                candidates.append(Path(str(raw)+ext))
+            for idx in self.indexes:
+                candidates.append(raw/idx)
+        # service-specific brute force fallback by basename
+        b=Path(module).name
+        if b:
+            for p in fs.src.rglob(b+"*"):
+                if p.is_file() and p.suffix in self.exts and "node_modules" not in str(p):
+                    candidates.append(p.resolve())
+        for c in candidates:
+            self.last_attempts.append(str(c))
+            if c.exists() and c.is_file():
+                try: return str(c.relative_to(fs.src)).replace("\\","/")
+                except Exception: return str(c)
+        return ""
+
+class ServiceCallGraphAgentV57:
+    def __init__(self,cfg,store):
+        self.cfg=cfg or {}; self.store=store
+    def run(self,contracts,import_registry):
+        imports=import_registry.get("imports",[]) if isinstance(import_registry,dict) else []
+        by_file_local={}
+        for im in imports:
+            by_file_local[(im.get("file"),im.get("local"))]=im
+        nodes=[]; edges=[]; unresolved=[]
+        for c in contracts:
+            route_file=self.route_file(c)
+            raw=self.raw(c)
+            nodes.append({"id":c.api_id,"type":"Route","path":c.path,"method":c.method,"file":route_file})
+            for m in re.finditer(r"([A-Za-z_$][\w$]*)\.([A-Za-z_$][\w$]*)\s*\(",raw):
+                local,method=m.group(1),m.group(2)
+                im=by_file_local.get((route_file,local))
+                sid=f"service:{route_file}:{local}.{method}"
+                nodes.append({"id":sid,"type":"ServiceCall","local":local,"method":method,"file":route_file,"resolvedFile":im.get("resolvedFile","") if im else ""})
+                edges.append({"from":c.api_id,"to":sid,"type":"CALLS_SERVICE","confidence":0.85 if im and im.get("resolvedFile") else 0.45})
+                if im and im.get("resolvedFile"):
+                    impl=f"file:{im.get('resolvedFile')}:{method}"
+                    nodes.append({"id":impl,"type":"ServiceImplementationCandidate","file":im.get("resolvedFile"),"method":method})
+                    edges.append({"from":sid,"to":impl,"type":"RESOLVES_TO","confidence":0.82})
+                else:
+                    unresolved.append({"apiId":c.api_id,"local":local,"method":method,"routeFile":route_file})
+        graph={"nodes":nodes,"edges":edges,"unresolved":unresolved,"edgeCount":len(edges)}
+        self.store.json("graph_completion/service_call_graph_v57.json",graph)
+        return graph
+    def route_file(self,c):
+        try: return (c.source_mappings.get("route") or [""])[0].split(":")[0]
+        except Exception: return ""
+    def raw(self,c):
+        chunks=[]
+        for item in c.request_trace or []:
+            if isinstance(item,dict):
+                bi=item.get("bodyInfo") or {}
+                if isinstance(bi,dict) and bi.get("rawHandler"): chunks.append(bi.get("rawHandler"))
+        return "\n".join(chunks)
+
+class ShapePropagationAgentV57:
+    def __init__(self,cfg,store):
+        self.cfg=cfg or {}; self.store=store; self.report=[]
+    def run(self,fs,contracts,service_graph):
+        impl_nodes=[n for n in service_graph.get("nodes",[]) if n.get("type")=="ServiceImplementationCandidate"]
+        impl_by_method={(n.get("file"),n.get("method")):n for n in impl_nodes}
+        propagations=0
+        for c in contracts:
+            if c.method not in {"POST","PUT","PATCH"}: continue
+            if c.request_body and c.request_body.get("properties"): continue
+            raw=self.raw(c)
+            aliases=self.aliases(raw)
+            fields=set()
+            for a in aliases:
+                fields |= set(re.findall(r"\b"+re.escape(a)+r"\.([A-Za-z_$][\w$]*)",raw))
+                fields |= self.destructured(raw,a)
+            # service graph impl file field usage
+            route_edges=[e for e in service_graph.get("edges",[]) if e.get("from")==c.api_id and e.get("type")=="CALLS_SERVICE"]
+            for e in route_edges:
+                service_node=next((n for n in service_graph.get("nodes",[]) if n.get("id")==e.get("to")),None)
+                if not service_node: continue
+                impl_file=service_node.get("resolvedFile",""); method=service_node.get("method","")
+                if impl_file:
+                    fields |= self.fields_from_impl(fs,impl_file,method)
+            if fields:
+                c.request_body={"type":"object","required":[],"properties":{f:{"type":"string","x-qaira-source":"shape_propagation_v57"} for f in sorted(fields)}}
+                propagations+=1
+                self.report.append({"apiId":c.api_id,"path":c.path,"method":c.method,"fields":sorted(fields)})
+        result={"propagations":propagations,"items":self.report}
+        self.store.json("graph_completion/shape_propagation_v57_report.json",result)
+        return result
+    def aliases(self,raw):
+        out={"payload","body","data","input","dto","requestBody"}
+        out |= set(re.findall(r"(?:const|let|var)\s+([A-Za-z_$][\w$]*)\s*=\s*(?:req|request)\.body",raw))
+        return out
+    def destructured(self,raw,alias):
+        fields=set()
+        for m in re.finditer(r"(?:const|let|var)\s*\{([^}]+)\}\s*=\s*"+re.escape(alias),raw):
+            for part in m.group(1).split(","):
+                name=part.strip().split(":")[0].strip()
+                if re.match(r"^[A-Za-z_$][\w$]*$",name): fields.add(name)
+        return fields
+    def fields_from_impl(self,fs,file,method):
+        p=fs.src/file
+        if not p.exists(): return set()
+        t=fs.read(p)
+        block=""
+        m=re.search(r"(?:async\s+)?"+re.escape(method)+r"\s*[:=]?\s*(?:async\s*)?\(?([^)]*)\)?\s*=>?\s*\{([\s\S]{0,6000}?)\n?\}",t)
+        if m: block=m.group(2)
+        else:
+            m=re.search(r"(?:async\s+)?"+re.escape(method)+r"\s*\(([^)]*)\)\s*\{([\s\S]{0,6000}?)\n?\}",t)
+            if m: block=m.group(2)
+        fields=set()
+        for alias in ["payload","body","data","input","dto","requestBody"]:
+            fields |= set(re.findall(r"\b"+alias+r"\.([A-Za-z_$][\w$]*)",block))
+            fields |= self.destructured(block,alias)
+        return fields
+    def raw(self,c):
+        chunks=[]
+        for item in c.request_trace or []:
+            if isinstance(item,dict):
+                bi=item.get("bodyInfo") or {}
+                if isinstance(bi,dict) and bi.get("rawHandler"): chunks.append(bi.get("rawHandler"))
+        return "\n".join(chunks)
+
+class ReturnPropagationAgentV57:
+    def __init__(self,cfg,store):
+        self.cfg=cfg or {}; self.store=store; self.report=[]
+    def run(self,contracts,service_graph):
+        count=0
+        for c in contracts:
+            raw=self.raw(c)
+            vars_=set(re.findall(r"(?:reply|res|response)\.(?:send|json)\s*\(\s*([A-Za-z_$][\w$]*)",raw))
+            vars_ |= set(re.findall(r"return\s+([A-Za-z_$][\w$]*)",raw))
+            assigns=re.findall(r"(?:const|let|var)\s+([A-Za-z_$][\w$]*)\s*=\s*await\s+([A-Za-z_$][\w$]*\.[A-Za-z_$][\w$]*)\(",raw)
+            evidence=[{"var":v,"sourceCall":call} for v,call in assigns if v in vars_]
+            if vars_ or evidence:
+                count+=1
+                self.report.append({"apiId":c.api_id,"path":c.path,"method":c.method,"responseVars":sorted(vars_),"evidence":evidence})
+                if not c.response_body or not c.response_body.get("properties"):
+                    c.response_body={"type":"object","properties":{"id":{"type":"string","x-qaira-source":"return_propagation_v57"}}}
+        result={"propagations":count,"items":self.report}
+        self.store.json("graph_completion/return_propagation_v57_report.json",result)
+        return result
+    def raw(self,c):
+        chunks=[]
+        for item in c.request_trace or []:
+            if isinstance(item,dict):
+                bi=item.get("bodyInfo") or {}
+                if isinstance(bi,dict) and bi.get("rawHandler"): chunks.append(bi.get("rawHandler"))
+        return "\n".join(chunks)
+
+class DTOAttachmentAgentV57:
+    def __init__(self,cfg,store,validation_registry):
+        self.cfg=cfg or {}; self.store=store; self.validation=validation_registry or {"schemas":[]}; self.report=[]
+    def run(self,contracts,service_graph):
+        checked=0; attached=0
+        schemas=self.validation.get("schemas",[])
+        for c in contracts:
+            if c.method in {"GET","HEAD","OPTIONS"}: continue
+            if c.request_body and c.request_body.get("properties"): continue
+            checked+=1
+            candidates=self.names_from_graph(c,service_graph)
+            schema=self.match_schema(candidates,schemas)
+            if schema:
+                c.request_body=schema.get("schema")
+                attached+=1
+                self.report.append({"apiId":c.api_id,"path":c.path,"method":c.method,"schema":schema.get("name"),"candidates":candidates})
+        result={"checked":checked,"attached":attached,"items":self.report}
+        self.store.json("graph_completion/dto_attachment_v57_report.json",result)
+        return result
+    def names_from_graph(self,c,graph):
+        names=set(re.findall(r"[A-Za-z0-9]+",c.path))
+        for e in graph.get("edges",[]):
+            if e.get("from")==c.api_id:
+                node=next((n for n in graph.get("nodes",[]) if n.get("id")==e.get("to")),None)
+                if node:
+                    names.add(node.get("method",""))
+                    names.add(node.get("local",""))
+        return [n for n in names if n]
+    def match_schema(self,names,schemas):
+        best=None; score=0
+        nset=set([n.lower() for n in names if n])
+        for s in schemas:
+            st=set(re.findall(r"[a-zA-Z0-9]+",s.get("name","").lower()))
+            sc=len(nset & st)/max(len(nset|st),1) if st else 0
+            if sc>score:
+                score=sc; best=s
+        return best if best and score>=float((self.cfg.get("dto_attachment") or {}).get("min_similarity",0.70)) else None
+
+class GraphCompletionSummaryAgentV57:
+    def __init__(self,store):
+        self.store=store
+    def run(self,import_result,service_graph,shape_result,return_result,dto_result):
+        summary={
+            "importHydrated":import_result.get("hydrated",0),
+            "serviceEdges":service_graph.get("edgeCount",0),
+            "shapePropagations":shape_result.get("propagations",0),
+            "returnPropagations":return_result.get("propagations",0),
+            "dtoAttached":dto_result.get("attached",0),
+            "dtoChecked":dto_result.get("checked",0)
+        }
+        self.store.json("graph_completion/graph_completion_summary.json",summary)
+        return summary
+
+
 class Orchestrator:
     def __init__(self,source,output,learning,changed_file,cfg,cfg_report):
         self.source=source.resolve(); self.output=output.resolve(); self.learning=learning.resolve()
@@ -3667,6 +3899,8 @@ class Orchestrator:
         import_registry=import_graph_resolver.run(self.fs)
         import_registry_hydrator=ImportRegistryHydratorV52(self.cfg,self.fs._enterprise_module_resolver)
         import_registry=import_registry_hydrator.hydrate(self.fs,import_registry)
+        import_v57_result=ImportHydrationAgentV57(self.cfg,self.store).run(self.fs,import_registry)
+        self.runtime_v56.stage(1,"ImportHydrationAgentV57","success" if import_v57_result.get("hydrated",0)>0 else "failure",import_v57_result,{"sourceFiles":[]})
         self.store.json("validation/validation_schema_registry.json",validation_registry)
         self.store.json("validation/dto_registry.json",dto_registry)
         self.store.json("validation/type_registry.json",type_registry)
@@ -3721,6 +3955,15 @@ class Orchestrator:
         auth_graph,auth=AuthScopeCompiler().run(self.fs,routes); self.store.json("graph/auth_graph.json",auth_graph); self.store.json("auth/effective_auth_report.json",auth)
         request_context_engine=RequestContextEngine(self.cfg)
         contracts=ContractBuilder(request_context_engine).run(routes,req_traces,res_traces,auth)
+        service_graph_v57=ServiceCallGraphAgentV57(self.cfg,self.store).run(contracts,import_registry)
+        self.runtime_v56.stage(1,"ServiceCallGraphAgentV57","success" if service_graph_v57.get("edgeCount",0)>0 else "failure",{"edges":service_graph_v57.get("edgeCount",0),"unresolved":len(service_graph_v57.get("unresolved",[]))},{"sourceFiles":[]})
+        shape_v57_result=ShapePropagationAgentV57(self.cfg,self.store).run(self.fs,contracts,service_graph_v57)
+        self.runtime_v56.stage(1,"ShapePropagationAgentV57","success" if shape_v57_result.get("propagations",0)>0 else "failure",shape_v57_result,{"sourceFiles":[]})
+        return_v57_result=ReturnPropagationAgentV57(self.cfg,self.store).run(contracts,service_graph_v57)
+        self.runtime_v56.stage(1,"ReturnPropagationAgentV57","success" if return_v57_result.get("propagations",0)>0 else "failure",return_v57_result,{"sourceFiles":[]})
+        dto_v57_result=DTOAttachmentAgentV57(self.cfg,self.store,validation_registry).run(contracts,service_graph_v57)
+        self.runtime_v56.stage(1,"DTOAttachmentAgentV57","success" if dto_v57_result.get("attached",0)>0 else "failure",dto_v57_result,{"sourceFiles":[]})
+        graph_completion_v57_summary=GraphCompletionSummaryAgentV57(self.store).run(locals().get("import_v57_result",{}),service_graph_v57,shape_v57_result,return_v57_result,dto_v57_result)
         vp_result=VariablePropagationAgentV56(self.cfg,self.store).run(contracts)
         self.runtime_v56.stage(1,"VariablePropagationAgentV56","success" if vp_result.get("propagations",0)>0 else "failure",vp_result,{"sourceFiles":[]})
         rp_result=ResponsePropagationAgentV56(self.cfg,self.store).run(contracts)
@@ -3802,6 +4045,15 @@ class Orchestrator:
         body_detected=len([c for c in contracts if c.method in {"POST","PUT","PATCH"} and c.request_body])
         body_fields_known=len([c for c in contracts if c.method in {"POST","PUT","PATCH"} and c.request_body and (c.request_body.get("properties") or {})])
         summary={"apiContracts":len(contracts),"bodyExpected":body_expected,"bodyDetected":body_detected,"bodyFieldsKnown":body_fields_known,"bodyDetectionRate":round((body_detected/body_expected)*100,2) if body_expected else 100,"bodyFieldKnownRate":round((body_fields_known/body_expected)*100,2) if body_expected else 100,"validationSchemasDiscovered":len(validation_registry.get("schemas",[])),"functionSignaturesDiscovered":len(signature_registry.get("signatures",[])),"typedFunctionSignatures":len([s for s in signature_registry.get("signatures",[]) if any(p.get("type") for p in s.get("params",[]))]),"typesDiscovered":len(type_registry.get("types",[])),"typeResolutions":len([x for x in enricher.type_engine.report if x.get("status","").startswith("resolved")]),"importsDiscovered":len(import_registry.get("imports",[])),"exportsDiscovered":len(import_registry.get("exports",[])),"commonJsImports":len([i for i in import_registry.get("imports",[]) if str(i.get("kind","")).startswith("commonjs")]),"commonJsExports":len([e for e in import_registry.get("exports",[]) if str(e.get("kind","")).startswith("commonjs")]),"serviceResolutions":len(enricher.service_resolver.resolution_report),"objectShapesFound":len(enricher.object_shape_analyzer.shape_registry),"shapePropagations":len(enricher.object_shape_analyzer.propagation_report),"functionReturnPropagations":len([x for x in enricher.object_shape_analyzer.propagation_report if "builder" in x.get("type","")]),"shapeMerges":len(enricher.object_shape_analyzer.merge_report),"falsePositiveGETBodies":len([c for c in contracts if c.method in {"GET","HEAD","OPTIONS"} and c.request_body]),"schemaAttachmentsResolved":schema_attachment_resolver.diagnostics.get("schemasResolved",0),"schemaAttachmentsFound":schema_attachment_resolver.diagnostics.get("attachmentsFound",0),"unresolvedRecovered":unresolved_summary.get("recovered",0),"unresolvedAfterInvestigation":unresolved_summary.get("unresolvedAfter",0),"bodyNotExpectedRoutes":diagnostic_classifier.summary.get("body_not_expected",0),"realUnresolvedPayloadRoutes":diagnostic_classifier.summary.get("real_unresolved",0),"actionableUnresolvedRoutes":diagnostic_classifier.summary.get("actionableUnresolvedRoutes",0),"v52HydratedImports":import_registry_hydrator.diagnostics.get("hydrated",0),"v52StillUnresolvedImports":import_registry_hydrator.diagnostics.get("stillUnresolved",0),"moduleResolutions":len([x for x in (getattr(self.fs,"_enterprise_module_resolver",None).registry if getattr(self.fs,"_enterprise_module_resolver",None) else []) if x.get("resolved")]),"moduleResolutionAttempts":len((getattr(self.fs,"_enterprise_module_resolver",None).registry if getattr(self.fs,"_enterprise_module_resolver",None) else [])),"v49ServiceImplementations":len(export_resolver_v49.registry),"v49ImportAwareResolutions":len([x for x in import_aware_service_resolver.report if x.get("resolved")]),"v48ActionableRecovered":actionable_recovery_report.get("recovered",0),"v48ActionableUnrecovered":actionable_recovery_report.get("unrecovered",0),"queryParamsDiscovered":sum(r.get("counts",{}).get("query",0) for r in request_context_engine.report),"pathParamsDiscovered":sum(r.get("counts",{}).get("path",0) for r in request_context_engine.report),"headersDiscovered":sum(r.get("counts",{}).get("header",0) for r in request_context_engine.report),"cookiesDiscovered":sum(r.get("counts",{}).get("cookie",0) for r in request_context_engine.report),"treeSitterAvailable":TREE_SITTER_AVAILABLE,"llmFallbackPrepared":len(llm_requests)}
+        
+        try:
+            summary["v57ImportHydrated"]=graph_completion_v57_summary.get("importHydrated",0)
+            summary["v57ServiceEdges"]=graph_completion_v57_summary.get("serviceEdges",0)
+            summary["v57ShapePropagations"]=graph_completion_v57_summary.get("shapePropagations",0)
+            summary["v57ReturnPropagations"]=graph_completion_v57_summary.get("returnPropagations",0)
+            summary["v57DtoAttached"]=graph_completion_v57_summary.get("dtoAttached",0)
+        except Exception:
+            pass
         self.store.json("summary/scan_summary.json",summary)
         try:
             summary["testsGenerated"]=bool(locals().get("test_generation_result",{}))
@@ -3930,6 +4182,12 @@ class Orchestrator:
 - `propagation/variable_propagation_report.json`
 - `propagation/response_propagation_report.json`
 - `propagation/dto_attachment_report.json`
+- `graph_completion/import_hydration_v57_report.json`
+- `graph_completion/service_call_graph_v57.json`
+- `graph_completion/shape_propagation_v57_report.json`
+- `graph_completion/return_propagation_v57_report.json`
+- `graph_completion/dto_attachment_v57_report.json`
+- `graph_completion/graph_completion_summary.json`
 - `repo/repo_clone_report.json`
 - `final/final_test_generation_report.json`
 - `llm/stage_decision_prompts/*.json`
