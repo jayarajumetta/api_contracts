@@ -1,0 +1,1592 @@
+{
+  "info": {
+    "name": "Generated Edge API Tests",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "EDGE empty strings - POST /projects/:project_id/knowledge",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/projects/:project_id/knowledge",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"app_type_id\": \"\", \"asset_type\": \"\", \"content\": \"\", \"content_type\": \"\", \"description\": \"\", \"embedding\": \"\", \"feature_name\": \"\", \"is_active\": \"\", \"item_status\": \"\", \"item_version\": \"\", \"linked_test_cases\": \"\", \"metadata\": \"\", \"module_name\": \"\", \"priority\": \"\", \"source\": \"\", \"source_uri\": \"\", \"title\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - PUT /projects/:project_id/knowledge/:id",
+      "request": {
+        "method": "PUT",
+        "url": "{{baseUrl}}/projects/:project_id/knowledge/:id",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"app_type_id\": \"\", \"asset_type\": \"\", \"content\": \"\", \"content_type\": \"\", \"description\": \"\", \"embedding\": \"\", \"feature_name\": \"\", \"is_active\": \"\", \"item_status\": \"\", \"item_version\": \"\", \"linked_test_cases\": \"\", \"metadata\": \"\", \"module_name\": \"\", \"priority\": \"\", \"source\": \"\", \"source_uri\": \"\", \"title\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /projects/:project_id/knowledge/relations",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/projects/:project_id/knowledge/relations",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"metadata\": \"\", \"relation_type\": \"\", \"source_id\": \"\", \"source_type\": \"\", \"target_id\": \"\", \"target_type\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /ai-prompt-templates",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/ai-prompt-templates",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"app_type_id\": \"\", \"created_by\": \"\", \"project_id\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - PUT /ai-prompt-templates/:id",
+      "request": {
+        "method": "PUT",
+        "url": "{{baseUrl}}/ai-prompt-templates/:id",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"app_type_id\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /app-types",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/app-types",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"is_unified\": \"\", \"name\": \"\", \"project_id\": \"\", \"type\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - PUT /app-types/:id",
+      "request": {
+        "method": "PUT",
+        "url": "{{baseUrl}}/app-types/:id",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"is_unified\": \"\", \"name\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /automation-generator/internal/jobs/:id/run",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/automation-generator/internal/jobs/:id/run",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"additional_context\": \"\", \"agent_plan\": \"\", \"integration_id\": \"\", \"job_id\": \"\", \"llm_model\": \"\", \"start_url\": \"\", \"test_case_id\": \"\", \"test_configuration_id\": \"\", \"test_data_set_id\": \"\", \"test_environment_id\": \"\", \"title\": \"\", \"worker_id\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /api/engine/runs/claim",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/api/engine/runs/claim",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"engine_id\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /api/engine/runs/:runId/heartbeat",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/api/engine/runs/:runId/heartbeat",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"engine_id\": \"\", \"heartbeat_at\": \"\", \"leased_by\": \"\", \"updated_at\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /execution-results",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/execution-results",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"app_type_id\": \"\", \"defects\": \"\", \"duration_ms\": \"\", \"error\": \"\", \"executed_by\": \"\", \"execution_id\": \"\", \"external_references\": \"\", \"logs\": \"\", \"status\": \"\", \"suite_id\": \"\", \"suite_name\": \"\", \"test_case_id\": \"\", \"test_case_title\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - PUT /execution-results/:id",
+      "request": {
+        "method": "PUT",
+        "url": "{{baseUrl}}/execution-results/:id",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"defects\": \"\", \"duration_ms\": \"\", \"error\": \"\", \"executed_by\": \"\", \"external_references\": \"\", \"logs\": \"\", \"status\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /execution-schedules",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/execution-schedules",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"app_type_id\": \"\", \"assigned_to\": \"\", \"cadence\": \"\", \"created_by\": \"\", \"is_active\": \"\", \"name\": \"\", \"next_run_at\": \"\", \"project_id\": \"\", \"suite_ids\": \"\", \"test_case_ids\": \"\", \"test_configuration_id\": \"\", \"test_data_set_id\": \"\", \"test_environment_id\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - PUT /execution-schedules/:id",
+      "request": {
+        "method": "PUT",
+        "url": "{{baseUrl}}/execution-schedules/:id",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"app_type_id\": \"\", \"assigned_to\": \"\", \"cadence\": \"\", \"name\": \"\", \"next_run_at\": \"\", \"project_id\": \"\", \"suite_ids\": \"\", \"test_case_ids\": \"\", \"test_configuration_id\": \"\", \"test_data_set_id\": \"\", \"test_environment_id\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /executions/smart-plan-preview",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/executions/smart-plan-preview",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"additional_context\": \"\", \"appType\": \"\", \"app_type_id\": \"\", \"cases\": \"\", \"impacted_requirement_ids\": \"\", \"integration_id\": \"\", \"project_id\": \"\", \"release_scope\": \"\", \"testCases\": \"\", \"test_cases\": \"\", \"test_configuration_id\": \"\", \"test_data_set_id\": \"\", \"test_environment_id\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /executions/manual-run-suggestion",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/executions/manual-run-suggestion",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"additional_context\": \"\", \"app_type_id\": \"\", \"integration_id\": \"\", \"project_id\": \"\", \"selected_suite_ids\": \"\", \"test_configuration_id\": \"\", \"test_data_set_id\": \"\", \"test_environment_id\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /executions",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/executions",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"app_type_id\": \"\", \"assigned_to\": \"\", \"created_by\": \"\", \"execution_hooks\": \"\", \"name\": \"\", \"parallel_count\": \"\", \"parallel_enabled\": \"\", \"project_id\": \"\", \"status\": \"\", \"test_configuration_id\": \"\", \"test_configuration_name\": \"\", \"test_configuration_snapshot\": \"\", \"test_data_set_id\": \"\", \"test_data_set_name\": \"\", \"test_data_set_snapshot\": \"\", \"test_environment_id\": \"\", \"test_environment_name\": \"\", \"test_environment_snapshot\": \"\", \"trigger\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /executions/local-run",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/executions/local-run",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"created_by\": \"\", \"ended_at\": \"\", \"engine_base_url\": \"\", \"name\": \"\", \"project_id\": \"\", \"status\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - PUT /executions/:id",
+      "request": {
+        "method": "PUT",
+        "url": "{{baseUrl}}/executions/:id",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"assigned_to\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - PUT /executions/:id/cases/:testCaseId/assignment",
+      "request": {
+        "method": "PUT",
+        "url": "{{baseUrl}}/executions/:id/cases/:testCaseId/assignment",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"assigned_to\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /executions/:id/rerun",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/executions/:id/rerun",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"app_type_id\": \"\", \"assigned_to\": \"\", \"created_by\": \"\", \"name\": \"\", \"project_id\": \"\", \"status\": \"\", \"test_configuration_id\": \"\", \"test_configuration_name\": \"\", \"test_configuration_snapshot\": \"\", \"test_data_set_id\": \"\", \"test_data_set_name\": \"\", \"test_data_set_snapshot\": \"\", \"test_environment_id\": \"\", \"test_environment_name\": \"\", \"test_environment_snapshot\": \"\", \"trigger\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /executions/:id/start",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/executions/:id/start",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"engine_base_url\": \"\", \"execution_mode\": \"\", \"initiated_by\": \"\", \"skip_testengine_dispatch\": \"\", \"started_at\": \"\", \"status\": \"\", \"trigger\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /executions/:id/cases/:testCaseId/steps/:stepId/run",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/executions/:id/cases/:testCaseId/steps/:stepId/run",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"executed_by\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /executions/:id/cases/:testCaseId/ai-analysis",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/executions/:id/cases/:testCaseId/ai-analysis",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"execution\": \"\", \"requestedBy\": \"\", \"testCaseId\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /executions/:id/share-report",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/executions/:id/share-report",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"execution_id\": \"\", \"recipients\": \"\", \"requested_by\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /executions/:id/complete",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/executions/:id/complete",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"ended_at\": \"\", \"status\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /feedback",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/feedback",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"message\": \"\", \"status\": \"\", \"title\": \"\", \"user_id\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - PUT /feedback/:id",
+      "request": {
+        "method": "PUT",
+        "url": "{{baseUrl}}/feedback/:id",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"message\": \"\", \"status\": \"\", \"title\": \"\", \"user_id\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /integrations",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/integrations",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"api_key\": \"\", \"base_url\": \"\", \"config\": \"\", \"is_active\": \"\", \"model\": \"\", \"name\": \"\", \"project_key\": \"\", \"type\": \"\", \"updated_at\": \"\", \"username\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /integrations/test-connection",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/integrations/test-connection",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"api_key\": \"\", \"base_url\": \"\", \"config\": \"\", \"type\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - PUT /integrations/:id",
+      "request": {
+        "method": "PUT",
+        "url": "{{baseUrl}}/integrations/:id",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"api_key\": \"\", \"base_url\": \"\", \"config\": \"\", \"is_active\": \"\", \"model\": \"\", \"name\": \"\", \"project_key\": \"\", \"type\": \"\", \"updated_at\": \"\", \"username\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /project-members",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/project-members",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"project_id\": \"\", \"role_id\": \"\", \"user_id\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - PUT /project-members/:id",
+      "request": {
+        "method": "PUT",
+        "url": "{{baseUrl}}/project-members/:id",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"project_id\": \"\", \"role_id\": \"\", \"user_id\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /projects/:id/sync/:provider",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/projects/:id/sync/:provider",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"created_by\": \"\", \"project_id\": \"\", \"provider\": \"\", \"trigger_mode\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /projects",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/projects",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"created_by\": \"\", \"description\": \"\", \"display_id\": \"\", \"name\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - PUT /projects/:id",
+      "request": {
+        "method": "PUT",
+        "url": "{{baseUrl}}/projects/:id",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"description\": \"\", \"name\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - PUT /requirement-test-cases/replace",
+      "request": {
+        "method": "PUT",
+        "url": "{{baseUrl}}/requirement-test-cases/replace",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"requirement_id\": \"\", \"test_case_ids\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /requirements",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/requirements",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"created_by\": \"\", \"description\": \"\", \"display_id\": \"\", \"external_references\": \"\", \"priority\": \"\", \"project_id\": \"\", \"status\": \"\", \"title\": \"\", \"updated_at\": \"\", \"updated_by\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /requirements/import",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/requirements/import",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"project_id\": \"\", \"rows\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - PUT /requirements/:id",
+      "request": {
+        "method": "PUT",
+        "url": "{{baseUrl}}/requirements/:id",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"description\": \"\", \"external_references\": \"\", \"priority\": \"\", \"project_id\": \"\", \"status\": \"\", \"title\": \"\", \"updated_at\": \"\", \"updated_by\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /requirements/:id/ai-optimize-preview",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/requirements/:id/ai-optimize-preview",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"additional_context\": \"\", \"integration_id\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /requirements/:id/generate-test-cases",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/requirements/:id/generate-test-cases",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"additional_context\": \"\", \"appType\": \"\", \"app_type_id\": \"\", \"external_links\": \"\", \"images\": \"\", \"integration_id\": \"\", \"max_cases\": \"\", \"requirement\": \"\", \"status\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /requirements/:id/design-test-cases-preview",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/requirements/:id/design-test-cases-preview",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"additional_context\": \"\", \"appType\": \"\", \"app_type_id\": \"\", \"external_links\": \"\", \"images\": \"\", \"integration_id\": \"\", \"max_cases\": \"\", \"requirement\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /requirements/:id/design-test-cases-accept",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/requirements/:id/design-test-cases-accept",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"appType\": \"\", \"app_type_id\": \"\", \"cases\": \"\", \"requirement\": \"\", \"status\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /roles",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/roles",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - PUT /roles/:id/permissions",
+      "request": {
+        "method": "PUT",
+        "url": "{{baseUrl}}/roles/:id/permissions",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"permission_codes\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - PUT /roles/:id",
+      "request": {
+        "method": "PUT",
+        "url": "{{baseUrl}}/roles/:id",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\": \"\", \"permission_codes\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - PUT /settings/localization",
+      "request": {
+        "method": "PUT",
+        "url": "{{baseUrl}}/settings/localization",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"key\": \"\", \"strings\": \"\", \"updated_at\": \"\", \"value\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - PUT /settings/workspace-preferences",
+      "request": {
+        "method": "PUT",
+        "url": "{{baseUrl}}/settings/workspace-preferences",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"key\": \"\", \"preferences\": \"\", \"updated_at\": \"\", \"value\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /shared-step-groups",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/shared-step-groups",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"app_type_id\": \"\", \"created_by\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - PUT /shared-step-groups/:id",
+      "request": {
+        "method": "PUT",
+        "url": "{{baseUrl}}/shared-step-groups/:id",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"app_type_id\": \"\", \"description\": \"\", \"name\": \"\", \"parameter_values\": \"\", \"steps\": \"\", \"updated_by\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - PUT /suite-test-cases/reorder",
+      "request": {
+        "method": "PUT",
+        "url": "{{baseUrl}}/suite-test-cases/reorder",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"sort_order\": \"\", \"suite_id\": \"\", \"test_case_ids\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /test-cases",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/test-cases",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"app_type_id\": \"\", \"created_by\": \"\", \"steps\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /test-cases/import",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/test-cases/import",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"app_type_id\": \"\", \"batches\": \"\", \"created_by\": \"\", \"rows\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /test-cases/export",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/test-cases/export",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"app_type_id\": \"\", \"created_by\": \"\", \"test_case_ids\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /test-cases/automation/learning-cache/import",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/test-cases/automation/learning-cache/import",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"app_type_id\": \"\", \"entries\": \"\", \"import_source\": \"\", \"project_id\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /test-cases/automation/learning-cache/extract-fields",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/test-cases/automation/learning-cache/extract-fields",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"app_type_id\": \"\", \"fields\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /test-cases/automation/learning-cache",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/test-cases/automation/learning-cache",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"app_type_id\": \"\", \"confidence\": \"\", \"dom_structure\": \"\", \"fallback_strategy\": \"\", \"locator\": \"\", \"locator_intent\": \"\", \"locator_kind\": \"\", \"metadata\": \"\", \"object_name\": \"\", \"object_role\": \"\", \"page_key\": \"\", \"page_url\": \"\", \"project_id\": \"\", \"screen_dom_compressed\": \"\", \"screen_name\": \"\", \"screen_screenshot_url\": \"\", \"screenshot_url\": \"\", \"source\": \"\", \"target_criteria\": \"\", \"test_case_id\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - PUT /test-cases/automation/learning-cache/screens/:screenName",
+      "request": {
+        "method": "PUT",
+        "url": "{{baseUrl}}/test-cases/automation/learning-cache/screens/:screenName",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"app_type_id\": \"\", \"new_name\": \"\", \"screen_name\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /test-cases/automation/learning-cache/:id/ai-improve",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/test-cases/automation/learning-cache/:id/ai-improve",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"guidance\": \"\", \"integration_id\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /test-cases/automation/build-batch",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/test-cases/automation/build-batch",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"app_type_id\": \"\", \"created_by\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /test-cases/:id/automation/build",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/test-cases/:id/automation/build",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"additional_context\": \"\", \"captured_actions\": \"\", \"captured_network\": \"\", \"created_by\": \"\", \"integration_id\": \"\", \"start_url\": \"\", \"test_case_id\": \"\", \"test_configuration_id\": \"\", \"test_data_set_id\": \"\", \"test_environment_id\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /test-cases/:id/automation/generator-jobs",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/test-cases/:id/automation/generator-jobs",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"additional_context\": \"\", \"created_by\": \"\", \"integration_id\": \"\", \"start_url\": \"\", \"test_case_id\": \"\", \"test_configuration_id\": \"\", \"test_data_set_id\": \"\", \"test_environment_id\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /test-cases/:id/automation/recorder-session",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/test-cases/:id/automation/recorder-session",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"created_by\": \"\", \"engine_base_url\": \"\", \"recorder_mode\": \"\", \"recorder_public_base_url\": \"\", \"recorder_target\": \"\", \"reuse_existing\": \"\", \"start_url\": \"\", \"target_step_id\": \"\", \"test_case_id\": \"\", \"test_configuration_id\": \"\", \"test_data_set_id\": \"\", \"test_environment_id\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /test-cases/:id/automation/recorder-session/:sessionId/finish",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/test-cases/:id/automation/recorder-session/:sessionId/finish",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"additional_context\": \"\", \"created_by\": \"\", \"engine_base_url\": \"\", \"integration_id\": \"\", \"recorder_mode\": \"\", \"recorder_session_id\": \"\", \"recorder_target\": \"\", \"target_step_id\": \"\", \"test_case_id\": \"\", \"test_configuration_id\": \"\", \"test_data_set_id\": \"\", \"test_environment_id\": \"\", \"transaction_id\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /test-cases/design-test-cases-preview",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/test-cases/design-test-cases-preview",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"additional_context\": \"\", \"appType\": \"\", \"app_type_id\": \"\", \"external_links\": \"\", \"images\": \"\", \"integration_id\": \"\", \"max_cases\": \"\", \"requirement_ids\": \"\", \"requirements\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /test-cases/ai-authoring-preview",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/test-cases/ai-authoring-preview",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"additional_context\": \"\", \"appType\": \"\", \"app_type_id\": \"\", \"integration_id\": \"\", \"requirement\": \"\", \"requirement_id\": \"\", \"test_case\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /test-cases/ai-step-rephrase",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/test-cases/ai-step-rephrase",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"additional_context\": \"\", \"appType\": \"\", \"app_type_id\": \"\", \"integration_id\": \"\", \"project_id\": \"\", \"requirement\": \"\", \"requirement_id\": \"\", \"step\": \"\", \"test_case\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /test-cases/design-test-cases-accept",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/test-cases/design-test-cases-accept",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"appType\": \"\", \"app_type_id\": \"\", \"cases\": \"\", \"requirement_ids\": \"\", \"requirements\": \"\", \"status\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /test-cases/ai-generation-jobs",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/test-cases/ai-generation-jobs",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"app_type_id\": \"\", \"created_by\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - PUT /test-cases/:id",
+      "request": {
+        "method": "PUT",
+        "url": "{{baseUrl}}/test-cases/:id",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"app_type_id\": \"\", \"automated\": \"\", \"automation_status\": \"\", \"description\": \"\", \"external_references\": \"\", \"parameter_values\": \"\", \"priority\": \"\", \"requirement_id\": \"\", \"requirement_ids\": \"\", \"steps\": \"\", \"suite_id\": \"\", \"suite_ids\": \"\", \"title\": \"\", \"updated_by\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /test-configurations",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/test-configurations",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"app_type_id\": \"\", \"browser\": \"\", \"description\": \"\", \"mobile_os\": \"\", \"name\": \"\", \"platform_version\": \"\", \"project_id\": \"\", \"variables\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - PUT /test-configurations/:id",
+      "request": {
+        "method": "PUT",
+        "url": "{{baseUrl}}/test-configurations/:id",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"app_type_id\": \"\", \"browser\": \"\", \"description\": \"\", \"mobile_os\": \"\", \"name\": \"\", \"platform_version\": \"\", \"project_id\": \"\", \"variables\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /test-data-sets",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/test-data-sets",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"app_type_id\": \"\", \"columns\": \"\", \"description\": \"\", \"mode\": \"\", \"name\": \"\", \"project_id\": \"\", \"rows\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - PUT /test-data-sets/:id",
+      "request": {
+        "method": "PUT",
+        "url": "{{baseUrl}}/test-data-sets/:id",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"app_type_id\": \"\", \"columns\": \"\", \"description\": \"\", \"mode\": \"\", \"name\": \"\", \"project_id\": \"\", \"rows\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /api/testengine/callbacks/runs",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/api/testengine/callbacks/runs",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"artifact_bundle\": \"\", \"case_result\": \"\", \"deterministic_attempted\": \"\", \"emitted_at\": \"\", \"engine_run_id\": \"\", \"event\": \"\", \"healing_attempted\": \"\", \"healing_succeeded\": \"\", \"patch_proposals\": \"\", \"payload\": \"\", \"qaira_execution_id\": \"\", \"qaira_run_id\": \"\", \"qaira_test_case_id\": \"\", \"rawPayload\": \"\", \"state\": \"\", \"step_outcomes\": \"\", \"summary\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /testengine/internal/jobs/:id/start",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/testengine/internal/jobs/:id/start",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"job_id\": \"\", \"worker_id\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /testengine/internal/jobs/:id/steps/:stepId/execute",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/testengine/internal/jobs/:id/steps/:stepId/execute",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"job_id\": \"\", \"step_id\": \"\", \"steps\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /testengine/internal/jobs/:id/steps/:stepId/report",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/testengine/internal/jobs/:id/steps/:stepId/report",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"api_detail\": \"\", \"automation_detail\": \"\", \"captures\": \"\", \"evidence\": \"\", \"job_id\": \"\", \"note\": \"\", \"recovery_attempted\": \"\", \"recovery_succeeded\": \"\", \"step_id\": \"\", \"steps\": \"\", \"web_detail\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /testengine/internal/jobs/:id/complete",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/testengine/internal/jobs/:id/complete",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"artifact_bundle\": \"\", \"deterministic_attempted\": \"\", \"error\": \"\", \"healing_attempted\": \"\", \"healing_succeeded\": \"\", \"job_id\": \"\", \"patch_proposals\": \"\", \"steps\": \"\", \"summary\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /testengine/internal/jobs/:id/fail",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/testengine/internal/jobs/:id/fail",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"job_id\": \"\", \"message\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /test-environments",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/test-environments",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"app_type_id\": \"\", \"base_url\": \"\", \"browser\": \"\", \"description\": \"\", \"name\": \"\", \"notes\": \"\", \"project_id\": \"\", \"variables\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - PUT /test-environments/:id",
+      "request": {
+        "method": "PUT",
+        "url": "{{baseUrl}}/test-environments/:id",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"app_type_id\": \"\", \"base_url\": \"\", \"browser\": \"\", \"description\": \"\", \"name\": \"\", \"notes\": \"\", \"project_id\": \"\", \"variables\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /test-steps/run-api-request",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/test-steps/run-api-request",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"api_request\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - PUT /test-steps/:id",
+      "request": {
+        "method": "PUT",
+        "url": "{{baseUrl}}/test-steps/:id",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"action\": \"\", \"api_request\": \"\", \"automation_code\": \"\", \"expected_result\": \"\", \"group_id\": \"\", \"group_kind\": \"\", \"group_name\": \"\", \"reusable_group_id\": \"\", \"step_order\": \"\", \"step_type\": \"\", \"test_case_id\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - PUT /test-cases/:id/test-steps/reorder",
+      "request": {
+        "method": "PUT",
+        "url": "{{baseUrl}}/test-cases/:id/test-steps/reorder",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"entries\": \"\", \"indexOf\": \"\", \"step_ids\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - PUT /test-steps/reorder",
+      "request": {
+        "method": "PUT",
+        "url": "{{baseUrl}}/test-steps/reorder",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"entries\": \"\", \"indexOf\": \"\", \"step_ids\": \"\", \"test_case_id\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /test-suites",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/test-suites",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"app_type_id\": \"\", \"created_by\": \"\", \"display_id\": \"\", \"name\": \"\", \"parallel_count\": \"\", \"parallel_enabled\": \"\", \"parameter_values\": \"\", \"parent_id\": \"\", \"updated_at\": \"\", \"updated_by\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - PUT /test-suites/:id",
+      "request": {
+        "method": "PUT",
+        "url": "{{baseUrl}}/test-suites/:id",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\": \"\", \"parallel_count\": \"\", \"parallel_enabled\": \"\", \"parameter_values\": \"\", \"parent_id\": \"\", \"updated_at\": \"\", \"updated_by\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /test-suites/:id/assign-test-cases",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/test-suites/:id/assign-test-cases",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"test_case_ids\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /users",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/users",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"email\": \"\", \"is_workspace_admin\": \"\", \"name\": \"\", \"password\": \"\", \"password_hash\": \"\", \"project_id\": \"\", \"role_id\": \"\", \"user_id\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /users/import",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/users/import",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"rows\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - PUT /users/:id",
+      "request": {
+        "method": "PUT",
+        "url": "{{baseUrl}}/users/:id",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"avatar_data_url\": \"\", \"email\": \"\", \"is_workspace_admin\": \"\", \"name\": \"\", \"password\": \"\", \"password_hash\": \"\", \"role_id\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - PUT /users/:id/password",
+      "request": {
+        "method": "PUT",
+        "url": "{{baseUrl}}/users/:id/password",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"current_password\": \"\", \"new_password\": \"\", \"password_hash\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /api/v1/mobile/execute",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/api/v1/mobile/execute",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"objectRepository\": \"\", \"object_repository\": \"\", \"steps\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /api/v1/mobile/recorder/sessions",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/api/v1/mobile/recorder/sessions",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"recorder_mode\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /api/v1/mobile/recorder/sessions/:id/input",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/api/v1/mobile/recorder/sessions/:id/input",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"height\": \"\", \"type\": \"\", \"value\": \"\", \"width\": \"\", \"x\": \"\", \"y\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /api/v1/runs",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/api/v1/runs",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"automated\": \"\", \"callback\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    },
+    {
+      "name": "EDGE empty strings - POST /api/v1/recorder/sessions",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/api/v1/recorder/sessions",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"locator\": \"\", \"source\": \"\", \"text\": \"\", \"timestamp\": \"\", \"type\": \"\", \"url\": \"\", \"value\": \"\", \"x\": \"\", \"y\": \"\"}"
+        }
+      },
+      "expectedStatus": [
+        200,
+        400,
+        422
+      ]
+    }
+  ]
+}

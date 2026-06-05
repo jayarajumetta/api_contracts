@@ -1,0 +1,37 @@
+{
+  "score": 94.02,
+  "threshold": 90.0,
+  "accepted": true,
+  "issues": [],
+  "nextRemediations": [],
+  "summary": {
+    "apiContracts": 241,
+    "bodyExpected": 123,
+    "bodyDetected": 118,
+    "bodyFieldsKnown": 99,
+    "bodyDetectionRate": 95.93,
+    "bodyFieldKnownRate": 80.49,
+    "pathParamsDiscovered": 147,
+    "queryParamsDiscovered": 22,
+    "headersDiscovered": 0,
+    "serviceEdges": 959,
+    "schemasDiscovered": 12,
+    "inferredSchemas": 99,
+    "declaredSchemaAttachments": 0,
+    "inferredSchemaAttachments": 99,
+    "serviceBodyPatterns": 100,
+    "dbWritePatterns": 39,
+    "testsGenerated": true,
+    "negativeTestsGenerated": true,
+    "edgeTestsGenerated": true
+  },
+  "reactSafety": {
+    "strictJsonTransport": true,
+    "malformedQuoteEscapeFailOpen": true
+  },
+  "llmReview": {
+    "networkCallExecuted": false,
+    "reason": "centralized_llm_review_only",
+    "reviewAgent": "IterationLLMReviewerAgent"
+  }
+}
