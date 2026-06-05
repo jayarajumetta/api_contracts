@@ -1,7 +1,7 @@
 agent:
   name: qaira-semantic-compiler-platform
-  version: v61
-  mode: final-agentic-quality-runtime
+  version: v63
+  mode: accuracy-restored-balanced-parser-runtime
 
 repo:
   enabled: false
@@ -32,6 +32,12 @@ logging:
   write_agent_logs: true
   log_level: INFO
   redact_secrets: true
+
+parsing:
+  prefer_tree_sitter: false
+  fallback_regex_parser: true
+  balanced_regex_route_parser: true
+  max_route_call_chars: 20000
 
 scan:
   use_repository_index: true

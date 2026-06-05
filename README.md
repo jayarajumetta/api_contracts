@@ -1,50 +1,46 @@
-# QAira Semantic Compiler Platform V61 — Final Agentic Quality Runtime
+# QAira Semantic Compiler Platform V63 — Accuracy Restore
 
-V61 is the final consolidated version after the V30 → V60 learning cycle.
+V63 is based on the stable V61 runtime, not the V62 no-hang branch.
 
-## What was missing fundamentally
+## What V63 fixes
 
-The core compiler had strong discovery, but the agentic runtime needed these fundamental blocks:
+Your V61 run completed, but accuracy regressed:
 
 ```text
-Planner
-State machine
-Verifier
-Quality gate
-Artifact manifest
-Budget/cache/retry config
-Fail-open LLM guard
-Per-agent result contract
-Production package entrypoint
+bodyDetected: 1 / 123
+bodyDetectionRate: 0.81%
 ```
 
-V61 adds those blocks while preserving the proven V58/V57 compiler core.
-
-## Final execution flow
+Root cause:
 
 ```text
-FinalAgenticOrchestratorV61
-  ├── PlannerAgent
-  ├── StateMachine_INIT
-  ├── RepoCloneAgent
-  ├── RepositoryIndexAgent
-  ├── StateMachine_DISCOVERY
-  ├── LegacySemanticCompilerAgent
-  ├── OutputAnalyzerAgent
-  ├── VerifierAgent
-  ├── QualityGateAgent
-  ├── LLMResultsAnalyzerAgent
-  ├── FinalTestGenerationAgent
-  ├── ArtifactManifestAgent
-  ├── CodeGenerationAgent
-  ├── GitCommitPushAgent
-  └── StateMachine_COMPLETE
+old regex parser stopped at async (req, reply)
+rawHandler became only "async (req"
+```
+
+V63 replaces the old route regex with a balanced parenthesis route-call scanner.
+
+## Expected result
+
+The route handler body should no longer truncate at `async (req`.
+
+You should see parser type:
+
+```text
+regex-balanced-v63
+```
+
+in:
+
+```text
+/output/ast/parser_capability_report.json
+/output/diagnostics/body_detection_detail.json
 ```
 
 ## Build
 
 ```bash
-docker build -t qaira/semantic-compiler:v61 .
+docker build -t qaira/semantic-compiler:v63 .
 ```
 
 ## Run
@@ -53,39 +49,9 @@ docker build -t qaira/semantic-compiler:v61 .
 docker run --rm \
   -e PYTHONUNBUFFERED=1 \
   -e OPENAI_API_KEY="$OPENAI_API_KEY" \
-  -e GIT_USERNAME="$GIT_USERNAME" \
-  -e GIT_TOKEN="$GIT_TOKEN" \
   -v /Users/jayarajumetta/MJ/qaira:/repo:ro \
   -v /Users/jayarajumetta/Downloads/volume/output:/output \
   -v /Users/jayarajumetta/Downloads/volume/config.yaml:/config/config.yaml:ro \
   -v /Users/jayarajumetta/Downloads/volume/learning:/learning \
-  qaira/semantic-compiler:v61
-```
-
-## Critical outputs
-
-```text
-/output/runtime/execution_plan.json
-/output/runtime/final_agentic_orchestrator_report.json
-/output/runtime/artifact_manifest.json
-/output/quality/verifier_report.json
-/output/quality/quality_gate_report.json
-/output/summary/scan_summary.json
-/output/generated/openapi.json
-/output/generated/postman_collection.json
-/output/final/final_test_generation_report.json
-/output/verbose/console_progress.log
-```
-
-## Honest expectation
-
-No static analyzer can guarantee a literally perfect output for every repository, but V61 is designed to produce the best possible output safely:
-
-```text
-deterministic first
-LLM assisted only when safe
-fail-open
-artifact verification
-quality scoring
-complete traceability
+  qaira/semantic-compiler:v63
 ```

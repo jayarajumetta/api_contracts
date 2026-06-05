@@ -13,5 +13,5 @@ RUN pip install --no-cache-dir \
     tree-sitter-javascript \
     tree-sitter-typescript
 
-ENTRYPOINT ["python", "-m", "qaira_semantic_compiler.orchestrator_v61"]
+ENTRYPOINT ["python", "-m", "qaira_semantic_compiler.orchestrator_v63"]
 CMD ["--source", "/repo", "--output", "/output", "--learning", "/learning", "--config", "/config/config.yaml"]

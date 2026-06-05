@@ -25,7 +25,7 @@ EXCLUDED_DIRS={".git","node_modules","dist","build","target","bin","obj","covera
 SOURCE_EXTENSIONS={".js",".jsx",".ts",".tsx",".json",".yaml",".yml",".prisma",".sql",".md",".env"}
 
 DEFAULT_CONFIG={
- "agent":{"name":"qaira-semantic-compiler-platform","version":"v61","mode":"prebuild"},
+ "agent":{"name":"qaira-semantic-compiler-platform","version":"v63","mode":"prebuild"},
  "paths":{"source_dir":"/repo","output_dir":"/output","learning_dir":"/learning","changed_files":""},
  "logging":{"verbose_console":True},
  "parsing":{"prefer_tree_sitter":True,"fallback_regex_parser":True,"max_file_size_kb":4096},
@@ -1705,6 +1705,279 @@ class InlineHandlerCompiler:
                     service_calls.append({"call":sm.group(1),"args":sm.group(2)})
         return {"hasBody":bool(re.search(r"(?:request|req)\.body|\bbody\b",raw)),"aliases":sorted(set(aliases)),"fields":sorted(set(fields)),"destructuredFields":sorted(set(destructured)),"params":[],"query":[],"serviceCalls":service_calls,"schemaRefs":[],"rawHandler":raw}
 
+
+# ---------------- V63 Balanced Regex Route Parser Patch ----------------
+# Root-cause fixed:
+# Previous regex route parser stopped at the first ")" inside async (req, reply),
+# so rawHandler became " async (req" and body detection collapsed.
+# V63 scans balanced route call parentheses and preserves the full handler text.
+
+def _v63_find_matching_paren(text, open_idx, max_chars=20000):
+    depth = 0
+    quote = None
+    escape = False
+    line_comment = False
+    block_comment = False
+    end_limit = min(len(text), open_idx + max_chars)
+    i = open_idx
+    while i < end_limit:
+        ch = text[i]
+        nxt = text[i+1] if i+1 < end_limit else ""
+
+        if line_comment:
+            if ch == "\n":
+                line_comment = False
+            i += 1
+            continue
+        if block_comment:
+            if ch == "*" and nxt == "/":
+                block_comment = False
+                i += 2
+                continue
+            i += 1
+            continue
+        if quote:
+            if escape:
+                escape = False
+            elif ch == "\\":
+                escape = True
+            elif ch == quote:
+                quote = None
+            i += 1
+            continue
+
+        if ch == "/" and nxt == "/":
+            line_comment = True
+            i += 2
+            continue
+        if ch == "/" and nxt == "*":
+            block_comment = True
+            i += 2
+            continue
+        if ch in ("'", '"', "`"):
+            quote = ch
+            i += 1
+            continue
+        if ch == "(":
+            depth += 1
+        elif ch == ")":
+            depth -= 1
+            if depth == 0:
+                return i
+        i += 1
+    return -1
+
+def _v63_split_top_level_args(arg_text):
+    args = []
+    start = 0
+    depth_round = depth_curly = depth_square = 0
+    quote = None
+    escape = False
+    line_comment = False
+    block_comment = False
+    i = 0
+    while i < len(arg_text):
+        ch = arg_text[i]
+        nxt = arg_text[i+1] if i+1 < len(arg_text) else ""
+
+        if line_comment:
+            if ch == "\n":
+                line_comment = False
+            i += 1
+            continue
+        if block_comment:
+            if ch == "*" and nxt == "/":
+                block_comment = False
+                i += 2
+                continue
+            i += 1
+            continue
+        if quote:
+            if escape:
+                escape = False
+            elif ch == "\\":
+                escape = True
+            elif ch == quote:
+                quote = None
+            i += 1
+            continue
+
+        if ch == "/" and nxt == "/":
+            line_comment = True
+            i += 2
+            continue
+        if ch == "/" and nxt == "*":
+            block_comment = True
+            i += 2
+            continue
+        if ch in ("'", '"', "`"):
+            quote = ch
+            i += 1
+            continue
+        if ch == "(":
+            depth_round += 1
+        elif ch == ")":
+            depth_round -= 1
+        elif ch == "{":
+            depth_curly += 1
+        elif ch == "}":
+            depth_curly -= 1
+        elif ch == "[":
+            depth_square += 1
+        elif ch == "]":
+            depth_square -= 1
+        elif ch == "," and depth_round == 0 and depth_curly == 0 and depth_square == 0:
+            args.append(arg_text[start:i].strip())
+            start = i + 1
+        i += 1
+    tail = arg_text[start:].strip()
+    if tail:
+        args.append(tail)
+    return args
+
+def _v63_extract_route_calls(text, max_chars=20000):
+    pat = re.compile(r"\b(app|router|server|fastify)\.(get|post|put|patch|delete)\s*\(", re.I)
+    for m in pat.finditer(text):
+        open_idx = text.find("(", m.end() - 1)
+        close_idx = _v63_find_matching_paren(text, open_idx, max_chars=max_chars)
+        if close_idx == -1:
+            continue
+        call_body = text[open_idx+1:close_idx]
+        args = _v63_split_top_level_args(call_body)
+        if not args:
+            continue
+        path_arg = args[0].strip()
+        pm = re.match(r"^[`'\"]([^`'\"]+)[`'\"]", path_arg)
+        if not pm:
+            continue
+        yield {
+            "object": m.group(1),
+            "method": m.group(2).upper(),
+            "path": pm.group(1),
+            "args": args,
+            "start": m.start(),
+            "end": close_idx + 1,
+            "callText": text[m.start():close_idx+1],
+        }
+
+def _v63_choose_handler_text(args):
+    if len(args) < 2:
+        return ""
+    # Fastify style: route(path, opts, handler)
+    for arg in reversed(args[1:]):
+        s = arg.strip()
+        if "=>" in s or s.startswith("async ") or s.startswith("function"):
+            return s
+    # route(path, { schema, handler: async (...) => {} })
+    for arg in args[1:]:
+        hm = re.search(r"\bhandler\s*:\s*([\s\S]+)$", arg)
+        if hm:
+            return hm.group(1).strip()
+    return args[-1].strip() if len(args) >= 2 else ""
+
+def _v63_parse_file_regex(self, t, r):
+    routes = []
+    nodes = [node("file:"+r, "File", {"file": r, "parser": "regex-balanced-v63"})]
+    edges = []
+    req_traces = []
+    res_traces = []
+    handler_report = []
+    body_report = []
+    max_chars = 20000
+    try:
+        max_chars = int(self._v63_cfg.get("parsing", {}).get("max_route_call_chars", 20000))
+    except Exception:
+        pass
+
+    for call in _v63_extract_route_calls(t, max_chars=max_chars):
+        method = call["method"]
+        path = norm_path(call["path"])
+        handler_text = _v63_choose_handler_text(call["args"])
+        if not handler_text:
+            handler_text = call["callText"]
+
+        rid = f"route:{method}:{path}:{r}:{line_no(t, call['start'])}"
+        route = {
+            "id": rid,
+            "method": method,
+            "path": path,
+            "file": r,
+            "line": line_no(t, call["start"]),
+            "handler": "<inline-regex-balanced-v63>",
+            "parser": "regex-balanced-v63",
+            "inline": True,
+        }
+
+        info = self.extract_body_info_from_text(handler_text)
+        info["rawHandler"] = handler_text
+
+        req_schema = self.schema_from_body_info(info)
+        routes.append(route)
+        nodes.append(node(rid, "Route", route))
+        edges.append(edge("file:"+r, rid, "DECLARES_ROUTE"))
+        handler_report.append({
+            "route": path,
+            "method": method,
+            "file": r,
+            "inlineHandlerDetected": True,
+            "line": line_no(t, call["start"]),
+            "parser": "regex-balanced-v63",
+            "handlerLength": len(handler_text),
+        })
+        body_report.append({"route": path, "method": method, "file": r, **info})
+        req_traces.append({
+            "routeId": rid,
+            "method": method,
+            "path": path,
+            "schema": req_schema,
+            "trace": [{"type": "regex_balanced_v63_body_analysis", "bodyInfo": info}],
+            "confidence": 0.85 if req_schema else 0.25,
+        })
+        res_traces.append({
+            "routeId": rid,
+            "method": method,
+            "path": path,
+            "schema": {"type": "object", "properties": {"id": {"type": "string", "x-qaira-source": "fallback_minimal"}}},
+            "trace": [{"type": "regex_balanced_v63_response_placeholder"}],
+            "confidence": 0.3,
+        })
+
+    return {
+        "routes": routes,
+        "nodes": nodes,
+        "edges": edges,
+        "requestTraces": req_traces,
+        "responseTraces": res_traces,
+        "handlerReport": handler_report,
+        "bodyReport": body_report,
+    }
+
+def _v63_inline_run(self, fs, cfg):
+    # Store config for parser helpers.
+    self._v63_cfg = cfg or {}
+    routes=[]; nodes=[]; edges=[]; req_traces=[]; res_traces=[]; handler_report=[]; body_report=[]
+    parser_report={"treeSitterAvailable":TREE_SITTER_AVAILABLE,"files":[],"errors":[],"v63BalancedRegex":True}
+    for p in fs.all_files():
+        if p.suffix.lower() not in {".js",".jsx",".ts",".tsx"}:
+            continue
+        r=fs.rel(p); t=fs.read(p)
+        try:
+            # V63 intentionally prefers balanced regex for Fastify/Express-style routing
+            # because tree-sitter extraction was falling back to broken old regex on this repo.
+            fr=self.parse_file_regex(t,r)
+            parser_report["files"].append({"file":r,"parser":"regex-balanced-v63"})
+        except Exception as e:
+            parser_report["errors"].append({"file":r,"error":str(e),"parser":"regex-balanced-v63"})
+            fr={"routes":[],"nodes":[],"edges":[],"requestTraces":[],"responseTraces":[],"handlerReport":[],"bodyReport":[]}
+        routes += fr["routes"]; nodes += fr["nodes"]; edges += fr["edges"]; req_traces += fr["requestTraces"]; res_traces += fr["responseTraces"]; handler_report += fr["handlerReport"]; body_report += fr["bodyReport"]
+    graph={"nodes":nodes,"edges":edges}
+    return routes,graph,req_traces,res_traces,handler_report,body_report,parser_report
+
+InlineHandlerCompiler.parse_file_regex = _v63_parse_file_regex
+InlineHandlerCompiler.run = _v63_inline_run
+# ---------------- End V63 Patch ----------------
+
+
 class AuthScopeCompiler:
     def run(self,fs,routes):
         effective={}
@@ -2776,7 +3049,7 @@ class ArtifactGenerator:
         store.text("generated/generated_curls.sh",self.curls(contracts))
         store.json("generated/openapi.json",self.openapi(contracts))
         store.json("generated/postman_collection.json",self.postman(contracts))
-        store.json("generated/qaira_api_repository.json",{"version":"61.0","apis":[safe_json(c) for c in contracts]})
+        store.json("generated/qaira_api_repository.json",{"version":"63.0","apis":[safe_json(c) for c in contracts]})
     def curls(self,contracts):
         lines=["#!/usr/bin/env bash","set -euo pipefail",': "${baseUrl:=http://localhost:3000}"',': "${token:=CHANGE_ME}"',""]
         for c in contracts: lines += [f"echo '### {c.method} {c.path}'",c.curl.replace("{{baseUrl}}","${baseUrl}").replace("{{token}}","${token}"),""]
@@ -2788,14 +3061,14 @@ class ArtifactGenerator:
             if c.request_body: op["requestBody"]={"required":bool(c.request_body.get("required")),"content":{"application/json":{"schema":c.request_body}}}
             if c.auth.get("required"): op["security"]=[{"bearerAuth":[]}]
             paths.setdefault(c.path,{})[c.method.lower()]=op
-        return {"openapi":"3.1.0","info":{"title":"QAira Semantic Compiler V61 API","version":"58.0.0"},"paths":paths,"components":{"securitySchemes":{"bearerAuth":{"type":"http","scheme":"bearer","bearerFormat":"JWT"}}}}
+        return {"openapi":"3.1.0","info":{"title":"QAira Semantic Compiler V63 API","version":"58.0.0"},"paths":paths,"components":{"securitySchemes":{"bearerAuth":{"type":"http","scheme":"bearer","bearerFormat":"JWT"}}}}
     def postman(self,contracts):
         items=[]
         for c in contracts:
             req={"method":c.method,"header":[{"key":k,"value":v} for k,v in headers(c.auth).items()],"url":{"raw":"{{baseUrl}}"+c.path,"host":["{{baseUrl}}"],"path":c.path.strip("/").split("/"),"query":[{"key":p.get("name"),"value":""} for p in (c.parameters or []) if p.get("in")=="query"]}}
             if c.request_body: req["body"]={"mode":"raw","raw":json.dumps(sample(c.request_body),indent=2),"options":{"raw":{"language":"json"}}}
             items.append({"name":c.api_id,"request":req})
-        return {"info":{"name":"QAira V61 API Collection","schema":"https://schema.getpostman.com/json/collection/v2.1.0/collection.json"},"variable":[{"key":"baseUrl","value":"http://localhost:3000"},{"key":"token","value":""}],"item":items}
+        return {"info":{"name":"QAira V63 API Collection","schema":"https://schema.getpostman.com/json/collection/v2.1.0/collection.json"},"variable":[{"key":"baseUrl","value":"http://localhost:3000"},{"key":"token","value":""}],"item":items}
 
 
 class V53Governance:
@@ -3092,7 +3365,7 @@ class TestGeneratorAgentV54:
                 lines.append(f"curl -X {c.method} \"$BASE_URL{path}\"")
         return "\n".join(lines)+"\n"
     def generate_qaira(self,contracts,relationship):
-        return json.dumps({"version":"v61","sequence":relationship.get("sequence",[]),"tests":[{"id":c.api_id,"method":c.method,"path":c.path,"payload":self.payload_for(c),"params":self.params_for(c)} for c in contracts]},indent=2)
+        return json.dumps({"version":"v63","sequence":relationship.get("sequence",[]),"tests":[{"id":c.api_id,"method":c.method,"path":c.path,"payload":self.payload_for(c),"params":self.params_for(c)} for c in contracts]},indent=2)
     def generate_rest_assured(self,contracts):
         body=["import io.restassured.RestAssured;","public class GeneratedApiTests {","  String baseUrl = System.getProperty(\"baseUrl\", \"http://localhost:3000\");"]
         for i,c in enumerate(contracts[:200]):
