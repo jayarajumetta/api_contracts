@@ -1,7 +1,7 @@
 from __future__ import annotations
 from pathlib import Path
 from typing import Dict, List, Any
-import fnmatch, re, json
+import fnmatch
 
 class RepositoryIndex:
     def __init__(self, source: Path, config: Dict[str, Any]):
@@ -16,7 +16,14 @@ class RepositoryIndex:
         self.text_files: List[Path] = []
         self.by_name: Dict[str, List[str]] = {}
         self.by_stem: Dict[str, List[str]] = {}
-        self.by_kind: Dict[str, List[str]] = {"routes": [], "services": [], "schemas": [], "dtos": [], "repositories": []}
+        self.by_kind: Dict[str, List[str]] = {
+            "routes": [],
+            "controllers": [],
+            "services": [],
+            "schemas": [],
+            "dtos": [],
+            "repositories": []
+        }
 
     def skip(self, p: Path):
         if any(part in self.exclude_dirs for part in p.parts):
@@ -43,17 +50,21 @@ class RepositoryIndex:
             self.text_files.append(p)
             self.by_name.setdefault(p.name.lower(), []).append(rel)
             self.by_stem.setdefault(p.stem.lower(), []).append(rel)
+
             stem = p.stem.lower()
             rel_l = rel.lower()
-            if any(x in stem for x in ["route", "controller"]) or "/routes/" in rel_l:
+
+            if any(x in stem for x in ["route", "routes"]) or "/routes/" in rel_l:
                 self.by_kind["routes"].append(rel)
+            if any(x in stem for x in ["controller", "controllers"]) or "/controllers/" in rel_l:
+                self.by_kind["controllers"].append(rel)
             if "service" in stem or "/services/" in rel_l:
                 self.by_kind["services"].append(rel)
-            if any(x in stem for x in ["schema", "validator"]):
+            if any(x in stem for x in ["schema", "validator", "validation"]):
                 self.by_kind["schemas"].append(rel)
             if "dto" in stem:
                 self.by_kind["dtos"].append(rel)
-            if "repository" in stem or "/repositories/" in rel_l:
+            if "repository" in stem or "/repositories/" in rel_l or "/repository/" in rel_l:
                 self.by_kind["repositories"].append(rel)
         return self
 
@@ -70,10 +81,12 @@ class RepositoryIndex:
             candidates = [raw] + [Path(str(raw)+e) for e in exts] + [raw/"index.js", raw/"index.ts", raw/"index.tsx"]
             for c in candidates:
                 if c.exists() and c.is_file():
-                    try: return str(c.relative_to(self.source)).replace("\\", "/")
-                    except Exception: return str(c)
+                    try:
+                        return str(c.relative_to(self.source)).replace("\\", "/")
+                    except Exception:
+                        return str(c)
         stem = Path(module).name.lower()
-        keys = [stem, stem+".js", stem+".ts", stem+".tsx"]
+        keys = [stem, stem+".js", stem+".ts", stem+".tsx", stem+".jsx"]
         for k in keys:
             vals = self.by_name.get(k) or self.by_stem.get(k)
             if vals:
@@ -81,4 +94,8 @@ class RepositoryIndex:
         return ""
 
     def summary(self):
-        return {"fileCount": len(self.files), "byKind": {k: len(v) for k,v in self.by_kind.items()}, "names": len(self.by_name)}
+        return {
+            "fileCount": len(self.files),
+            "byKind": {k: len(v) for k, v in self.by_kind.items()},
+            "names": len(self.by_name)
+        }
