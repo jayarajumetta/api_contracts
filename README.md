@@ -1,99 +1,110 @@
-# QAira Semantic Compiler Platform V57 — Graph Completion Release
+# QAira Semantic Compiler Platform V58 — LLM Safe-Guarded Runtime
 
-V57 is a focused fix release over V56.
-
-The V56 output proved that discovery is good, but graph traversal is weak:
+V58 is built on V57 and adds the operational safeguards you asked for:
 
 ```text
-Import-aware resolutions      0
-DTO attachments               1 / 60
-Shape propagations            0
-Function return propagations  0
-Actionable recovery           0 / 37
+LLM enabled in config
+selective LLM only
+short timeout
+single retry
+fail-open behavior
+continue deterministic agents if LLM fails
+console logs at every major stage
+heartbeat logs
+scan folder exclusions
+clear final outcome artifacts
 ```
 
-V57 focuses only on graph completion.
+## What changes in V58
 
-## V57 Adds
+### LLM is enabled but safe
 
-### 1. ImportHydrationAgentV57
+```yaml
+llm:
+  enabled: true
+  timeout_seconds: 20
+  max_retries: 1
+  fail_open: true
 
-Repairs unresolved service imports like:
-
-```js
-const authService = require("../services/auth.service")
+llm_invocation:
+  enabled: true
+  mode: selective
+  continue_on_timeout: true
+  continue_on_error: true
+  max_stage_llm_calls_per_iteration: 8
 ```
 
-by explicitly checking:
+If LLM fails:
 
 ```text
-../services/auth.service.js
-../services/auth.service.ts
-../services/auth.service/index.js
-../services/auth.service/index.ts
+record failure
+write prompt/diagnostic
+continue deterministic execution
+finish output
 ```
 
-and common service module patterns.
+### Console logs are forced
 
-### 2. ServiceCallGraphAgentV57
+Run with:
 
-Builds edges:
-
-```text
-Route → Handler → Service → Repository → ORM
+```bash
+-e PYTHONUNBUFFERED=1
 ```
 
-based on import aliases, service calls, implementation files, and method names.
-
-### 3. ShapePropagationAgentV57
-
-Propagates:
+V58 prints:
 
 ```text
-request.body → alias → service call → service method param → field usage
+[Qaira][START] stage
+[Qaira][END] stage
+[Qaira][LLM-SKIP]
+[Qaira][LLM-FAIL-OPEN]
+[Qaira][DONE]
 ```
 
-and enriches request schemas.
+### Scan exclusions
 
-### 4. ReturnPropagationAgentV57
-
-Propagates:
+V58 skips heavy folders:
 
 ```text
-service result → handler variable → reply.send / return
-```
-
-and improves response schema evidence.
-
-### 5. DTOAttachmentAgentV57
-
-Replaces weak string similarity with call-graph-aware attachment:
-
-```text
-route → service method signature → DTO/schema → request body
-```
-
-## New Outputs
-
-```text
-/output/graph_completion/import_hydration_v57_report.json
-/output/graph_completion/service_call_graph_v57.json
-/output/graph_completion/shape_propagation_v57_report.json
-/output/graph_completion/return_propagation_v57_report.json
-/output/graph_completion/dto_attachment_v57_report.json
-/output/graph_completion/graph_completion_summary.json
+node_modules
+.git
+dist
+build
+coverage
+.next
+.cache
+playwright-report
+test-results
 ```
 
 ## Docker Run
 
 ```bash
-docker build -t qaira/semantic-compiler:v57 .
+docker build -t qaira/semantic-compiler:v58 .
 
 docker run --rm \
-  -v /absolute/path/to/source:/repo:ro \
-  -v /absolute/path/to/output:/output \
-  -v /absolute/path/to/config.yaml:/config/config.yaml:ro \
-  -v /absolute/path/to/learning:/learning \
+  -e PYTHONUNBUFFERED=1 \
   -e OPENAI_API_KEY="$OPENAI_API_KEY" \
-  qaira/semantic-compiler:v57
+  -v /Users/jayarajumetta/MJ/qaira:/repo:ro \
+  -v /Users/jayarajumetta/Downloads/volume/output:/output \
+  -v /Users/jayarajumetta/Downloads/volume/config.yaml:/config/config.yaml:ro \
+  -v /Users/jayarajumetta/Downloads/volume/learning:/learning \
+  qaira/semantic-compiler:v58
+```
+
+## Live log
+
+```bash
+tail -f /Users/jayarajumetta/Downloads/volume/output/verbose/agent_stage_log.jsonl
+```
+
+## Important outputs
+
+```text
+/output/runtime/confidence_report.json
+/output/runtime/selective_llm_invocation_report.json
+/output/llm/selective_prompts/
+/output/llm/fail_open_report.json
+/output/verbose/console_progress.log
+/output/summary/scan_summary.json
 ```

@@ -1,7 +1,7 @@
 agent:
   name: qaira-semantic-compiler-platform
-  version: v57
-  mode: graph-completion-release
+  version: v58
+  mode: llm-safe-guarded-runtime
 
 repo:
   enabled: false
@@ -23,13 +23,44 @@ paths:
 logging:
   verbose_console: true
   verbose_files: true
+  console_heartbeat: true
+  heartbeat_every_seconds: 10
+  stage_start_end_logs: true
+  flush_console: true
+
+scan:
+  exclude_dirs:
+    - node_modules
+    - .git
+    - dist
+    - build
+    - coverage
+    - .next
+    - .cache
+    - playwright-report
+    - test-results
+    - tmp
+    - logs
+  exclude_files:
+    - "*.map"
+    - "*.lock"
+    - "*.png"
+    - "*.jpg"
+    - "*.jpeg"
+    - "*.gif"
+    - "*.mp4"
+    - "*.zip"
+    - "*.tar"
+    - "*.gz"
 
 runtime_execution:
   enabled: true
-  max_iterations: 50
+  max_iterations: 3
   stop_when_satisfied: true
   threshold_percent: 100
   write_iteration_snapshots: true
+  fail_open_on_agent_error: true
+  fail_open_on_llm_error: true
 
 agent_confidence:
   enabled: true
@@ -44,26 +75,33 @@ agent_confidence:
     test_generation: 0.90
 
 llm:
-  enabled: false
+  enabled: true
   provider: openai
   model: gpt-4.1-mini
   api_key_env: OPENAI_API_KEY
   endpoint: https://api.openai.com/v1/chat/completions
   temperature: 0
-  max_tokens: 2500
-  timeout_seconds: 60
-  max_retries: 2
+  max_tokens: 1200
+  timeout_seconds: 20
+  max_retries: 1
+  fail_open: true
   require_json_response: true
   allow_full_file_context: false
   allow_full_repo_context: false
+  max_prompt_chars: 12000
+  save_prompts: true
+  save_responses: true
 
 llm_invocation:
   mode: selective
-  enabled: false
+  enabled: true
   confidence_threshold: 0.80
   invoke_on_failure: true
   invoke_on_low_confidence: true
   invoke_on_high_confidence: false
+  continue_on_timeout: true
+  continue_on_error: true
+  max_stage_llm_calls_per_iteration: 8
   allowed_task_types:
     - inspect_output_file
     - inspect_source_slice
@@ -71,6 +109,20 @@ llm_invocation:
     - add_pattern_to_learning
     - adjust_agent_config
     - mark_manual_review
+  blocked_task_types:
+    - arbitrary_shell
+    - network_call
+    - delete_files
+    - modify_source_without_code_generation_gate
+    - exfiltrate_secret
+
+llm_results_analyser:
+  enabled: true
+  threshold_percent: 100
+  stop_when_llm_says_satisfied: true
+  include_previous_iterations: true
+  continue_on_timeout: true
+  continue_on_error: true
 
 framework_harvesting:
   enabled: true
@@ -104,36 +156,15 @@ graph_completion:
   enabled: true
   import_hydration:
     enabled: true
-    service_patterns:
-      - "../services/*.service"
-      - "./services/*.service"
-      - "@/services/*.service"
-      - "@api/services/*.service"
   service_call_graph:
     enabled: true
     max_depth: 4
   shape_propagation:
     enabled: true
-    propagate_request_body_aliases: true
-    propagate_schema_to_service: true
-    propagate_service_to_repository: true
-    propagate_repository_to_orm: true
   return_propagation:
     enabled: true
-    sinks:
-      - reply.send
-      - response.send
-      - res.send
-      - res.json
-      - return
   dto_attachment:
     enabled: true
-    strategies:
-      - service_signature_param_type
-      - validation_wrapper_schema
-      - call_graph_schema
-      - local_schema_reference
-      - route_handler_schema_reference
     min_similarity: 0.70
 
 relationship_engine:

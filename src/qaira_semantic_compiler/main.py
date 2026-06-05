@@ -25,7 +25,7 @@ EXCLUDED_DIRS={".git","node_modules","dist","build","target","bin","obj","covera
 SOURCE_EXTENSIONS={".js",".jsx",".ts",".tsx",".json",".yaml",".yml",".prisma",".sql",".md",".env"}
 
 DEFAULT_CONFIG={
- "agent":{"name":"qaira-semantic-compiler-platform","version":"v57","mode":"prebuild"},
+ "agent":{"name":"qaira-semantic-compiler-platform","version":"v58","mode":"prebuild"},
  "paths":{"source_dir":"/repo","output_dir":"/output","learning_dir":"/learning","changed_files":""},
  "logging":{"verbose_console":True},
  "parsing":{"prefer_tree_sitter":True,"fallback_regex_parser":True,"max_file_size_kb":4096},
@@ -2776,7 +2776,7 @@ class ArtifactGenerator:
         store.text("generated/generated_curls.sh",self.curls(contracts))
         store.json("generated/openapi.json",self.openapi(contracts))
         store.json("generated/postman_collection.json",self.postman(contracts))
-        store.json("generated/qaira_api_repository.json",{"version":"57.0","apis":[safe_json(c) for c in contracts]})
+        store.json("generated/qaira_api_repository.json",{"version":"58.0","apis":[safe_json(c) for c in contracts]})
     def curls(self,contracts):
         lines=["#!/usr/bin/env bash","set -euo pipefail",': "${baseUrl:=http://localhost:3000}"',': "${token:=CHANGE_ME}"',""]
         for c in contracts: lines += [f"echo '### {c.method} {c.path}'",c.curl.replace("{{baseUrl}}","${baseUrl}").replace("{{token}}","${token}"),""]
@@ -2788,14 +2788,14 @@ class ArtifactGenerator:
             if c.request_body: op["requestBody"]={"required":bool(c.request_body.get("required")),"content":{"application/json":{"schema":c.request_body}}}
             if c.auth.get("required"): op["security"]=[{"bearerAuth":[]}]
             paths.setdefault(c.path,{})[c.method.lower()]=op
-        return {"openapi":"3.1.0","info":{"title":"QAira Semantic Compiler V57 API","version":"57.0.0"},"paths":paths,"components":{"securitySchemes":{"bearerAuth":{"type":"http","scheme":"bearer","bearerFormat":"JWT"}}}}
+        return {"openapi":"3.1.0","info":{"title":"QAira Semantic Compiler V58 API","version":"58.0.0"},"paths":paths,"components":{"securitySchemes":{"bearerAuth":{"type":"http","scheme":"bearer","bearerFormat":"JWT"}}}}
     def postman(self,contracts):
         items=[]
         for c in contracts:
             req={"method":c.method,"header":[{"key":k,"value":v} for k,v in headers(c.auth).items()],"url":{"raw":"{{baseUrl}}"+c.path,"host":["{{baseUrl}}"],"path":c.path.strip("/").split("/"),"query":[{"key":p.get("name"),"value":""} for p in (c.parameters or []) if p.get("in")=="query"]}}
             if c.request_body: req["body"]={"mode":"raw","raw":json.dumps(sample(c.request_body),indent=2),"options":{"raw":{"language":"json"}}}
             items.append({"name":c.api_id,"request":req})
-        return {"info":{"name":"QAira V57 API Collection","schema":"https://schema.getpostman.com/json/collection/v2.1.0/collection.json"},"variable":[{"key":"baseUrl","value":"http://localhost:3000"},{"key":"token","value":""}],"item":items}
+        return {"info":{"name":"QAira V58 API Collection","schema":"https://schema.getpostman.com/json/collection/v2.1.0/collection.json"},"variable":[{"key":"baseUrl","value":"http://localhost:3000"},{"key":"token","value":""}],"item":items}
 
 
 class V53Governance:
@@ -3092,7 +3092,7 @@ class TestGeneratorAgentV54:
                 lines.append(f"curl -X {c.method} \"$BASE_URL{path}\"")
         return "\n".join(lines)+"\n"
     def generate_qaira(self,contracts,relationship):
-        return json.dumps({"version":"v57","sequence":relationship.get("sequence",[]),"tests":[{"id":c.api_id,"method":c.method,"path":c.path,"payload":self.payload_for(c),"params":self.params_for(c)} for c in contracts]},indent=2)
+        return json.dumps({"version":"v58","sequence":relationship.get("sequence",[]),"tests":[{"id":c.api_id,"method":c.method,"path":c.path,"payload":self.payload_for(c),"params":self.params_for(c)} for c in contracts]},indent=2)
     def generate_rest_assured(self,contracts):
         body=["import io.restassured.RestAssured;","public class GeneratedApiTests {","  String baseUrl = System.getProperty(\"baseUrl\", \"http://localhost:3000\");"]
         for i,c in enumerate(contracts[:200]):
@@ -3431,6 +3431,13 @@ class SelectiveLLMInvocationAgentV56:
                 result["note"]="safe_runtime_records_prompt_only"
         self.items.append(result)
         self.store.json("runtime/selective_llm_invocation_report.json",{"items":self.items})
+        try:
+            if should:
+                print(f"[Qaira][LLM-FAIL-OPEN] {stage} reason={reason} - prompt recorded, continuing", flush=True)
+            else:
+                print(f"[Qaira][LLM-SKIP] {stage} confidence={confidence_item.get('confidence')}", flush=True)
+        except Exception:
+            pass
         return result
 
 class RuntimeExecutionManagerV56:
@@ -3442,6 +3449,11 @@ class RuntimeExecutionManagerV56:
         self.llm=SelectiveLLMInvocationAgentV56(cfg,store)
         self.worked=[]; self.failed=[]; self.iterations=[]
     def stage(self,iteration,stage,status,outcome,evidence=None):
+        try:
+            self.store.json(f"runtime/heartbeat_{safe_name_v56(stage)}.json",{"stage":stage,"status":"started"})
+            print(f"[Qaira][START] {stage}", flush=True)
+        except Exception:
+            pass
         ci=self.conf.score_stage(stage,outcome or {})
         li=self.llm.maybe_invoke(iteration,stage,status,ci,evidence or {})
         item={"iteration":iteration,"stage":stage,"status":status,"outcome":outcome,"confidence":ci,"llm":li,"evidence":evidence or {}}
@@ -3449,6 +3461,10 @@ class RuntimeExecutionManagerV56:
         else: self.failed.append(item)
         self._jsonl("agent_stage_log.jsonl",item)
         self.store.json(f"runtime/iteration_{iteration}/stages/{safe_name_v56(stage)}.json",item)
+        try:
+            print(f"[Qaira][END] {stage} confidence={ci.get('confidence')} status={status}", flush=True)
+        except Exception:
+            pass
         return item
     def analyse(self,iteration,summary):
         threshold=float((self.cfg.get("runtime_execution") or {}).get("threshold_percent",100))
@@ -3864,6 +3880,71 @@ class GraphCompletionSummaryAgentV57:
         return summary
 
 
+
+class ConsoleProgressV58:
+    def __init__(self,cfg,store):
+        self.cfg=cfg or {}
+        self.store=store
+        self.enabled=bool((self.cfg.get("logging") or {}).get("verbose_console",True))
+        self.path=self.store.out/"verbose"/"console_progress.log"
+        self.path.parent.mkdir(parents=True,exist_ok=True)
+    def log(self,msg,stage=None,level="INFO"):
+        item={"ts":now_iso_v58(),"level":level,"stage":stage,"message":msg}
+        line=f"[Qaira][{level}] {stage+': ' if stage else ''}{msg}"
+        try:
+            with self.path.open("a",encoding="utf-8") as f:
+                f.write(json.dumps(item)+"\n")
+        except Exception:
+            pass
+        if self.enabled:
+            print(line, flush=True)
+    def start(self,stage):
+        self.log("started",stage,"START")
+    def end(self,stage,outcome=None):
+        self.log("completed "+(json.dumps(outcome,default=str)[:500] if outcome is not None else ""),stage,"END")
+    def fail_open(self,stage,error):
+        self.log("failed but continuing: "+str(error)[:500],stage,"FAIL-OPEN")
+
+class FailOpenLLMGuardV58:
+    def __init__(self,cfg,store,console):
+        self.cfg=cfg or {}
+        self.store=store
+        self.console=console
+        self.items=[]
+    def guarded(self,stage,prompt,default=None):
+        default=default or {"suggested_tasks":[]}
+        llm_cfg=self.cfg.get("llm") or {}
+        inv_cfg=self.cfg.get("llm_invocation") or {}
+        if not (llm_cfg.get("enabled",False) and inv_cfg.get("enabled",False)):
+            item={"stage":stage,"called":False,"reason":"llm_disabled","default":default}
+            self.items.append(item)
+            self.store.json("llm/fail_open_report.json",{"items":self.items})
+            self.console.log("LLM skipped; deterministic flow continues",stage,"LLM-SKIP")
+            return default
+        # Safe generated runtime records prompt and fails open. This avoids hangs when network/API is unavailable.
+        try:
+            sid=sha(json.dumps(prompt,sort_keys=True,default=str))[:12]
+            self.store.json(f"llm/selective_prompts/{safe_name_v58(stage)}_{sid}.json",prompt)
+            item={"stage":stage,"called":True,"deferred":True,"reason":"safe_runtime_records_prompt_and_continues","timeoutSeconds":llm_cfg.get("timeout_seconds",20),"maxRetries":llm_cfg.get("max_retries",1),"default":default}
+            self.items.append(item)
+            self.store.json("llm/fail_open_report.json",{"items":self.items})
+            self.console.log("LLM prompt recorded; continuing without blocking",stage,"LLM-FAIL-OPEN")
+            return default
+        except Exception as e:
+            item={"stage":stage,"called":True,"error":str(e),"default":default}
+            self.items.append(item)
+            self.store.json("llm/fail_open_report.json",{"items":self.items})
+            self.console.fail_open(stage,e)
+            return default
+
+def now_iso_v58():
+    import datetime
+    return datetime.datetime.utcnow().isoformat()+"Z"
+
+def safe_name_v58(s):
+    return re.sub(r"[^a-zA-Z0-9_.-]+","_",str(s))[:120]
+
+
 class Orchestrator:
     def __init__(self,source,output,learning,changed_file,cfg,cfg_report):
         self.source=source.resolve(); self.output=output.resolve(); self.learning=learning.resolve()
@@ -3872,6 +3953,9 @@ class Orchestrator:
         self.fs=FS(self.source,changed,int(cfg.get("parsing",{}).get("max_file_size_kb",4096)))
         self.cfg=cfg; self.log=Logger(self.output,cfg); self.store=Store(self.output,self.log)
         self.store.json("config/effective_config.json",cfg); self.store.json("config/config_validation_report.json",cfg_report)
+        self.console_v58=ConsoleProgressV58(cfg,self.store)
+        self.llm_guard_v58=FailOpenLLMGuardV58(cfg,self.store,self.console_v58)
+        self.console_v58.log("QAira semantic compiler v58 initialized",None,"START")
         self.real_repo_agent_v56=RealRepoAgentV56(cfg,self.store)
         self.runtime_v56=RuntimeExecutionManagerV56(cfg,self.store,self.learning)
         self.repo_clone_agent=RepoCloneAgentV55(cfg,self.store)
@@ -4055,6 +4139,7 @@ class Orchestrator:
         except Exception:
             pass
         self.store.json("summary/scan_summary.json",summary)
+        self.console_v58.log("scan summary written", "Summary", "END")
         try:
             summary["testsGenerated"]=bool(locals().get("test_generation_result",{}))
         except Exception:
