@@ -1,58 +1,61 @@
 agent:
   name: qaira-semantic-compiler
-  mode: final-compatible-auto-iterative
+  mode: final-enterprise-loop-config-safe
+
 paths:
   source_dir: /repo
   output_dir: /output
   learning_dir: /learning
-  changed_files: ''
+
 logging:
   console: true
   jsonl_trace: true
   redact_secrets: true
   progress_every_items: 50
-  verbose_console: true
+
 scan:
   max_file_size_kb: 4096
   include_extensions:
-  - .js
-  - .jsx
-  - .ts
-  - .tsx
-  - .py
-  - .java
-  - .cs
-  - .json
-  - .yaml
-  - .yml
+    - .js
+    - .jsx
+    - .ts
+    - .tsx
+    - .py
+    - .java
+    - .cs
+    - .json
+    - .yaml
+    - .yml
   exclude_dirs:
-  - node_modules
-  - .git
-  - dist
-  - build
-  - coverage
-  - .next
-  - .cache
-  - playwright-report
-  - test-results
-  - tmp
-  - logs
+    - node_modules
+    - .git
+    - dist
+    - build
+    - coverage
+    - .next
+    - .cache
+    - playwright-report
+    - test-results
+    - tmp
+    - logs
   exclude_files:
-  - '*.map'
-  - '*.lock'
-  - '*.png'
-  - '*.jpg'
-  - '*.jpeg'
-  - '*.gif'
-  - '*.mp4'
-  - '*.zip'
-  - '*.tar'
-  - '*.gz'
+    - "*.map"
+    - "*.lock"
+    - "*.png"
+    - "*.jpg"
+    - "*.jpeg"
+    - "*.gif"
+    - "*.mp4"
+    - "*.zip"
+    - "*.tar"
+    - "*.gz"
+
 runtime:
   fail_open: true
   agent_timeout_seconds: 900
   continue_on_error: true
   write_agent_io: true
+
 auto_iteration:
   enabled: true
   max_iterations: 3
@@ -61,19 +64,22 @@ auto_iteration:
   apply_known_remediations: true
   preserve_best_iteration: true
   compare_against_previous_iteration: true
-llm_review:
+
+enterprise_loop:
   enabled: true
-  execute_network_calls: false
-  provider: openai
-  model: gpt-4.1-mini
-  api_key_env: OPENAI_API_KEY
-  endpoint: https://api.openai.com/v1/chat/completions
-  timeout_seconds: 20
-  max_retries: 1
-  fail_open: true
-  review_each_iteration: true
-  review_each_agent_failure: true
-  max_prompt_chars: 12000
+  clone_before_iterations: false
+  final_generation_after_iterations: true
+  llm_once_per_iteration: true
+  llm_only_when_below_threshold: true
+  max_llm_calls_per_run: 1
+  single_context_file: runtime/iteration_context.json
+  compact_context_only: true
+  max_context_chars: 12000
+  apply_llm_delta_code_generation: true
+  delta_patch_mode: plan_only
+  commit_generated_artifacts: false
+  commit_delta_patches: false
+
 agents:
   source_detection: true
   repository_index: true
@@ -98,6 +104,7 @@ agents:
   test_generation: true
   quality_gate: true
   artifact_manifest: true
+
 pattern_establishment:
   enabled: true
   service_body_field_extraction: true
@@ -105,63 +112,59 @@ pattern_establishment:
   service_body_propagation: true
   inferred_schema_registry: true
   min_confidence: 0.55
+
+contract_quality:
+  enabled: true
+  separate_declared_and_inferred_schema_metrics: true
+  generate_required_field_confidence: true
+  generate_negative_tests: true
+  generate_edge_tests: true
+
 quality_gate:
   min_score_percent: 90
   fail_open_below_threshold: true
+
 test_generation:
   types:
-  - postman
-  - curl
-  - qaira
-  - rest_assured
-  - playwright_api
-  - k6
-  - jmeter
-  base_url_variable: '{{baseUrl}}'
+    - postman
+    - curl
+    - qaira
+    - playwright_api
+  base_url_variable: "{{baseUrl}}"
+  default_base_url_variable: "{{baseUrl}}"
   use_data_references: true
   use_param_references: true
   generate_extractors: true
   generate_negative_tests: true
   generate_edge_tests: true
-git_finalization:
-  enabled: true
-  execute_git: true
-  repo_url: https://github.com/jayarajumetta/api_contracts.git
-  clone_dir: /workspace/final-repo
-  source_subdir: ''
-  target_branch: develop
-  create_branch: true
-  branch_prefix: qaira-agent
-  username_env: GIT_USERNAME
-  token_env: GIT_TOKEN
-  commit_message: 'chore: apply QAira agent learned patterns'
-  copy_artifacts_to:
-  - generated/
-  - final/
-  - summary/
-  - quality/
-  - analysis/
-  push: false
-pull_request:
-  enabled: true
-  execute_network_calls: false
-  provider: github
-  base_branch: main
-  title: QAira agent learned pattern updates
-  body: Automated QAira semantic compiler output update.
-  token_env: GIT_TOKEN
-  fail_open: true
-compatibility:
-  accepts_legacy_sections:
-  - agentic_runtime
-  - git_push
-  - llm
-  - llm_invocation
-  - quality_gate
-  - test_generation
-  uploaded_config_mode: final-agentic-quality-runtime
-  uploaded_config_agent_name: qaira-semantic-compiler-platform
 
+# External-input features are disabled by default.
+# Enable only when env vars and permissions are ready.
+llm_review:
+  enabled: false
+  execute_network_calls: false
+  provider: openai
+  model: gpt-4.1-mini
+  api_key_env: OPENAI_API_KEY
+  endpoint: https://api.openai.com/v1/chat/completions
+  timeout_seconds: 20
+  max_retries: 0
+  fail_open: true
+  max_prompt_chars: 12000
+  calls_per_run: 1
+  send_single_iteration_context: true
+
+llm:
+  enabled: false
+  execute_network_calls: false
+  provider: openai
+  model: gpt-4.1-mini
+  api_key_env: OPENAI_API_KEY
+  endpoint: https://api.openai.com/v1/chat/completions
+  timeout_seconds: 20
+  max_retries: 0
+  fail_open: true
+  max_prompt_chars: 12000
 
 react_safety:
   enabled: true
@@ -171,7 +174,74 @@ react_safety:
   fail_open_on_parse_error: true
   save_raw_llm_text: true
 
+branch_strategy:
+  clone_base_branch: main
+  work_branch: develop
+  create_work_branch_if_missing: true
+  push_work_branch: develop
+  pr_base_branch: main
+
+git_push:
+  enabled: false
+  execute_git: false
+  repo_url: ""
+  target_branch: develop
+  create_branch: true
+  create_branch_prefix: qaira-agent
+  username_env: GIT_USERNAME
+  token_env: GIT_TOKEN
+  commit_message: "chore: update generated API contracts and tests"
+  push: false
+  fail_open: true
+
+git_finalization:
+  enabled: false
+  execute_git: false
+  repo_url: ""
+  clone_dir: /workspace/final-repo
+  source_subdir: ""
+  target_branch: develop
+  create_branch: true
+  branch_prefix: qaira-agent
+  username_env: GIT_USERNAME
+  token_env: GIT_TOKEN
+  commit_message: "chore: update generated API contracts and tests"
+  copy_artifacts_to:
+    - generated/
+    - final/
+    - summary/
+    - quality/
+    - analysis/
+    - codegen/
+  push: false
+
+pull_request:
+  enabled: false
+  execute_network_calls: false
+  provider: github
+  base_branch: main
+  title: "QAira generated API contracts and tests"
+  body: "Automated QAira semantic compiler output update."
+  token_env: GIT_TOKEN
+  fail_open: true
+
 git_diagnostics:
   enabled: true
-  require_git_binary: true
+  require_git_binary: false
   write_preflight_report: true
+
+compatibility:
+  config_override_optional: true
+  default_config_used_when_no_config_supplied: true
+  mounted_config_is_deep_merged_override: true
+  external_features_default_false:
+    - llm_review.execute_network_calls
+    - llm_review.enabled
+    - git_push.enabled
+    - git_push.execute_git
+    - git_push.push
+    - git_finalization.enabled
+    - git_finalization.execute_git
+    - git_finalization.push
+    - pull_request.enabled
+    - pull_request.execute_network_calls

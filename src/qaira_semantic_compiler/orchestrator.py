@@ -5,6 +5,7 @@ import argparse, yaml, shutil, json
 from qaira_semantic_compiler.core.context import RunContext
 from qaira_semantic_compiler.core.logger import Logger
 from qaira_semantic_compiler.core.runner import AgentRunner
+from qaira_semantic_compiler.core.iteration_context import IterationContextStore
 
 from qaira_semantic_compiler.agents.repository_index_agent import RepositoryIndexAgent
 from qaira_semantic_compiler.agents.source_detection_agent import SourceDetectionAgent
@@ -32,10 +33,46 @@ from qaira_semantic_compiler.agents.results_analyzer_agent import ResultsAnalyze
 from qaira_semantic_compiler.agents.remediation_agent import RemediationAgent
 from qaira_semantic_compiler.agents.git_finalization_agent import GitFinalizationAgent
 from qaira_semantic_compiler.agents.final_run_report_agent import FinalRunReportAgent
+from qaira_semantic_compiler.agents.iteration_llm_reviewer_agent import IterationLLMReviewerAgent
+from qaira_semantic_compiler.agents.code_delta_generation_agent import CodeDeltaGenerationAgent
+
+def deep_merge(base, override):
+    if not isinstance(base, dict):
+        return override
+    if not isinstance(override, dict):
+        return override if override is not None else base
+    out = dict(base)
+    for k, v in override.items():
+        if isinstance(v, dict) and isinstance(out.get(k), dict):
+            out[k] = deep_merge(out[k], v)
+        else:
+            out[k] = v
+    return out
 
 def load_config(path):
-    p=Path(path)
-    return yaml.safe_load(p.read_text(encoding="utf-8")) if p.exists() else {}
+    # Config override is optional.
+    # Default config is bundled inside the image. If /config/config.yaml is absent,
+    # mounted as a directory, or invalid, the bundled default still runs.
+    package_default = Path(__file__).resolve().parents[2] / "config" / "config.example.yaml"
+    cfg = {}
+    if package_default.exists() and package_default.is_file():
+        try:
+            cfg = yaml.safe_load(package_default.read_text(encoding="utf-8")) or {}
+        except Exception:
+            cfg = {}
+
+    if path:
+        p = Path(path)
+        if p.exists() and p.is_file():
+            try:
+                override = yaml.safe_load(p.read_text(encoding="utf-8")) or {}
+                cfg = deep_merge(cfg, override)
+                cfg.setdefault("compatibility", {})["override_config_loaded"] = str(p)
+            except Exception as e:
+                cfg.setdefault("compatibility", {})["override_config_error"] = str(e)
+        else:
+            cfg.setdefault("compatibility", {})["override_config_skipped"] = str(p)
+    return cfg
 
 class Orchestrator:
     def __init__(self, source, output, learning, config):
@@ -108,12 +145,21 @@ class Orchestrator:
                 self.runner.run(cls(self.ctx,self.logger))
 
             quality=self.ctx.read_json("quality/quality_gate_report.json",{}) or {}
+            summary=self.ctx.read_json("summary/scan_summary.json",{}) or {}
+            analysis=self.ctx.read_json("analysis/results_analysis.json",{}) or {}
             score=float(quality.get("score",0) or 0)
+
+            IterationContextStore(self.ctx).load().add_iteration(iteration,self.ctx.results,summary,quality,analysis)
+
             if score>best["score"]:
-                best={"iteration":iteration,"score":score,"summary":self.ctx.read_json("summary/scan_summary.json",{})}
+                best={"iteration":iteration,"score":score,"summary":summary}
                 self.ctx.state["bestIteration"]=best
 
             self.snapshot_iteration(iteration)
+
+            # Exactly one compact LLM review per iteration/run, not many agent log prompts.
+            self.runner.run(IterationLLMReviewerAgent(self.ctx,self.logger))
+            self.runner.run(CodeDeltaGenerationAgent(self.ctx,self.logger))
 
             passed=bool(quality.get("passed",False))
             self.logger.log("ITERATION","Orchestrator",f"iteration {iteration} completed",score=score,passed=passed)

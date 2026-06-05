@@ -1,32 +1,67 @@
-# QAira Semantic Compiler — Final Git Auth Runtime
+# QAira Semantic Compiler — Final Config-Safe Enterprise Loop
 
-This patch fixes the latest Git clone failure:
+This package makes config override optional.
 
-```text
-fatal: could not read Username for 'https://github.com'
-```
+## Key change
 
-## Root cause
-
-`http.extraHeader=Authorization: Bearer ...` was not reliable for `git clone` in this environment.
-
-## Fix
-
-GitHub standard token-auth URL is now used:
+The agent now runs even if you do **not** mount:
 
 ```text
-https://x-access-token:<TOKEN>@github.com/org/repo.git
+/config/config.yaml
 ```
 
-The token is URL-encoded and redacted from all logs.
+It uses the bundled config:
 
-## Build
+```text
+/app/config/config.example.yaml
+```
+
+If you do mount a config, it becomes a **deep-merge override**, not a full replacement.
+
+## External-input features default OFF
+
+These are false by default:
+
+```text
+llm_review.enabled
+llm_review.execute_network_calls
+git_push.enabled
+git_push.execute_git
+git_push.push
+git_finalization.enabled
+git_finalization.execute_git
+git_finalization.push
+pull_request.enabled
+pull_request.execute_network_calls
+```
+
+So the default run performs:
+
+```text
+source scan
+agent iteration
+contract generation
+test generation
+quality gate
+artifact manifest
+LLM prompt/context saving only if enabled by override
+no real LLM call
+no git push
+no PR
+```
+
+## Run without config override
 
 ```bash
-docker build -t qaira/semantic-compiler:final-git-auth .
+docker run --rm \
+  -e PYTHONUNBUFFERED=1 \
+  -v /Users/jayarajumetta/MJ/qaira:/repo:ro \
+  -v /Users/jayarajumetta/Downloads/volume/output:/output \
+  -v /Users/jayarajumetta/Downloads/volume/learning:/learning \
+  qaira/semantic-compiler:config-safe
 ```
 
-## Run
+## Run with optional config override
 
 ```bash
 docker run --rm \
@@ -38,23 +73,37 @@ docker run --rm \
   -v /Users/jayarajumetta/Downloads/volume/output:/output \
   -v /Users/jayarajumetta/Downloads/volume/config.yaml:/config/config.yaml:ro \
   -v /Users/jayarajumetta/Downloads/volume/learning:/learning \
-  qaira/semantic-compiler:final-git-auth
+  qaira/semantic-compiler:config-safe
 ```
 
-## Verify
+## To enable external integrations
 
-```text
-git/finalization_report.json
-git/command_log.json
-runtime/final_run_report.json
+Add only what you need in the override config:
+
+```yaml
+llm_review:
+  enabled: true
+  execute_network_calls: true
+
+git_push:
+  enabled: true
+  execute_git: true
+  repo_url: "https://github.com/jayarajumetta/api_contracts.git"
+  target_branch: develop
+  push: true
+
+pull_request:
+  enabled: true
+  execute_network_calls: true
+  base_branch: main
 ```
 
-If this still fails, `likelyCause` will tell whether it is:
+## Verification
 
 ```text
-invalid token
-missing repo access
-no write permission
-protected branch
-repo not found
+config/effective_config.json
+runtime/config_compatibility_report.json
+runtime/iteration_context.json
+summary/scan_summary.json
+quality/quality_gate_report.json
 ```
