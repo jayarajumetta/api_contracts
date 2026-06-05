@@ -1,32 +1,34 @@
-# QAira Semantic Compiler — Clean Production Fixed
+# QAira Semantic Compiler — Clean Production Enhanced
 
-This is the fixed clean-production package.
+This enhanced clean package fixes the body-count regression found in the clean-fixed run.
 
-## Fix included
-
-The previous clean package failed route discovery because `RepositoryIndex.by_kind` missed the `controllers` key.
-
-Fixed:
+## Fixes
 
 ```text
-by_kind.controllers added
-RouteDiscoveryAgent guarded with .get()
-RouteDiscoveryAgent scans route/controller files first
-RouteDiscoveryAgent falls back to all JS/TS files
+Route discovery works: 241 routes
+Service graph works: 959 edges
+BodyDiscovery now marks req.body presence even when exact fields are unknown
+QualityGate counts bodyDetected from body presence, not only known fields
+OpenAPI requestBody generated for unknown object bodies
+Schema discovery scans all source files for schema-like declarations
+Schema attachment enriches requestBody with schemaRef when possible
 ```
 
 ## Architecture
 
 ```text
-one orchestrator only: src/qaira_semantic_compiler/orchestrator.py
-one agent per stage under src/qaira_semantic_compiler/agents/
+one orchestrator only
+one agent per stage
 no version names in output paths
+shared repository index
+balanced route parser
+fail-open runtime
 ```
 
 ## Build
 
 ```bash
-docker build -t qaira/semantic-compiler:clean-fixed .
+docker build -t qaira/semantic-compiler:clean-enhanced .
 ```
 
 ## Run
@@ -41,5 +43,5 @@ docker run --rm \
   -v /Users/jayarajumetta/Downloads/volume/output:/output \
   -v /Users/jayarajumetta/Downloads/volume/config.yaml:/config/config.yaml:ro \
   -v /Users/jayarajumetta/Downloads/volume/learning:/learning \
-  qaira/semantic-compiler:clean-fixed
+  qaira/semantic-compiler:clean-enhanced
 ```
