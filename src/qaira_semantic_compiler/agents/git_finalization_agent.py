@@ -16,7 +16,6 @@ class GitFinalizationAgent:
         gp=self.ctx.config.get("git_push") or {}
         gg=self.ctx.config.get("git") or {}
 
-        # Prefer explicitly enabled section.
         if gp.get("enabled",False):
             merged=dict(gf)
             merged.update(gp)
@@ -27,7 +26,6 @@ class GitFinalizationAgent:
         if gg.get("enabled",False):
             gg=dict(gg); gg["_selected_source"]="git"; return gg
 
-        # None enabled. Use git_finalization if present for reporting, else git_push/git.
         cfg=dict(gf or gp or gg)
         cfg["_selected_source"]="none_enabled"
         return cfg
@@ -49,6 +47,7 @@ class GitFinalizationAgent:
             "workBranch":work_branch,
             "pushBranch":push_branch,
             "pushRequested":bool(cfg.get("push",False)),
+            "branchSyncStrategy":"prefer_origin_work_branch_else_base_branch",
             "gitBinaryAvailable":False,
             "gitVersion":"",
             "gitExecuted":False,
@@ -67,12 +66,10 @@ class GitFinalizationAgent:
             report["reason"]="git_finalization_disabled"
             self.finish(report)
             return AgentResult(self.name,"success",0.9,report,report)
-
         if not cfg.get("execute_git",False):
             report["reason"]="execute_git_false"
             self.finish(report)
             return AgentResult(self.name,"success",0.85,report,report)
-
         if not git_check.get("gitBinaryAvailable"):
             report["reason"]="git_binary_missing"
             self.finish(report)
@@ -86,7 +83,6 @@ class GitFinalizationAgent:
             report["reason"]="repo_url_missing"
             self.finish(report)
             return AgentResult(self.name,"failed_open",0.25,report,report)
-
         if not token:
             report["reason"]="git_token_missing"
             self.finish(report)
@@ -116,12 +112,24 @@ class GitFinalizationAgent:
 
             report["gitExecuted"]=True
 
-            # Checkout base branch, then create/reset work branch from base.
-            self.run_cmd(["git","checkout",base_branch],cwd=clone_dir,check=False,timeout=120,redact_token=token,env=env)
-            self.run_cmd(["git","checkout","-B",work_branch],cwd=clone_dir,timeout=120,redact_token=token,env=env)
+            self.run_cmd(["git","fetch","origin","--prune"],cwd=clone_dir,check=False,timeout=180,redact_token=token,env=env)
+
+            # New behavior:
+            # If origin/develop exists, base local develop from origin/develop.
+            # Else create develop from origin/main/main.
+            remote_work=self.run_cmd(["git","rev-parse","--verify",f"origin/{work_branch}"],cwd=clone_dir,check=False,timeout=30,redact_token=token,env=env)
+            if remote_work.get("returncode")==0:
+                self.run_cmd(["git","checkout","-B",work_branch,f"origin/{work_branch}"],cwd=clone_dir,timeout=120,redact_token=token,env=env)
+                report["workBranchBase"]=f"origin/{work_branch}"
+            else:
+                checkout_base=self.run_cmd(["git","checkout",base_branch],cwd=clone_dir,check=False,timeout=120,redact_token=token,env=env)
+                if checkout_base.get("returncode") != 0:
+                    self.run_cmd(["git","checkout","-B",base_branch,f"origin/{base_branch}"],cwd=clone_dir,check=False,timeout=120,redact_token=token,env=env)
+                self.run_cmd(["git","checkout","-B",work_branch],cwd=clone_dir,timeout=120,redact_token=token,env=env)
+                report["workBranchBase"]=base_branch
 
             copied=[]
-            for rel in cfg.get("copy_artifacts_to",["generated/","final/","summary/","quality/","analysis/","codegen/"]):
+            for rel in cfg.get("copy_artifacts_to",["generated/","final/","summary/","quality/","analysis/","codegen/","docs/","self_healing/"]):
                 src=self.ctx.output/rel
                 if src.exists():
                     dst=clone_dir/"qaira-generated"/rel
@@ -147,6 +155,7 @@ class GitFinalizationAgent:
                 report["committed"]=True
 
                 if cfg.get("push",False):
+                    # Normal push now works because branch starts from origin/develop when it exists.
                     push=self.run_cmd(["git","push","-u",auth_url,f"{work_branch}:{push_branch}"],cwd=clone_dir,check=False,timeout=300,redact_token=token,env=env)
                     if push["returncode"]==0:
                         report["pushed"]=True
@@ -233,10 +242,10 @@ class GitFinalizationAgent:
             return "branch_protection_rejected_push"
         if "repository not found" in t:
             return "repo_not_found_or_token_no_access"
+        if "non-fast-forward" in t:
+            return "non_fast_forward_rejected_remote_branch_changed"
         if "src refspec" in t:
             return "branch_refspec_issue"
-        if "non-fast-forward" in t:
-            return "non_fast_forward_rejected"
         return "inspect_git_command_log"
 
     def create_pr(self,repo_url,token,head,base_branch,pr_cfg):

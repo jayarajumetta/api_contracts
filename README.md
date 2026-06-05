@@ -1,73 +1,37 @@
-# QAira Semantic Compiler — Self-Healing + Premium Docs Runtime
+# QAira Semantic Compiler — Self-Healing Docs Git Sync
 
-This version extends the successful baseline with:
+This patch keeps the self-healing/docs engine unchanged and fixes the Git non-fast-forward push issue.
 
-```text
-AgentPerformanceEvaluatorAgent
-SelfHealingLLMAdvisorAgent
-SelfHealingCodeDeltaAgent
-ApiDocumentationAgent
-Enhanced TestGenerationAgent
-```
-
-## Self-healing design
-
-Each run now produces:
+## Problem from latest run
 
 ```text
-self_healing/agent_performance_report.json
-self_healing/llm_advice.json
-self_healing/code_delta_report.json
-codegen/agent_deltas/*.patch_plan.json
+develop -> develop rejected: non-fast-forward
 ```
 
-Workflow:
+Reason: local `develop` was created from `main`, while remote `develop` already had commits.
+
+## Fix
+
+Branch sync now works like this:
 
 ```text
-each agent runs
-performance evaluator scores each agent
-one compact LLM advisor call, only if weak agent or score below threshold
-LLM suggestions are mapped to agent-specific delta plans
-safe patch plans generated
-optional future deterministic patch application
-final artifacts pushed after quality is satisfied
+git clone
+git fetch origin --prune
+if origin/develop exists:
+    checkout -B develop origin/develop
+else:
+    checkout main
+    checkout -B develop
+commit generated artifacts
+git push develop:develop
 ```
 
-For safety, arbitrary LLM code is **not blindly applied**. It creates reviewable agent-specific patch plans. You can enable deterministic patch library later.
-
-## Premium API docs and Postman
-
-Generated:
-
-```text
-docs/API_REFERENCE.md
-docs/api_reference_index.json
-generated/openapi.json
-generated/postman_collection.json
-generated/negative_tests.postman_collection.json
-generated/edge_tests.postman_collection.json
-generated/data_references.json
-generated/environment.postman_environment.json
-generated/qaira_tests.json
-```
-
-Postman now includes:
-
-```text
-status code assertions
-response time assertions
-response body checks
-extractors for id/token
-negative missing-required tests
-edge empty-value tests
-collection variables
-data reference payloads
-```
+So normal push should work without force.
 
 ## Build
 
 ```bash
-docker build -t qaira/semantic-compiler:self-healing-docs .
+docker build -t qaira/semantic-compiler:self-healing-docs-git-sync .
 ```
 
 ## Run
@@ -82,5 +46,5 @@ docker run --rm \
   -v /Users/jayarajumetta/Downloads/volume/output:/output \
   -v /Users/jayarajumetta/Downloads/volume/config.yaml:/config/config.yaml:ro \
   -v /Users/jayarajumetta/Downloads/volume/learning:/learning \
-  qaira/semantic-compiler:self-healing-docs
+  qaira/semantic-compiler:self-healing-docs-git-sync
 ```
