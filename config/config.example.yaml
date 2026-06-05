@@ -83,6 +83,10 @@ agents:
   import_graph: true
   service_graph: true
   schema_attachment: true
+  service_body_field_extraction: true
+  db_write_field_extraction: true
+  service_body_propagation: true
+  inferred_schema_registry: true
   response_discovery: true
   contract_builder: true
   relationship_discovery: true
@@ -113,3 +117,12 @@ git:
   token_env: GIT_TOKEN
   execute_git: false
   push: false
+
+
+pattern_establishment:
+  enabled: true
+  service_body_field_extraction: true
+  db_write_field_extraction: true
+  service_body_propagation: true
+  inferred_schema_registry: true
+  min_confidence: 0.55

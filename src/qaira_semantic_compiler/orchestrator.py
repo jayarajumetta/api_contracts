@@ -15,6 +15,10 @@ from qaira_semantic_compiler.agents.param_type_discovery_agent import ParamTypeD
 from qaira_semantic_compiler.agents.validation_schema_agent import ValidationSchemaAgent
 from qaira_semantic_compiler.agents.import_graph_agent import ImportGraphAgent
 from qaira_semantic_compiler.agents.service_graph_agent import ServiceGraphAgent
+from qaira_semantic_compiler.agents.service_body_field_agent import ServiceBodyFieldAgent
+from qaira_semantic_compiler.agents.db_write_field_agent import DbWriteFieldAgent
+from qaira_semantic_compiler.agents.service_body_propagation_agent import ServiceBodyPropagationAgent
+from qaira_semantic_compiler.agents.inferred_schema_registry_agent import InferredSchemaRegistryAgent
 from qaira_semantic_compiler.agents.schema_attachment_agent import SchemaAttachmentAgent
 from qaira_semantic_compiler.agents.response_discovery_agent import ResponseDiscoveryAgent
 from qaira_semantic_compiler.agents.contract_builder_agent import ContractBuilderAgent
@@ -35,9 +39,11 @@ class Orchestrator:
         self.ctx.learning.mkdir(parents=True,exist_ok=True)
         self.logger=Logger(self.ctx.output, console=self.ctx.config.get("logging",{}).get("console",True))
         self.runner=AgentRunner(self.ctx,self.logger)
+
     def run(self):
-        self.logger.log("START","Orchestrator","clean production runtime started")
+        self.logger.log("START","Orchestrator","pattern-establishment runtime started")
         self.ctx.write_json("config/effective_config.json", self.ctx.config)
+
         agents=[
             RepositoryIndexAgent,
             SourceDetectionAgent,
@@ -48,6 +54,10 @@ class Orchestrator:
             ValidationSchemaAgent,
             ImportGraphAgent,
             ServiceGraphAgent,
+            ServiceBodyFieldAgent,
+            DbWriteFieldAgent,
+            ServiceBodyPropagationAgent,
+            InferredSchemaRegistryAgent,
             SchemaAttachmentAgent,
             ResponseDiscoveryAgent,
             ContractBuilderAgent,
@@ -57,10 +67,10 @@ class Orchestrator:
             LLMGatewayAgent,
             ArtifactManifestAgent,
         ]
+
         for cls in agents:
-            enabled=self.ctx.config.get("agents",{}).get(cls.name.replace("Agent","").lower(), True)
-            # names in config use snake_case; default run all.
             self.runner.run(cls(self.ctx,self.logger))
+
         self.ctx.write_json("runtime/orchestrator_report.json",{"status":"completed","agents":[r.__dict__ for r in self.ctx.results]})
         self.logger.log("DONE","Orchestrator","completed",agents=len(self.ctx.results))
         return 0
