@@ -1,0 +1,827 @@
+{
+  "post-projects-project_id-knowledge": {
+    "app_type_id": "{{lastId}}",
+    "asset_type": "{{data.asset_type}}",
+    "content": "{{data.content}}",
+    "content_type": "{{data.content_type}}",
+    "description": "{{data.description}}",
+    "embedding": "{{data.embedding}}",
+    "feature_name": "{{data.feature_name}}",
+    "is_active": true,
+    "item_status": "{{data.item_status}}",
+    "item_version": "{{data.item_version}}",
+    "linked_test_cases": "{{data.linked_test_cases}}",
+    "metadata": "{{data.metadata}}",
+    "module_name": "{{data.module_name}}",
+    "priority": "{{data.priority}}",
+    "source": "{{data.source}}",
+    "source_uri": "{{data.source_uri}}",
+    "title": "{{data.title}}"
+  },
+  "put-projects-project_id-knowledge-id": {
+    "app_type_id": "{{lastId}}",
+    "asset_type": "{{data.asset_type}}",
+    "content": "{{data.content}}",
+    "content_type": "{{data.content_type}}",
+    "description": "{{data.description}}",
+    "embedding": "{{data.embedding}}",
+    "feature_name": "{{data.feature_name}}",
+    "is_active": true,
+    "item_status": "{{data.item_status}}",
+    "item_version": "{{data.item_version}}",
+    "linked_test_cases": "{{data.linked_test_cases}}",
+    "metadata": "{{data.metadata}}",
+    "module_name": "{{data.module_name}}",
+    "priority": "{{data.priority}}",
+    "source": "{{data.source}}",
+    "source_uri": "{{data.source_uri}}",
+    "title": "{{data.title}}"
+  },
+  "post-projects-project_id-knowledge-relations": {
+    "metadata": "{{data.metadata}}",
+    "relation_type": "{{data.relation_type}}",
+    "source_id": "{{lastId}}",
+    "source_type": "{{data.source_type}}",
+    "target_id": "{{lastId}}",
+    "target_type": "{{data.target_type}}"
+  },
+  "post-ai-prompt-templates": {
+    "app_type_id": "{{lastId}}",
+    "created_by": "{{data.created_by}}",
+    "project_id": "{{lastId}}"
+  },
+  "put-ai-prompt-templates-id": {
+    "app_type_id": "{{lastId}}"
+  },
+  "post-app-types": {
+    "is_unified": true,
+    "name": "{{data.name}}",
+    "project_id": "{{lastId}}",
+    "type": "{{data.type}}"
+  },
+  "put-app-types-id": {
+    "is_unified": true,
+    "name": "{{data.name}}"
+  },
+  "post-auth-signup-request-code": {},
+  "post-auth-signup-verify": {},
+  "post-auth-login": {},
+  "post-auth-login-google": {},
+  "post-auth-forgot-password-request-code": {},
+  "post-auth-forgot-password-verify": {},
+  "post-automation-generator-internal-jobs-lease": {},
+  "post-automation-generator-internal-jobs-id-run": {
+    "additional_context": "{{data.additional_context}}",
+    "agent_plan": "{{data.agent_plan}}",
+    "integration_id": "{{lastId}}",
+    "job_id": "{{lastId}}",
+    "llm_model": "{{data.llm_model}}",
+    "start_url": "{{data.start_url}}",
+    "test_case_id": "{{lastId}}",
+    "test_configuration_id": "{{lastId}}",
+    "test_data_set_id": "{{lastId}}",
+    "test_environment_id": "{{lastId}}",
+    "title": "{{data.title}}",
+    "worker_id": "{{lastId}}"
+  },
+  "post-api-engine-runs-claim": {
+    "engine_id": "{{lastId}}"
+  },
+  "post-api-engine-runs-runId-heartbeat": {
+    "engine_id": "{{lastId}}",
+    "heartbeat_at": "{{data.heartbeat_at}}",
+    "leased_by": "{{data.leased_by}}",
+    "updated_at": "{{data.updated_at}}"
+  },
+  "post-execution-results": {
+    "app_type_id": "{{lastId}}",
+    "defects": "{{data.defects}}",
+    "duration_ms": "{{data.duration_ms}}",
+    "error": "{{data.error}}",
+    "executed_by": "{{data.executed_by}}",
+    "execution_id": "{{lastId}}",
+    "external_references": "{{data.external_references}}",
+    "logs": "{{data.logs}}",
+    "status": "{{data.status}}",
+    "suite_id": "{{lastId}}",
+    "suite_name": "{{data.suite_name}}",
+    "test_case_id": "{{lastId}}",
+    "test_case_title": "{{data.test_case_title}}"
+  },
+  "put-execution-results-id": {
+    "defects": "{{data.defects}}",
+    "duration_ms": "{{data.duration_ms}}",
+    "error": "{{data.error}}",
+    "executed_by": "{{data.executed_by}}",
+    "external_references": "{{data.external_references}}",
+    "logs": "{{data.logs}}",
+    "status": "{{data.status}}"
+  },
+  "post-execution-schedules": {
+    "app_type_id": "{{lastId}}",
+    "assigned_to": "{{data.assigned_to}}",
+    "cadence": "{{data.cadence}}",
+    "created_by": "{{data.created_by}}",
+    "is_active": true,
+    "name": "{{data.name}}",
+    "next_run_at": "{{data.next_run_at}}",
+    "project_id": "{{lastId}}",
+    "suite_ids": "{{data.suite_ids}}",
+    "test_case_ids": "{{data.test_case_ids}}",
+    "test_configuration_id": "{{lastId}}",
+    "test_data_set_id": "{{lastId}}",
+    "test_environment_id": "{{lastId}}"
+  },
+  "put-execution-schedules-id": {
+    "app_type_id": "{{lastId}}",
+    "assigned_to": "{{data.assigned_to}}",
+    "cadence": "{{data.cadence}}",
+    "name": "{{data.name}}",
+    "next_run_at": "{{data.next_run_at}}",
+    "project_id": "{{lastId}}",
+    "suite_ids": "{{data.suite_ids}}",
+    "test_case_ids": "{{data.test_case_ids}}",
+    "test_configuration_id": "{{lastId}}",
+    "test_data_set_id": "{{lastId}}",
+    "test_environment_id": "{{lastId}}"
+  },
+  "post-executions-smart-plan-preview": {
+    "additional_context": "{{data.additional_context}}",
+    "appType": "{{data.appType}}",
+    "app_type_id": "{{lastId}}",
+    "cases": "{{data.cases}}",
+    "impacted_requirement_ids": "{{data.impacted_requirement_ids}}",
+    "integration_id": "{{lastId}}",
+    "project_id": "{{lastId}}",
+    "release_scope": "{{data.release_scope}}",
+    "testCases": "{{data.testCases}}",
+    "test_cases": "{{data.test_cases}}",
+    "test_configuration_id": "{{lastId}}",
+    "test_data_set_id": "{{lastId}}",
+    "test_environment_id": "{{lastId}}"
+  },
+  "post-executions-manual-run-suggestion": {
+    "additional_context": "{{data.additional_context}}",
+    "app_type_id": "{{lastId}}",
+    "integration_id": "{{lastId}}",
+    "project_id": "{{lastId}}",
+    "selected_suite_ids": "{{data.selected_suite_ids}}",
+    "test_configuration_id": "{{lastId}}",
+    "test_data_set_id": "{{lastId}}",
+    "test_environment_id": "{{lastId}}"
+  },
+  "post-executions": {
+    "app_type_id": "{{lastId}}",
+    "assigned_to": "{{data.assigned_to}}",
+    "created_by": "{{data.created_by}}",
+    "execution_hooks": "{{data.execution_hooks}}",
+    "name": "{{data.name}}",
+    "parallel_count": 1,
+    "parallel_enabled": "{{data.parallel_enabled}}",
+    "project_id": "{{lastId}}",
+    "status": "{{data.status}}",
+    "test_configuration_id": "{{lastId}}",
+    "test_configuration_name": "{{data.test_configuration_name}}",
+    "test_configuration_snapshot": "{{data.test_configuration_snapshot}}",
+    "test_data_set_id": "{{lastId}}",
+    "test_data_set_name": "{{data.test_data_set_name}}",
+    "test_data_set_snapshot": "{{data.test_data_set_snapshot}}",
+    "test_environment_id": "{{lastId}}",
+    "test_environment_name": "{{data.test_environment_name}}",
+    "test_environment_snapshot": "{{data.test_environment_snapshot}}",
+    "trigger": "{{data.trigger}}"
+  },
+  "post-executions-local-run": {
+    "created_by": "{{data.created_by}}",
+    "ended_at": "{{data.ended_at}}",
+    "engine_base_url": "{{data.engine_base_url}}",
+    "name": "{{data.name}}",
+    "project_id": "{{lastId}}",
+    "status": "{{data.status}}"
+  },
+  "put-executions-id": {
+    "assigned_to": "{{data.assigned_to}}"
+  },
+  "put-executions-id-cases-testCaseId-assignment": {
+    "assigned_to": "{{data.assigned_to}}"
+  },
+  "post-executions-id-rerun": {
+    "app_type_id": "{{lastId}}",
+    "assigned_to": "{{data.assigned_to}}",
+    "created_by": "{{data.created_by}}",
+    "name": "{{data.name}}",
+    "project_id": "{{lastId}}",
+    "status": "{{data.status}}",
+    "test_configuration_id": "{{lastId}}",
+    "test_configuration_name": "{{data.test_configuration_name}}",
+    "test_configuration_snapshot": "{{data.test_configuration_snapshot}}",
+    "test_data_set_id": "{{lastId}}",
+    "test_data_set_name": "{{data.test_data_set_name}}",
+    "test_data_set_snapshot": "{{data.test_data_set_snapshot}}",
+    "test_environment_id": "{{lastId}}",
+    "test_environment_name": "{{data.test_environment_name}}",
+    "test_environment_snapshot": "{{data.test_environment_snapshot}}",
+    "trigger": "{{data.trigger}}"
+  },
+  "post-executions-id-start": {
+    "engine_base_url": "{{data.engine_base_url}}",
+    "execution_mode": "{{data.execution_mode}}",
+    "initiated_by": "{{data.initiated_by}}",
+    "skip_testengine_dispatch": "{{data.skip_testengine_dispatch}}",
+    "started_at": "{{data.started_at}}",
+    "status": "{{data.status}}",
+    "trigger": "{{data.trigger}}"
+  },
+  "post-executions-id-cases-testCaseId-steps-stepId-run": {
+    "executed_by": "{{data.executed_by}}"
+  },
+  "post-executions-id-cases-testCaseId-ai-analysis": {
+    "execution": "{{data.execution}}",
+    "requestedBy": "{{data.requestedBy}}",
+    "testCaseId": "{{lastId}}"
+  },
+  "post-executions-id-share-report": {
+    "execution_id": "{{lastId}}",
+    "recipients": "{{data.recipients}}",
+    "requested_by": "{{data.requested_by}}"
+  },
+  "post-executions-id-complete": {
+    "ended_at": "{{data.ended_at}}",
+    "status": "{{data.status}}"
+  },
+  "post-feedback": {
+    "message": "{{data.message}}",
+    "status": "{{data.status}}",
+    "title": "{{data.title}}",
+    "user_id": "{{lastId}}"
+  },
+  "put-feedback-id": {
+    "message": "{{data.message}}",
+    "status": "{{data.status}}",
+    "title": "{{data.title}}",
+    "user_id": "{{lastId}}"
+  },
+  "post-integrations": {
+    "api_key": "{{data.api_key}}",
+    "base_url": "{{data.base_url}}",
+    "config": "{{data.config}}",
+    "is_active": true,
+    "model": "{{data.model}}",
+    "name": "{{data.name}}",
+    "project_key": "{{data.project_key}}",
+    "type": "{{data.type}}",
+    "updated_at": "{{data.updated_at}}",
+    "username": "{{data.username}}"
+  },
+  "post-integrations-test-connection": {
+    "api_key": "{{data.api_key}}",
+    "base_url": "{{data.base_url}}",
+    "config": "{{data.config}}",
+    "type": "{{data.type}}"
+  },
+  "put-integrations-id": {
+    "api_key": "{{data.api_key}}",
+    "base_url": "{{data.base_url}}",
+    "config": "{{data.config}}",
+    "is_active": true,
+    "model": "{{data.model}}",
+    "name": "{{data.name}}",
+    "project_key": "{{data.project_key}}",
+    "type": "{{data.type}}",
+    "updated_at": "{{data.updated_at}}",
+    "username": "{{data.username}}"
+  },
+  "post-local-agent-start": {},
+  "post-project-members": {
+    "project_id": "{{lastId}}",
+    "role_id": "{{lastId}}",
+    "user_id": "{{lastId}}"
+  },
+  "put-project-members-id": {
+    "project_id": "{{lastId}}",
+    "role_id": "{{lastId}}",
+    "user_id": "{{lastId}}"
+  },
+  "post-projects-id-sync-provider": {
+    "created_by": "{{data.created_by}}",
+    "project_id": "{{lastId}}",
+    "provider": "{{data.provider}}",
+    "trigger_mode": "{{data.trigger_mode}}"
+  },
+  "post-projects": {
+    "created_by": "{{data.created_by}}",
+    "description": "{{data.description}}",
+    "display_id": "{{lastId}}",
+    "name": "{{data.name}}"
+  },
+  "put-projects-id": {
+    "description": "{{data.description}}",
+    "name": "{{data.name}}"
+  },
+  "put-requirement-test-cases-replace": {
+    "requirement_id": "{{lastId}}",
+    "test_case_ids": "{{data.test_case_ids}}"
+  },
+  "post-requirements": {
+    "created_by": "{{data.created_by}}",
+    "description": "{{data.description}}",
+    "display_id": "{{lastId}}",
+    "external_references": "{{data.external_references}}",
+    "priority": "{{data.priority}}",
+    "project_id": "{{lastId}}",
+    "status": "{{data.status}}",
+    "title": "{{data.title}}",
+    "updated_at": "{{data.updated_at}}",
+    "updated_by": "{{data.updated_by}}"
+  },
+  "post-requirements-import": {
+    "project_id": "{{lastId}}",
+    "rows": "{{data.rows}}"
+  },
+  "put-requirements-id": {
+    "description": "{{data.description}}",
+    "external_references": "{{data.external_references}}",
+    "priority": "{{data.priority}}",
+    "project_id": "{{lastId}}",
+    "status": "{{data.status}}",
+    "title": "{{data.title}}",
+    "updated_at": "{{data.updated_at}}",
+    "updated_by": "{{data.updated_by}}"
+  },
+  "post-requirements-id-ai-optimize-preview": {
+    "additional_context": "{{data.additional_context}}",
+    "integration_id": "{{lastId}}"
+  },
+  "post-requirements-id-generate-test-cases": {
+    "additional_context": "{{data.additional_context}}",
+    "appType": "{{data.appType}}",
+    "app_type_id": "{{lastId}}",
+    "external_links": "{{data.external_links}}",
+    "images": "{{data.images}}",
+    "integration_id": "{{lastId}}",
+    "max_cases": "{{data.max_cases}}",
+    "requirement": "{{data.requirement}}",
+    "status": "{{data.status}}"
+  },
+  "post-requirements-id-design-test-cases-preview": {
+    "additional_context": "{{data.additional_context}}",
+    "appType": "{{data.appType}}",
+    "app_type_id": "{{lastId}}",
+    "external_links": "{{data.external_links}}",
+    "images": "{{data.images}}",
+    "integration_id": "{{lastId}}",
+    "max_cases": "{{data.max_cases}}",
+    "requirement": "{{data.requirement}}"
+  },
+  "post-requirements-id-design-test-cases-accept": {
+    "appType": "{{data.appType}}",
+    "app_type_id": "{{lastId}}",
+    "cases": "{{data.cases}}",
+    "requirement": "{{data.requirement}}",
+    "status": "{{data.status}}"
+  },
+  "post-roles": {
+    "name": "{{data.name}}"
+  },
+  "put-roles-id-permissions": {
+    "permission_codes": "{{data.permission_codes}}"
+  },
+  "put-roles-id": {
+    "name": "{{data.name}}",
+    "permission_codes": "{{data.permission_codes}}"
+  },
+  "put-settings-localization": {
+    "key": "{{data.key}}",
+    "strings": "{{data.strings}}",
+    "updated_at": "{{data.updated_at}}",
+    "value": "{{data.value}}"
+  },
+  "put-settings-workspace-preferences": {
+    "key": "{{data.key}}",
+    "preferences": "{{data.preferences}}",
+    "updated_at": "{{data.updated_at}}",
+    "value": "{{data.value}}"
+  },
+  "post-shared-step-groups": {
+    "app_type_id": "{{lastId}}",
+    "created_by": "{{data.created_by}}"
+  },
+  "put-shared-step-groups-id": {
+    "app_type_id": "{{lastId}}",
+    "description": "{{data.description}}",
+    "name": "{{data.name}}",
+    "parameter_values": "{{data.parameter_values}}",
+    "steps": "{{data.steps}}",
+    "updated_by": "{{data.updated_by}}"
+  },
+  "put-suite-test-cases-reorder": {
+    "sort_order": "{{data.sort_order}}",
+    "suite_id": "{{lastId}}",
+    "test_case_ids": "{{data.test_case_ids}}"
+  },
+  "post-test-cases": {
+    "app_type_id": "{{lastId}}",
+    "created_by": "{{data.created_by}}",
+    "steps": "{{data.steps}}"
+  },
+  "post-test-cases-import": {
+    "app_type_id": "{{lastId}}",
+    "batches": "{{data.batches}}",
+    "created_by": "{{data.created_by}}",
+    "rows": "{{data.rows}}"
+  },
+  "post-test-cases-export": {
+    "app_type_id": "{{lastId}}",
+    "created_by": "{{data.created_by}}",
+    "test_case_ids": "{{data.test_case_ids}}"
+  },
+  "post-test-cases-automation-learning-cache-import": {
+    "app_type_id": "{{lastId}}",
+    "entries": "{{data.entries}}",
+    "import_source": "{{data.import_source}}",
+    "project_id": "{{lastId}}"
+  },
+  "post-test-cases-automation-learning-cache-extract-fields": {
+    "app_type_id": "{{lastId}}",
+    "fields": "{{data.fields}}"
+  },
+  "put-test-cases-automation-learning-cache-id": {},
+  "post-test-cases-automation-learning-cache": {
+    "app_type_id": "{{lastId}}",
+    "confidence": "{{data.confidence}}",
+    "dom_structure": "{{data.dom_structure}}",
+    "fallback_strategy": "{{data.fallback_strategy}}",
+    "locator": "{{data.locator}}",
+    "locator_intent": "{{data.locator_intent}}",
+    "locator_kind": "{{data.locator_kind}}",
+    "metadata": "{{data.metadata}}",
+    "object_name": "{{data.object_name}}",
+    "object_role": "{{data.object_role}}",
+    "page_key": 1,
+    "page_url": 1,
+    "project_id": "{{lastId}}",
+    "screen_dom_compressed": "{{data.screen_dom_compressed}}",
+    "screen_name": "{{data.screen_name}}",
+    "screen_screenshot_url": "{{data.screen_screenshot_url}}",
+    "screenshot_url": "{{data.screenshot_url}}",
+    "source": "{{data.source}}",
+    "target_criteria": "{{data.target_criteria}}",
+    "test_case_id": "{{lastId}}"
+  },
+  "put-test-cases-automation-learning-cache-screens-screenName": {
+    "app_type_id": "{{lastId}}",
+    "new_name": "{{data.new_name}}",
+    "screen_name": "{{data.screen_name}}"
+  },
+  "post-test-cases-automation-learning-cache-id-ai-improve": {
+    "guidance": "{{data.guidance}}",
+    "integration_id": "{{lastId}}"
+  },
+  "post-test-cases-automation-build-batch": {
+    "app_type_id": "{{lastId}}",
+    "created_by": "{{data.created_by}}"
+  },
+  "post-test-cases-id-automation-build": {
+    "additional_context": "{{data.additional_context}}",
+    "captured_actions": "{{data.captured_actions}}",
+    "captured_network": "{{data.captured_network}}",
+    "created_by": "{{data.created_by}}",
+    "integration_id": "{{lastId}}",
+    "start_url": "{{data.start_url}}",
+    "test_case_id": "{{lastId}}",
+    "test_configuration_id": "{{lastId}}",
+    "test_data_set_id": "{{lastId}}",
+    "test_environment_id": "{{lastId}}"
+  },
+  "post-test-cases-id-automation-generator-jobs": {
+    "additional_context": "{{data.additional_context}}",
+    "created_by": "{{data.created_by}}",
+    "integration_id": "{{lastId}}",
+    "start_url": "{{data.start_url}}",
+    "test_case_id": "{{lastId}}",
+    "test_configuration_id": "{{lastId}}",
+    "test_data_set_id": "{{lastId}}",
+    "test_environment_id": "{{lastId}}"
+  },
+  "post-test-cases-id-automation-recorder-session": {
+    "created_by": "{{data.created_by}}",
+    "engine_base_url": "{{data.engine_base_url}}",
+    "recorder_mode": "{{data.recorder_mode}}",
+    "recorder_public_base_url": "{{data.recorder_public_base_url}}",
+    "recorder_target": "{{data.recorder_target}}",
+    "reuse_existing": "{{data.reuse_existing}}",
+    "start_url": "{{data.start_url}}",
+    "target_step_id": "{{lastId}}",
+    "test_case_id": "{{lastId}}",
+    "test_configuration_id": "{{lastId}}",
+    "test_data_set_id": "{{lastId}}",
+    "test_environment_id": "{{lastId}}"
+  },
+  "post-test-cases-id-automation-recorder-session-sessionId-finish": {
+    "additional_context": "{{data.additional_context}}",
+    "created_by": "{{data.created_by}}",
+    "engine_base_url": "{{data.engine_base_url}}",
+    "integration_id": "{{lastId}}",
+    "recorder_mode": "{{data.recorder_mode}}",
+    "recorder_session_id": "{{lastId}}",
+    "recorder_target": "{{data.recorder_target}}",
+    "target_step_id": "{{lastId}}",
+    "test_case_id": "{{lastId}}",
+    "test_configuration_id": "{{lastId}}",
+    "test_data_set_id": "{{lastId}}",
+    "test_environment_id": "{{lastId}}",
+    "transaction_id": "{{lastId}}"
+  },
+  "post-test-cases-design-test-cases-preview": {
+    "additional_context": "{{data.additional_context}}",
+    "appType": "{{data.appType}}",
+    "app_type_id": "{{lastId}}",
+    "external_links": "{{data.external_links}}",
+    "images": "{{data.images}}",
+    "integration_id": "{{lastId}}",
+    "max_cases": "{{data.max_cases}}",
+    "requirement_ids": "{{data.requirement_ids}}",
+    "requirements": "{{data.requirements}}"
+  },
+  "post-test-cases-ai-authoring-preview": {
+    "additional_context": "{{data.additional_context}}",
+    "appType": "{{data.appType}}",
+    "app_type_id": "{{lastId}}",
+    "integration_id": "{{lastId}}",
+    "requirement": "{{data.requirement}}",
+    "requirement_id": "{{lastId}}",
+    "test_case": "{{data.test_case}}"
+  },
+  "post-test-cases-ai-step-rephrase": {
+    "additional_context": "{{data.additional_context}}",
+    "appType": "{{data.appType}}",
+    "app_type_id": "{{lastId}}",
+    "integration_id": "{{lastId}}",
+    "project_id": "{{lastId}}",
+    "requirement": "{{data.requirement}}",
+    "requirement_id": "{{lastId}}",
+    "step": "{{data.step}}",
+    "test_case": "{{data.test_case}}"
+  },
+  "post-test-cases-design-test-cases-accept": {
+    "appType": "{{data.appType}}",
+    "app_type_id": "{{lastId}}",
+    "cases": "{{data.cases}}",
+    "requirement_ids": "{{data.requirement_ids}}",
+    "requirements": "{{data.requirements}}",
+    "status": "{{data.status}}"
+  },
+  "post-test-cases-ai-generation-jobs": {
+    "app_type_id": "{{lastId}}",
+    "created_by": "{{data.created_by}}"
+  },
+  "put-test-cases-id": {
+    "app_type_id": "{{lastId}}",
+    "automated": "{{data.automated}}",
+    "automation_status": "{{data.automation_status}}",
+    "description": "{{data.description}}",
+    "external_references": "{{data.external_references}}",
+    "parameter_values": "{{data.parameter_values}}",
+    "priority": "{{data.priority}}",
+    "requirement_id": "{{lastId}}",
+    "requirement_ids": "{{data.requirement_ids}}",
+    "steps": "{{data.steps}}",
+    "suite_id": "{{lastId}}",
+    "suite_ids": "{{data.suite_ids}}",
+    "title": "{{data.title}}",
+    "updated_by": "{{data.updated_by}}"
+  },
+  "post-test-configurations": {
+    "app_type_id": "{{lastId}}",
+    "browser": "{{data.browser}}",
+    "description": "{{data.description}}",
+    "mobile_os": "{{data.mobile_os}}",
+    "name": "{{data.name}}",
+    "platform_version": "{{data.platform_version}}",
+    "project_id": "{{lastId}}",
+    "variables": "{{data.variables}}"
+  },
+  "put-test-configurations-id": {
+    "app_type_id": "{{lastId}}",
+    "browser": "{{data.browser}}",
+    "description": "{{data.description}}",
+    "mobile_os": "{{data.mobile_os}}",
+    "name": "{{data.name}}",
+    "platform_version": "{{data.platform_version}}",
+    "project_id": "{{lastId}}",
+    "variables": "{{data.variables}}"
+  },
+  "post-test-data-sets": {
+    "app_type_id": "{{lastId}}",
+    "columns": "{{data.columns}}",
+    "description": "{{data.description}}",
+    "mode": "{{data.mode}}",
+    "name": "{{data.name}}",
+    "project_id": "{{lastId}}",
+    "rows": "{{data.rows}}"
+  },
+  "put-test-data-sets-id": {
+    "app_type_id": "{{lastId}}",
+    "columns": "{{data.columns}}",
+    "description": "{{data.description}}",
+    "mode": "{{data.mode}}",
+    "name": "{{data.name}}",
+    "project_id": "{{lastId}}",
+    "rows": "{{data.rows}}"
+  },
+  "post-api-testengine-callbacks-runs": {
+    "artifact_bundle": "{{data.artifact_bundle}}",
+    "case_result": "{{data.case_result}}",
+    "deterministic_attempted": "{{data.deterministic_attempted}}",
+    "emitted_at": "{{data.emitted_at}}",
+    "engine_run_id": "{{lastId}}",
+    "event": "{{data.event}}",
+    "healing_attempted": "{{data.healing_attempted}}",
+    "healing_succeeded": "{{data.healing_succeeded}}",
+    "patch_proposals": "{{data.patch_proposals}}",
+    "payload": "{{data.payload}}",
+    "qaira_execution_id": "{{lastId}}",
+    "qaira_run_id": "{{lastId}}",
+    "qaira_test_case_id": "{{lastId}}",
+    "rawPayload": "{{data.rawPayload}}",
+    "state": "{{data.state}}",
+    "step_outcomes": "{{data.step_outcomes}}",
+    "summary": "{{data.summary}}"
+  },
+  "post-testengine-internal-jobs-lease": {},
+  "post-testengine-internal-jobs-id-start": {
+    "job_id": "{{lastId}}",
+    "worker_id": "{{lastId}}"
+  },
+  "post-testengine-internal-jobs-id-steps-stepId-execute": {
+    "job_id": "{{lastId}}",
+    "step_id": "{{lastId}}",
+    "steps": "{{data.steps}}"
+  },
+  "post-testengine-internal-jobs-id-steps-stepId-report": {
+    "api_detail": "{{data.api_detail}}",
+    "automation_detail": "{{data.automation_detail}}",
+    "captures": "{{data.captures}}",
+    "evidence": "{{data.evidence}}",
+    "job_id": "{{lastId}}",
+    "note": "{{data.note}}",
+    "recovery_attempted": "{{data.recovery_attempted}}",
+    "recovery_succeeded": "{{data.recovery_succeeded}}",
+    "step_id": "{{lastId}}",
+    "steps": "{{data.steps}}",
+    "web_detail": "{{data.web_detail}}"
+  },
+  "post-testengine-internal-jobs-id-complete": {
+    "artifact_bundle": "{{data.artifact_bundle}}",
+    "deterministic_attempted": "{{data.deterministic_attempted}}",
+    "error": "{{data.error}}",
+    "healing_attempted": "{{data.healing_attempted}}",
+    "healing_succeeded": "{{data.healing_succeeded}}",
+    "job_id": "{{lastId}}",
+    "patch_proposals": "{{data.patch_proposals}}",
+    "steps": "{{data.steps}}",
+    "summary": "{{data.summary}}"
+  },
+  "post-testengine-internal-jobs-id-fail": {
+    "job_id": "{{lastId}}",
+    "message": "{{data.message}}"
+  },
+  "post-test-environments": {
+    "app_type_id": "{{lastId}}",
+    "base_url": "{{data.base_url}}",
+    "browser": "{{data.browser}}",
+    "description": "{{data.description}}",
+    "name": "{{data.name}}",
+    "notes": "{{data.notes}}",
+    "project_id": "{{lastId}}",
+    "variables": "{{data.variables}}"
+  },
+  "put-test-environments-id": {
+    "app_type_id": "{{lastId}}",
+    "base_url": "{{data.base_url}}",
+    "browser": "{{data.browser}}",
+    "description": "{{data.description}}",
+    "name": "{{data.name}}",
+    "notes": "{{data.notes}}",
+    "project_id": "{{lastId}}",
+    "variables": "{{data.variables}}"
+  },
+  "post-test-steps": {},
+  "post-test-steps-run-api-request": {
+    "api_request": "{{data.api_request}}"
+  },
+  "put-test-steps-id": {
+    "action": "{{data.action}}",
+    "api_request": "{{data.api_request}}",
+    "automation_code": "{{data.automation_code}}",
+    "expected_result": "{{data.expected_result}}",
+    "group_id": "{{lastId}}",
+    "group_kind": "{{data.group_kind}}",
+    "group_name": "{{data.group_name}}",
+    "reusable_group_id": "{{lastId}}",
+    "step_order": "{{data.step_order}}",
+    "step_type": "{{data.step_type}}",
+    "test_case_id": "{{lastId}}"
+  },
+  "post-test-steps-duplicate": {},
+  "post-test-steps-group": {},
+  "post-test-steps-ungroup": {},
+  "post-test-steps-insert-shared-group": {},
+  "put-test-cases-id-test-steps-reorder": {
+    "entries": "{{data.entries}}",
+    "indexOf": "{{data.indexOf}}",
+    "step_ids": "{{data.step_ids}}"
+  },
+  "put-test-steps-reorder": {
+    "entries": "{{data.entries}}",
+    "indexOf": "{{data.indexOf}}",
+    "step_ids": "{{data.step_ids}}",
+    "test_case_id": "{{lastId}}"
+  },
+  "post-test-suites": {
+    "app_type_id": "{{lastId}}",
+    "created_by": "{{data.created_by}}",
+    "display_id": "{{lastId}}",
+    "name": "{{data.name}}",
+    "parallel_count": 1,
+    "parallel_enabled": "{{data.parallel_enabled}}",
+    "parameter_values": "{{data.parameter_values}}",
+    "parent_id": "{{lastId}}",
+    "updated_at": "{{data.updated_at}}",
+    "updated_by": "{{data.updated_by}}"
+  },
+  "put-test-suites-id": {
+    "name": "{{data.name}}",
+    "parallel_count": 1,
+    "parallel_enabled": "{{data.parallel_enabled}}",
+    "parameter_values": "{{data.parameter_values}}",
+    "parent_id": "{{lastId}}",
+    "updated_at": "{{data.updated_at}}",
+    "updated_by": "{{data.updated_by}}"
+  },
+  "post-test-suites-id-assign-test-cases": {
+    "test_case_ids": "{{data.test_case_ids}}"
+  },
+  "post-users": {
+    "email": "{{data.email}}",
+    "is_workspace_admin": true,
+    "name": "{{data.name}}",
+    "password": "{{data.password}}",
+    "password_hash": "{{data.password}}",
+    "project_id": "{{lastId}}",
+    "role_id": "{{lastId}}",
+    "user_id": "{{lastId}}"
+  },
+  "post-users-import": {
+    "rows": "{{data.rows}}"
+  },
+  "put-users-id": {
+    "avatar_data_url": "{{data.avatar_data_url}}",
+    "email": "{{data.email}}",
+    "is_workspace_admin": true,
+    "name": "{{data.name}}",
+    "password": "{{data.password}}",
+    "password_hash": "{{data.password}}",
+    "role_id": "{{lastId}}"
+  },
+  "put-users-id-password": {
+    "current_password": "{{data.password}}",
+    "new_password": "{{data.password}}",
+    "password_hash": "{{data.password}}"
+  },
+  "post-api-v1-mobile-execute": {
+    "objectRepository": "{{data.objectRepository}}",
+    "object_repository": "{{data.object_repository}}",
+    "steps": "{{data.steps}}"
+  },
+  "post-api-v1-mobile-recorder-sessions": {
+    "recorder_mode": "{{data.recorder_mode}}"
+  },
+  "post-api-v1-mobile-recorder-sessions-id-input": {
+    "height": "{{data.height}}",
+    "type": "{{data.type}}",
+    "value": "{{data.value}}",
+    "width": "{{data.width}}",
+    "x": "{{data.x}}",
+    "y": "{{data.y}}"
+  },
+  "post-api-v1-runs": {
+    "automated": "{{data.automated}}",
+    "callback": "{{data.callback}}"
+  },
+  "post-api-v1-recorder-sessions-id-inspect-start": {},
+  "post-api-v1-recorder-sessions-id-inspect-stop": {},
+  "post-api-v1-recorder-sessions-id-highlight": {},
+  "post-api-v1-recorder-sessions-id-input": {},
+  "post-api-v1-recorder-sessions": {
+    "locator": "{{data.locator}}",
+    "source": "{{data.source}}",
+    "text": "{{data.text}}",
+    "timestamp": "{{data.timestamp}}",
+    "type": "{{data.type}}",
+    "url": "{{data.url}}",
+    "value": "{{data.value}}",
+    "x": "{{data.x}}",
+    "y": "{{data.y}}"
+  }
+}

@@ -5,10 +5,13 @@
     "negative_postman",
     "edge_postman",
     "curl",
-    "qaira"
+    "qaira",
+    "data_references",
+    "environment"
   ],
   "contractCount": 241,
   "negativeTests": 223,
   "edgeTests": 99,
-  "componentSchemas": 97
+  "componentSchemas": 97,
+  "dataReferenceRoutes": 118
 }
