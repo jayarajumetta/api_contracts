@@ -19,6 +19,7 @@ from qaira_semantic_compiler.agents.service_body_field_agent import ServiceBodyF
 from qaira_semantic_compiler.agents.db_write_field_agent import DbWriteFieldAgent
 from qaira_semantic_compiler.agents.service_body_propagation_agent import ServiceBodyPropagationAgent
 from qaira_semantic_compiler.agents.inferred_schema_registry_agent import InferredSchemaRegistryAgent
+from qaira_semantic_compiler.agents.required_field_confidence_agent import RequiredFieldConfidenceAgent
 from qaira_semantic_compiler.agents.schema_attachment_agent import SchemaAttachmentAgent
 from qaira_semantic_compiler.agents.response_discovery_agent import ResponseDiscoveryAgent
 from qaira_semantic_compiler.agents.contract_builder_agent import ContractBuilderAgent
@@ -59,6 +60,7 @@ class Orchestrator:
             ServiceBodyPropagationAgent,
             InferredSchemaRegistryAgent,
             SchemaAttachmentAgent,
+            RequiredFieldConfidenceAgent,
             ResponseDiscoveryAgent,
             ContractBuilderAgent,
             RelationshipAgent,

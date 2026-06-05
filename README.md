@@ -1,33 +1,26 @@
-# QAira Semantic Compiler — Precision Field Inference
+# QAira Semantic Compiler — Contract Quality Cleanup
 
-This package fixes over-propagation from the field-inference run.
+Continues from precision-field baseline.
 
-## Problem fixed
+## What this release changes
 
-Previous run found strong patterns but over-counted:
+No changes to stable discovery/propagation logic.
 
-```text
-bodyExpected        123
-bodyFieldsKnown     210
-bodyFieldKnownRate  170%
-```
-
-That is impossible.
-
-## Corrections
+Cleanup only:
 
 ```text
-DB write fields scoped to called service method only
-No requestBody added to GET/DELETE unless req.body is explicitly used
-Inferred schemas only for POST/PUT/PATCH or confirmed body routes
-Quality rates capped at 100%
-bodyFieldsKnown counted only across body-expected routes
+declaredSchemaAttachments separated from inferredSchemaAttachments
+OpenAPI uses components.schemas for inferred request schemas
+Required field confidence added
+Negative Postman tests generated
+Edge Postman tests generated
+Summary metric names cleaned
 ```
 
 ## Build
 
 ```bash
-docker build -t qaira/semantic-compiler:precision-fields .
+docker build -t qaira/semantic-compiler:contract-quality .
 ```
 
 ## Run
@@ -42,5 +35,17 @@ docker run --rm \
   -v /Users/jayarajumetta/Downloads/volume/output:/output \
   -v /Users/jayarajumetta/Downloads/volume/config.yaml:/config/config.yaml:ro \
   -v /Users/jayarajumetta/Downloads/volume/learning:/learning \
-  qaira/semantic-compiler:precision-fields
+  qaira/semantic-compiler:contract-quality
+```
+
+## Expected
+
+```text
+bodyDetected around 118
+bodyFieldsKnown around 99
+declaredSchemaAttachments may be low
+inferredSchemaAttachments around 99
+negative tests > 0
+edge tests > 0
+OpenAPI components.schemas populated
 ```

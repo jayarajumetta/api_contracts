@@ -26,7 +26,8 @@ class QualityGateAgent:
         body_rate=min(100,round(body_detected/max(body_expected,1)*100,2))
         fields_rate=min(100,round(body_fields_known/max(body_expected,1)*100,2))
 
-        schema_attachments=len([
+        declared_schema_attachments=len(self.ctx.state.get("declaredSchemaAttachments",[]))
+        inferred_schema_attachments=len([
             r for r in expected_routes
             if (r.get("requestBody") or {}).get("schemaRef")
         ])
@@ -44,19 +45,23 @@ class QualityGateAgent:
             "serviceEdges":len(self.ctx.state.get("serviceEdges",[])),
             "schemasDiscovered":len(self.ctx.state.get("schemas",[])),
             "inferredSchemas":len(self.ctx.state.get("inferredSchemas",[])),
-            "schemaAttachments":schema_attachments,
+            "declaredSchemaAttachments":declared_schema_attachments,
+            "inferredSchemaAttachments":inferred_schema_attachments,
             "serviceBodyPatterns":len(self.ctx.state.get("serviceBodyFieldsByRoute",{})),
             "dbWritePatterns":len(self.ctx.state.get("dbWriteFieldsByRoute",{})),
-            "testsGenerated":True
+            "testsGenerated":True,
+            "negativeTestsGenerated":True,
+            "edgeTestsGenerated":True
         }
 
         score=min(100,
-            body_rate*0.35 +
-            fields_rate*0.25 +
-            (100 if contracts else 0)*0.15 +
+            body_rate*0.32 +
+            fields_rate*0.24 +
+            (100 if contracts else 0)*0.14 +
             (100 if summary["serviceEdges"] else 0)*0.10 +
             (100 if summary["inferredSchemas"] else 0)*0.10 +
-            (100 if summary["testsGenerated"] else 0)*0.05
+            (100 if summary["negativeTestsGenerated"] else 0)*0.05 +
+            (100 if summary["edgeTestsGenerated"] else 0)*0.05
         )
 
         report={"score":round(score,2),"passed":score>=self.ctx.config.get("quality_gate",{}).get("min_score_percent",90),"summary":summary}

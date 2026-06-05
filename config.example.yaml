@@ -87,6 +87,7 @@ agents:
   db_write_field_extraction: true
   service_body_propagation: true
   inferred_schema_registry: true
+  required_field_confidence: true
   response_discovery: true
   contract_builder: true
   relationship_discovery: true
@@ -126,3 +127,11 @@ pattern_establishment:
   service_body_propagation: true
   inferred_schema_registry: true
   min_confidence: 0.55
+
+
+contract_quality:
+  enabled: true
+  separate_declared_and_inferred_schema_metrics: true
+  generate_required_field_confidence: true
+  generate_negative_tests: true
+  generate_edge_tests: true

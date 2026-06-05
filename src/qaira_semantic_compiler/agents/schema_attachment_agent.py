@@ -17,7 +17,6 @@ class SchemaAttachmentAgent:
             tokens=set(re.findall(r"[A-Za-z0-9]+", r["path"].lower()))
             tokens.add(r["method"].lower())
 
-            # add service method names from service graph
             for e in self.ctx.state.get("serviceEdges",[]):
                 if e.get("from")==r["id"] and e.get("method"):
                     tokens |= set(re.findall(r"[A-Za-z0-9]+", e["method"].lower()))
@@ -31,8 +30,12 @@ class SchemaAttachmentAgent:
                     best=s
                     score=sc
 
+            # Declared schema attachment only. Inferred schema refs are handled by InferredSchemaRegistryAgent.
             if best and score>=0.10:
                 if not r.get("requestBody"):
+                    # Do not create body only from declared schema unless the route expects/has body.
+                    if r["method"] not in {"POST","PUT","PATCH"}:
+                        continue
                     r["requestBody"]={
                         "type":"object",
                         "properties":{},
@@ -40,12 +43,13 @@ class SchemaAttachmentAgent:
                         "x-qaira-body-detected":True,
                         "x-qaira-fields-known":False
                     }
-                r["requestBody"]["schemaRef"]=best["name"]
-                r["requestBody"]["schemaRefFile"]=best["file"]
-                r["requestBody"]["x-qaira-schema-attachment-score"]=score
+
+                r["requestBody"]["declaredSchemaRef"]=best["name"]
+                r["requestBody"]["declaredSchemaRefFile"]=best["file"]
+                r["requestBody"]["x-qaira-declared-schema-attachment-score"]=score
                 attached+=1
                 items.append({"routeId":r["id"],"schema":best["name"],"file":best["file"],"score":score})
 
-        self.ctx.write_json("validation/schema_attachment.json", {"attached":attached,"items":items})
-        expected=len([r for r in self.ctx.state.get("routes",[]) if r["method"] in {"POST","PUT","PATCH"}])
-        return AgentResult(self.name,"success",attached/max(expected,1) if expected else 0.5,{"attached":attached}, {})
+        self.ctx.state["declaredSchemaAttachments"]=items
+        self.ctx.write_json("validation/declared_schema_attachment.json", {"attached":attached,"items":items})
+        return AgentResult(self.name,"success" if attached else "failed_open",attached/max(len([r for r in self.ctx.state.get("routes",[]) if r["method"] in {"POST","PUT","PATCH"}]),1),{"declaredSchemaAttachments":attached}, {})
