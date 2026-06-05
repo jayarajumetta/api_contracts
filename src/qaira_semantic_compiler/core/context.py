@@ -1,14 +1,20 @@
 from __future__ import annotations
+
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Dict, List
-import json, os, time, traceback, hashlib, datetime
+import datetime
+import hashlib
+import json
+
 
 def now_iso() -> str:
     return datetime.datetime.utcnow().isoformat() + "Z"
 
+
 def sha_text(text: str) -> str:
     return hashlib.sha256(text.encode("utf-8", errors="ignore")).hexdigest()
+
 
 @dataclass
 class AgentResult:
@@ -24,6 +30,7 @@ class AgentResult:
     def finish(self):
         self.ended_at = now_iso()
         return self
+
 
 @dataclass
 class RunContext:

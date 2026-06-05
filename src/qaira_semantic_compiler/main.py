@@ -25,7 +25,7 @@ EXCLUDED_DIRS={".git","node_modules","dist","build","target","bin","obj","covera
 SOURCE_EXTENSIONS={".js",".jsx",".ts",".tsx",".json",".yaml",".yml",".prisma",".sql",".md",".env"}
 
 DEFAULT_CONFIG={
- "agent":{"name":"qaira-semantic-compiler-platform","version":"v58","mode":"prebuild"},
+ "agent":{"name":"qaira-semantic-compiler-platform","version":"v61","mode":"prebuild"},
  "paths":{"source_dir":"/repo","output_dir":"/output","learning_dir":"/learning","changed_files":""},
  "logging":{"verbose_console":True},
  "parsing":{"prefer_tree_sitter":True,"fallback_regex_parser":True,"max_file_size_kb":4096},
@@ -2776,7 +2776,7 @@ class ArtifactGenerator:
         store.text("generated/generated_curls.sh",self.curls(contracts))
         store.json("generated/openapi.json",self.openapi(contracts))
         store.json("generated/postman_collection.json",self.postman(contracts))
-        store.json("generated/qaira_api_repository.json",{"version":"58.0","apis":[safe_json(c) for c in contracts]})
+        store.json("generated/qaira_api_repository.json",{"version":"61.0","apis":[safe_json(c) for c in contracts]})
     def curls(self,contracts):
         lines=["#!/usr/bin/env bash","set -euo pipefail",': "${baseUrl:=http://localhost:3000}"',': "${token:=CHANGE_ME}"',""]
         for c in contracts: lines += [f"echo '### {c.method} {c.path}'",c.curl.replace("{{baseUrl}}","${baseUrl}").replace("{{token}}","${token}"),""]
@@ -2788,14 +2788,14 @@ class ArtifactGenerator:
             if c.request_body: op["requestBody"]={"required":bool(c.request_body.get("required")),"content":{"application/json":{"schema":c.request_body}}}
             if c.auth.get("required"): op["security"]=[{"bearerAuth":[]}]
             paths.setdefault(c.path,{})[c.method.lower()]=op
-        return {"openapi":"3.1.0","info":{"title":"QAira Semantic Compiler V58 API","version":"58.0.0"},"paths":paths,"components":{"securitySchemes":{"bearerAuth":{"type":"http","scheme":"bearer","bearerFormat":"JWT"}}}}
+        return {"openapi":"3.1.0","info":{"title":"QAira Semantic Compiler V61 API","version":"58.0.0"},"paths":paths,"components":{"securitySchemes":{"bearerAuth":{"type":"http","scheme":"bearer","bearerFormat":"JWT"}}}}
     def postman(self,contracts):
         items=[]
         for c in contracts:
             req={"method":c.method,"header":[{"key":k,"value":v} for k,v in headers(c.auth).items()],"url":{"raw":"{{baseUrl}}"+c.path,"host":["{{baseUrl}}"],"path":c.path.strip("/").split("/"),"query":[{"key":p.get("name"),"value":""} for p in (c.parameters or []) if p.get("in")=="query"]}}
             if c.request_body: req["body"]={"mode":"raw","raw":json.dumps(sample(c.request_body),indent=2),"options":{"raw":{"language":"json"}}}
             items.append({"name":c.api_id,"request":req})
-        return {"info":{"name":"QAira V58 API Collection","schema":"https://schema.getpostman.com/json/collection/v2.1.0/collection.json"},"variable":[{"key":"baseUrl","value":"http://localhost:3000"},{"key":"token","value":""}],"item":items}
+        return {"info":{"name":"QAira V61 API Collection","schema":"https://schema.getpostman.com/json/collection/v2.1.0/collection.json"},"variable":[{"key":"baseUrl","value":"http://localhost:3000"},{"key":"token","value":""}],"item":items}
 
 
 class V53Governance:
@@ -3092,7 +3092,7 @@ class TestGeneratorAgentV54:
                 lines.append(f"curl -X {c.method} \"$BASE_URL{path}\"")
         return "\n".join(lines)+"\n"
     def generate_qaira(self,contracts,relationship):
-        return json.dumps({"version":"v58","sequence":relationship.get("sequence",[]),"tests":[{"id":c.api_id,"method":c.method,"path":c.path,"payload":self.payload_for(c),"params":self.params_for(c)} for c in contracts]},indent=2)
+        return json.dumps({"version":"v61","sequence":relationship.get("sequence",[]),"tests":[{"id":c.api_id,"method":c.method,"path":c.path,"payload":self.payload_for(c),"params":self.params_for(c)} for c in contracts]},indent=2)
     def generate_rest_assured(self,contracts):
         body=["import io.restassured.RestAssured;","public class GeneratedApiTests {","  String baseUrl = System.getProperty(\"baseUrl\", \"http://localhost:3000\");"]
         for i,c in enumerate(contracts[:200]):

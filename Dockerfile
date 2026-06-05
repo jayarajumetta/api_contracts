@@ -1,19 +1,17 @@
 FROM python:3.11-slim
 
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONPATH=/app/src
+
 WORKDIR /app
+
 COPY . /app
 
 RUN pip install --no-cache-dir \
     pyyaml \
     tree-sitter \
     tree-sitter-javascript \
-    tree-sitter-typescript \
-    && chmod +x /app/run_qaira_semantic_compiler.sh
+    tree-sitter-typescript
 
-ENV QAIRA_SOURCE=/repo
-ENV QAIRA_OUTPUT=/output
-ENV QAIRA_CONFIG=/config/config.yaml
-ENV QAIRA_LEARNING=/learning
-
-ENTRYPOINT ["/app/run_qaira_semantic_compiler.sh"]
-CMD ["/repo", "/output", "/config/config.yaml", "", "/learning"]
+ENTRYPOINT ["python", "-m", "qaira_semantic_compiler.orchestrator_v61"]
+CMD ["--source", "/repo", "--output", "/output", "--learning", "/learning", "--config", "/config/config.yaml"]

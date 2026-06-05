@@ -1,7 +1,7 @@
 agent:
   name: qaira-semantic-compiler-platform
-  version: v59
-  mode: modular-orchestrated-runtime
+  version: v61
+  mode: final-agentic-quality-runtime
 
 repo:
   enabled: false
@@ -31,6 +31,7 @@ logging:
   jsonl_trace: true
   write_agent_logs: true
   log_level: INFO
+  redact_secrets: true
 
 scan:
   use_repository_index: true
@@ -60,47 +61,110 @@ scan:
     - "*.gz"
   max_file_size_kb: 4096
 
-runtime_execution:
+agentic_runtime:
   enabled: true
-  architecture: modular_agents
+  execution_model: deterministic_first_llm_assisted
   max_iterations: 3
-  stop_when_satisfied: true
-  threshold_percent: 100
-  fail_open_on_agent_error: true
-  fail_open_on_llm_error: true
-  write_iteration_snapshots: true
+  quality_threshold_percent: 90
+  perfect_threshold_percent: 100
+  stop_when_quality_gate_passes: true
+  fail_open: true
   continue_from_last_success: true
+  write_run_manifest: true
+  write_artifact_manifest: true
+
+planner:
+  enabled: true
+  static_plan_first: true
+  llm_plan_only_on_low_confidence: true
+  plan_file: /output/runtime/execution_plan.json
+
+state_machine:
+  enabled: true
+  states:
+    - INIT
+    - INDEXING
+    - DISCOVERY
+    - GRAPH_COMPLETION
+    - CONTRACT_BUILD
+    - TEST_GENERATION
+    - QUALITY_GATE
+    - FINALIZE
+    - COMPLETE
+    - FAILED_OPEN
+
+quality_gate:
+  enabled: true
+  min_score_percent: 90
+  fail_open_below_threshold: true
+  required_artifacts:
+    - summary/scan_summary.json
+    - generated/openapi.json
+    - generated/postman_collection.json
+    - discovery/unified_api_contracts.json
+    - final/final_test_generation_report.json
+  metric_weights:
+    body_detection_rate: 20
+    body_field_known_rate: 15
+    import_hydration: 15
+    service_edges: 15
+    return_propagation: 10
+    actionable_recovery: 10
+    test_generation: 10
+    artifact_validity: 5
+
+verifier:
+  enabled: true
+  verify_openapi_json: true
+  verify_postman_json: true
+  verify_contract_count: true
+  verify_generated_tests: true
+  verify_no_empty_critical_outputs: true
+
+retry_policy:
+  enabled: true
+  max_retries_per_agent: 1
+  retry_only_on:
+    - timeout
+    - transient_error
+    - low_confidence
+  never_retry_on:
+    - config_error
+    - missing_source
+    - permission_denied
+
+cache:
+  enabled: true
+  repository_index_cache: true
+  module_resolution_cache: true
+  artifact_cache: true
+  cache_dir: /output/cache
+
+budget:
+  enabled: true
+  max_runtime_seconds: 3600
+  max_stage_seconds: 900
+  max_llm_calls_per_run: 8
+  max_llm_tokens_per_run: 20000
 
 orchestrator:
-  stage_timeout_seconds: 900
-  agent_timeout_seconds: 300
   continue_on_stage_failure: true
   capture_exception_trace: true
   write_stage_input_output: true
   write_stage_metrics: true
+  fail_fast: false
   stages:
     - repo_clone
     - repository_index
     - legacy_semantic_compiler
     - output_analyzer
+    - verifier
+    - quality_gate
     - llm_results_analyzer
     - final_test_generation
+    - artifact_manifest
     - code_generation
     - git_commit_push
-
-agent_confidence:
-  enabled: true
-  thresholds:
-    repository_index: 0.90
-    route_discovery: 0.95
-    body_detection: 0.90
-    module_resolution: 0.80
-    import_aware_resolution: 0.80
-    dto_attachment: 0.80
-    variable_propagation: 0.80
-    response_propagation: 0.80
-    relationship_engine: 0.80
-    test_generation: 0.90
 
 llm:
   enabled: true
@@ -130,28 +194,6 @@ llm_invocation:
   continue_on_timeout: true
   continue_on_error: true
   max_stage_llm_calls_per_iteration: 8
-  allowed_task_types:
-    - inspect_output_file
-    - inspect_source_slice
-    - rerun_agent_with_config
-    - add_pattern_to_learning
-    - adjust_agent_config
-    - mark_manual_review
-  blocked_task_types:
-    - arbitrary_shell
-    - network_call
-    - delete_files
-    - modify_source_without_code_generation_gate
-    - exfiltrate_secret
-
-llm_results_analyser:
-  enabled: true
-  threshold_percent: 100
-  stop_when_llm_says_satisfied: true
-  read_full_output_volume: true
-  include_previous_iterations: true
-  continue_on_timeout: true
-  continue_on_error: true
 
 framework_harvesting:
   enabled: true
@@ -234,16 +276,6 @@ code_generation:
   generate_patch_only: true
   apply_patch: false
   fail_open: true
-  allowed_paths:
-    - src/
-    - docs/
-    - config.example.yaml
-  blocked_paths:
-    - .env
-    - secrets/
-    - credentials/
-    - node_modules/
-    - .git/
 
 git_push:
   enabled: true

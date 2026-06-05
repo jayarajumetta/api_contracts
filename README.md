@@ -1,80 +1,55 @@
-# QAira Semantic Compiler Platform V59 — Modular Orchestrated Runtime
+# QAira Semantic Compiler Platform V61 — Final Agentic Quality Runtime
 
-V59 restructures the runtime into separated agent files and keeps the existing compiler as the core semantic compiler stage.
+V61 is the final consolidated version after the V30 → V60 learning cycle.
 
-## Why V59
+## What was missing fundamentally
 
-Your current config is powerful but the implementation was becoming hard to control because many agents lived inside one large `main.py`.
-
-V59 introduces a production-style layout:
+The core compiler had strong discovery, but the agentic runtime needed these fundamental blocks:
 
 ```text
-src/qaira_semantic_compiler/
-  orchestrator_v59.py
-  main.py                         # legacy semantic compiler core
-  core/
-    context.py
-    logging.py
-    safe_runner.py
-    repository_index.py
-  agents/
-    repo_clone_agent.py
-    repository_index_agent.py
-    legacy_compiler_agent.py
-    output_analyzer_agent.py
-    llm_results_analyzer_agent.py
-    final_test_generation_agent.py
-    code_generation_agent.py
-    git_commit_push_agent.py
+Planner
+State machine
+Verifier
+Quality gate
+Artifact manifest
+Budget/cache/retry config
+Fail-open LLM guard
+Per-agent result contract
+Production package entrypoint
 ```
 
-## Execution flow
+V61 adds those blocks while preserving the proven V58/V57 compiler core.
+
+## Final execution flow
 
 ```text
-ModularOrchestratorV59
+FinalAgenticOrchestratorV61
+  ├── PlannerAgent
+  ├── StateMachine_INIT
   ├── RepoCloneAgent
   ├── RepositoryIndexAgent
+  ├── StateMachine_DISCOVERY
   ├── LegacySemanticCompilerAgent
-  │     └── runs the full V58/V57 semantic compiler
   ├── OutputAnalyzerAgent
+  ├── VerifierAgent
+  ├── QualityGateAgent
   ├── LLMResultsAnalyzerAgent
   ├── FinalTestGenerationAgent
+  ├── ArtifactManifestAgent
   ├── CodeGenerationAgent
-  └── GitCommitPushAgent
+  ├── GitCommitPushAgent
+  └── StateMachine_COMPLETE
 ```
 
-## Benefits
-
-```text
-agent-level logs
-agent-level metrics
-agent-level failure capture
-fail-open recovery
-central orchestrator control
-clean place to move legacy agents one-by-one into modules
-repository index built once
-safe LLM behavior
-safe git behavior
-```
-
-## Important outputs
-
-```text
-/output/agents/<AgentName>/result.json
-/output/runtime/modular_orchestrator_report.json
-/output/repository/repository_index_v59.json
-/output/analysis/output_analysis_v59.json
-/output/llm/results_analyser/iteration_1.json
-/output/final/final_test_generation_report.json
-/output/git/code_push_report.json
-/output/verbose/console_progress.log
-```
-
-## Docker run
+## Build
 
 ```bash
-docker build -t qaira/semantic-compiler:v59 .
+docker build -t qaira/semantic-compiler:v61 .
+```
 
+## Run
+
+```bash
 docker run --rm \
   -e PYTHONUNBUFFERED=1 \
   -e OPENAI_API_KEY="$OPENAI_API_KEY" \
@@ -84,14 +59,33 @@ docker run --rm \
   -v /Users/jayarajumetta/Downloads/volume/output:/output \
   -v /Users/jayarajumetta/Downloads/volume/config.yaml:/config/config.yaml:ro \
   -v /Users/jayarajumetta/Downloads/volume/learning:/learning \
-  qaira/semantic-compiler:v59
+  qaira/semantic-compiler:v61
 ```
 
-## Config
-
-The latest complete config is included in both:
+## Critical outputs
 
 ```text
-config.example.yaml
-config/config.example.yaml
+/output/runtime/execution_plan.json
+/output/runtime/final_agentic_orchestrator_report.json
+/output/runtime/artifact_manifest.json
+/output/quality/verifier_report.json
+/output/quality/quality_gate_report.json
+/output/summary/scan_summary.json
+/output/generated/openapi.json
+/output/generated/postman_collection.json
+/output/final/final_test_generation_report.json
+/output/verbose/console_progress.log
+```
+
+## Honest expectation
+
+No static analyzer can guarantee a literally perfect output for every repository, but V61 is designed to produce the best possible output safely:
+
+```text
+deterministic first
+LLM assisted only when safe
+fail-open
+artifact verification
+quality scoring
+complete traceability
 ```
