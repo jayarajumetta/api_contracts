@@ -1,0 +1,298 @@
+agent:
+  name: qaira-semantic-compiler-platform
+  version: v61
+  mode: final-agentic-quality-runtime
+
+repo:
+  enabled: true
+  url: ""
+  clone_dir: /workspace/repo
+  source_subdir: ""
+  default_branch: develop
+  clean_clone: true
+  username_env: GIT_USERNAME
+  token_env: GIT_TOKEN
+  execute_git: true
+  fail_open: true
+
+paths:
+  source_dir: /repo
+  output_dir: /output
+  learning_dir: /learning
+  changed_files: ""
+
+logging:
+  verbose_console: true
+  verbose_files: true
+  console_heartbeat: true
+  heartbeat_every_seconds: 10
+  stage_start_end_logs: true
+  flush_console: true
+  jsonl_trace: true
+  write_agent_logs: true
+  log_level: INFO
+  redact_secrets: true
+
+scan:
+  use_repository_index: true
+  build_index_once: true
+  exclude_dirs:
+    - node_modules
+    - .git
+    - dist
+    - build
+    - coverage
+    - .next
+    - .cache
+    - playwright-report
+    - test-results
+    - tmp
+    - logs
+  exclude_files:
+    - "*.map"
+    - "*.lock"
+    - "*.png"
+    - "*.jpg"
+    - "*.jpeg"
+    - "*.gif"
+    - "*.mp4"
+    - "*.zip"
+    - "*.tar"
+    - "*.gz"
+  max_file_size_kb: 4096
+
+agentic_runtime:
+  enabled: true
+  execution_model: deterministic_first_llm_assisted
+  max_iterations: 3
+  quality_threshold_percent: 90
+  perfect_threshold_percent: 100
+  stop_when_quality_gate_passes: true
+  fail_open: true
+  continue_from_last_success: true
+  write_run_manifest: true
+  write_artifact_manifest: true
+
+planner:
+  enabled: true
+  static_plan_first: true
+  llm_plan_only_on_low_confidence: true
+  plan_file: /output/runtime/execution_plan.json
+
+state_machine:
+  enabled: true
+  states:
+    - INIT
+    - INDEXING
+    - DISCOVERY
+    - GRAPH_COMPLETION
+    - CONTRACT_BUILD
+    - TEST_GENERATION
+    - QUALITY_GATE
+    - FINALIZE
+    - COMPLETE
+    - FAILED_OPEN
+
+quality_gate:
+  enabled: true
+  min_score_percent: 90
+  fail_open_below_threshold: true
+  required_artifacts:
+    - summary/scan_summary.json
+    - generated/openapi.json
+    - generated/postman_collection.json
+    - discovery/unified_api_contracts.json
+    - final/final_test_generation_report.json
+  metric_weights:
+    body_detection_rate: 20
+    body_field_known_rate: 15
+    import_hydration: 15
+    service_edges: 15
+    return_propagation: 10
+    actionable_recovery: 10
+    test_generation: 10
+    artifact_validity: 5
+
+verifier:
+  enabled: true
+  verify_openapi_json: true
+  verify_postman_json: true
+  verify_contract_count: true
+  verify_generated_tests: true
+  verify_no_empty_critical_outputs: true
+
+retry_policy:
+  enabled: true
+  max_retries_per_agent: 1
+  retry_only_on:
+    - timeout
+    - transient_error
+    - low_confidence
+  never_retry_on:
+    - config_error
+    - missing_source
+    - permission_denied
+
+cache:
+  enabled: true
+  repository_index_cache: true
+  module_resolution_cache: true
+  artifact_cache: true
+  cache_dir: /output/cache
+
+budget:
+  enabled: true
+  max_runtime_seconds: 3600
+  max_stage_seconds: 900
+  max_llm_calls_per_run: 8
+  max_llm_tokens_per_run: 20000
+
+orchestrator:
+  continue_on_stage_failure: true
+  capture_exception_trace: true
+  write_stage_input_output: true
+  write_stage_metrics: true
+  fail_fast: false
+  stages:
+    - repo_clone
+    - repository_index
+    - legacy_semantic_compiler
+    - output_analyzer
+    - verifier
+    - quality_gate
+    - llm_results_analyzer
+    - final_test_generation
+    - artifact_manifest
+    - code_generation
+    - git_commit_push
+
+llm:
+  enabled: true
+  provider: openai
+  model: gpt-4.1-mini
+  api_key_env: OPENAI_API_KEY
+  endpoint: https://api.openai.com/v1/chat/completions
+  temperature: 0
+  max_tokens: 1200
+  timeout_seconds: 20
+  max_retries: 1
+  fail_open: true
+  require_json_response: true
+  allow_full_file_context: false
+  allow_full_repo_context: false
+  max_prompt_chars: 12000
+  save_prompts: true
+  save_responses: true
+
+llm_invocation:
+  mode: selective
+  enabled: true
+  confidence_threshold: 0.80
+  invoke_on_failure: true
+  invoke_on_low_confidence: true
+  invoke_on_high_confidence: false
+  continue_on_timeout: true
+  continue_on_error: true
+  max_stage_llm_calls_per_iteration: 8
+
+framework_harvesting:
+  enabled: true
+  harvesters:
+    openapi_files: true
+    postman_files: true
+    fastify_swagger: true
+    nestjs_metadata: true
+    fastapi_openapi: true
+    spring_boot_openapi: true
+    aspnet_swagger: true
+    ast_comments: true
+    validation_constraints: true
+    runtime_swagger: false
+
+validation_engine:
+  enabled: true
+  enterprise_module_resolution: true
+  import_registry_hydration_fix: true
+  graph_completion: true
+  import_hydration_v57: true
+  service_call_graph_v57: true
+  shape_propagation_v57: true
+  return_propagation_v57: true
+  dto_attachment_v57: true
+  import_aware_service_resolver: true
+  export_resolver: true
+  diagnostic_classifier: true
+
+graph_completion:
+  enabled: true
+  use_repository_index: true
+  import_hydration:
+    enabled: true
+  service_call_graph:
+    enabled: true
+    max_depth: 4
+  shape_propagation:
+    enabled: true
+  return_propagation:
+    enabled: true
+  dto_attachment:
+    enabled: true
+    min_similarity: 0.70
+
+relationship_engine:
+  enabled: true
+  deterministic_first: true
+  llm_fallback_when_confidence_below: 0.75
+
+test_generation:
+  enabled: true
+  final_override_previous: true
+  types:
+    - postman
+    - curl
+    - qaira
+    - rest_assured
+    - playwright_api
+    - k6
+    - jmeter
+  use_data_references: true
+  use_param_references: true
+  generate_extractors: true
+  order_requests: true
+  llm_ordering_fallback: true
+  default_base_url_variable: "{{baseUrl}}"
+
+pattern_learning:
+  enabled: true
+  store_worked_patterns: true
+  store_failed_patterns: true
+  store_llm_suggested_worked_patterns: true
+
+code_generation:
+  enabled: true
+  generate_from_worked_patterns: true
+  require_llm_results_threshold: true
+  min_threshold_percent: 100
+  generate_patch_only: true
+  apply_patch: false
+  fail_open: true
+
+git_push:
+  enabled: true
+  repo_url: "https://github.com/jayarajumetta/api_contracts.git"
+  username_env: GIT_USERNAME
+  token_env: GIT_TOKEN
+  target_branch: develop
+  create_branch_prefix: qaira-agent
+  commit_message: "chore: apply QAira agent learned patterns"
+  push: false
+  execute_git: true
+  fail_open: true
+
+pull_request:
+  enabled: true
+  provider: github
+  base_branch: main
+  title: "QAira agent learned pattern updates"
+  body_file: /output/git/pr_body.md
+  fail_open: true

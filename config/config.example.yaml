@@ -1,75 +1,79 @@
 agent:
   name: qaira-semantic-compiler
-  mode: clean-production
-
+  mode: final-compatible-auto-iterative
 paths:
   source_dir: /repo
   output_dir: /output
   learning_dir: /learning
-
+  changed_files: ''
 logging:
   console: true
   jsonl_trace: true
   redact_secrets: true
   progress_every_items: 50
-
+  verbose_console: true
 scan:
   max_file_size_kb: 4096
   include_extensions:
-    - .js
-    - .jsx
-    - .ts
-    - .tsx
-    - .py
-    - .java
-    - .cs
-    - .json
-    - .yaml
-    - .yml
+  - .js
+  - .jsx
+  - .ts
+  - .tsx
+  - .py
+  - .java
+  - .cs
+  - .json
+  - .yaml
+  - .yml
   exclude_dirs:
-    - node_modules
-    - .git
-    - dist
-    - build
-    - coverage
-    - .next
-    - .cache
-    - playwright-report
-    - test-results
-    - tmp
-    - logs
+  - node_modules
+  - .git
+  - dist
+  - build
+  - coverage
+  - .next
+  - .cache
+  - playwright-report
+  - test-results
+  - tmp
+  - logs
   exclude_files:
-    - "*.map"
-    - "*.lock"
-    - "*.png"
-    - "*.jpg"
-    - "*.jpeg"
-    - "*.gif"
-    - "*.mp4"
-    - "*.zip"
-    - "*.tar"
-    - "*.gz"
-
+  - '*.map'
+  - '*.lock'
+  - '*.png'
+  - '*.jpg'
+  - '*.jpeg'
+  - '*.gif'
+  - '*.mp4'
+  - '*.zip'
+  - '*.tar'
+  - '*.gz'
 runtime:
   fail_open: true
   agent_timeout_seconds: 900
   continue_on_error: true
   write_agent_io: true
-
-llm:
+auto_iteration:
   enabled: true
+  max_iterations: 3
+  stop_when_quality_passes: true
+  min_score_percent: 90
+  apply_known_remediations: true
+  preserve_best_iteration: true
+  compare_against_previous_iteration: true
+llm_review:
+  enabled: true
+  execute_network_calls: false
   provider: openai
   model: gpt-4.1-mini
   api_key_env: OPENAI_API_KEY
+  endpoint: https://api.openai.com/v1/chat/completions
   timeout_seconds: 20
   max_retries: 1
   fail_open: true
-  selective_only: true
-  confidence_threshold: 0.80
-  max_calls_per_run: 8
-  save_prompts: true
-  execute_network_calls: false
-
+  review_each_iteration: true
+  review_each_agent_failure: true
+  max_prompt_chars: 12000
 agents:
   source_detection: true
   repository_index: true
@@ -94,32 +98,6 @@ agents:
   test_generation: true
   quality_gate: true
   artifact_manifest: true
-
-quality_gate:
-  min_score_percent: 90
-  fail_open_below_threshold: true
-
-test_generation:
-  types:
-    - postman
-    - curl
-    - qaira
-    - playwright_api
-  base_url_variable: "{{baseUrl}}"
-  use_data_references: true
-  use_param_references: true
-  generate_extractors: true
-
-git:
-  enabled: false
-  repo_url: ""
-  target_branch: develop
-  username_env: GIT_USERNAME
-  token_env: GIT_TOKEN
-  execute_git: false
-  push: false
-
-
 pattern_establishment:
   enabled: true
   service_body_field_extraction: true
@@ -127,11 +105,59 @@ pattern_establishment:
   service_body_propagation: true
   inferred_schema_registry: true
   min_confidence: 0.55
-
-
-contract_quality:
-  enabled: true
-  separate_declared_and_inferred_schema_metrics: true
-  generate_required_field_confidence: true
+quality_gate:
+  min_score_percent: 90
+  fail_open_below_threshold: true
+test_generation:
+  types:
+  - postman
+  - curl
+  - qaira
+  - rest_assured
+  - playwright_api
+  - k6
+  - jmeter
+  base_url_variable: '{{baseUrl}}'
+  use_data_references: true
+  use_param_references: true
+  generate_extractors: true
   generate_negative_tests: true
   generate_edge_tests: true
+git_finalization:
+  enabled: true
+  execute_git: true
+  repo_url: https://github.com/jayarajumetta/api_contracts.git
+  clone_dir: /workspace/final-repo
+  source_subdir: ''
+  target_branch: develop
+  create_branch: true
+  branch_prefix: qaira-agent
+  username_env: GIT_USERNAME
+  token_env: GIT_TOKEN
+  commit_message: 'chore: apply QAira agent learned patterns'
+  copy_artifacts_to:
+  - generated/
+  - final/
+  - summary/
+  - quality/
+  - analysis/
+  push: false
+pull_request:
+  enabled: true
+  execute_network_calls: false
+  provider: github
+  base_branch: main
+  title: QAira agent learned pattern updates
+  body: Automated QAira semantic compiler output update.
+  token_env: GIT_TOKEN
+  fail_open: true
+compatibility:
+  accepts_legacy_sections:
+  - agentic_runtime
+  - git_push
+  - llm
+  - llm_invocation
+  - quality_gate
+  - test_generation
+  uploaded_config_mode: final-agentic-quality-runtime
+  uploaded_config_agent_name: qaira-semantic-compiler-platform
