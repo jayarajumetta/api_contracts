@@ -1,67 +1,50 @@
-# QAira Semantic Compiler — Final Config-Safe Enterprise Loop
+# QAira Semantic Compiler — Final Config-Safe Git Routing Fix
 
-This package makes config override optional.
-
-## Key change
-
-The agent now runs even if you do **not** mount:
+This patch fixes the issue seen in the latest run:
 
 ```text
-/config/config.yaml
+git_push.enabled=true
+git_finalization.enabled=false
 ```
 
-It uses the bundled config:
+The old selector picked `git_finalization` first and disabled Git, even though `git_push` was enabled.
+
+## Fixed behavior
+
+Config priority is now:
 
 ```text
-/app/config/config.example.yaml
+1. git_push if git_push.enabled=true
+2. git_finalization if git_finalization.enabled=true
+3. git if git.enabled=true
+4. disabled
 ```
 
-If you do mount a config, it becomes a **deep-merge override**, not a full replacement.
+## LLM 429 fix
 
-## External-input features default OFF
+`ResultsAnalyzerAgent` no longer calls LLM directly.
 
-These are false by default:
+Only this agent can call LLM:
 
 ```text
-llm_review.enabled
-llm_review.execute_network_calls
-git_push.enabled
-git_push.execute_git
-git_push.push
-git_finalization.enabled
-git_finalization.execute_git
-git_finalization.push
-pull_request.enabled
-pull_request.execute_network_calls
+IterationLLMReviewerAgent
 ```
 
-So the default run performs:
+and it uses:
 
 ```text
-source scan
-agent iteration
-contract generation
-test generation
-quality gate
-artifact manifest
-LLM prompt/context saving only if enabled by override
-no real LLM call
-no git push
-no PR
+runtime/iteration_context.json
 ```
 
-## Run without config override
+with call budget control.
+
+## Build
 
 ```bash
-docker run --rm \
-  -e PYTHONUNBUFFERED=1 \
-  -v /Users/jayarajumetta/MJ/qaira:/repo:ro \
-  -v /Users/jayarajumetta/Downloads/volume/output:/output \
-  -v /Users/jayarajumetta/Downloads/volume/learning:/learning \
-  qaira/semantic-compiler:config-safe
+docker build -t qaira/semantic-compiler:config-safe-gitfix .
 ```
 
-## Run with optional config override
+## Run
 
 ```bash
 docker run --rm \
@@ -73,37 +56,14 @@ docker run --rm \
   -v /Users/jayarajumetta/Downloads/volume/output:/output \
   -v /Users/jayarajumetta/Downloads/volume/config.yaml:/config/config.yaml:ro \
   -v /Users/jayarajumetta/Downloads/volume/learning:/learning \
-  qaira/semantic-compiler:config-safe
+  qaira/semantic-compiler:config-safe-gitfix
 ```
 
-## To enable external integrations
-
-Add only what you need in the override config:
-
-```yaml
-llm_review:
-  enabled: true
-  execute_network_calls: true
-
-git_push:
-  enabled: true
-  execute_git: true
-  repo_url: "https://github.com/jayarajumetta/api_contracts.git"
-  target_branch: develop
-  push: true
-
-pull_request:
-  enabled: true
-  execute_network_calls: true
-  base_branch: main
-```
-
-## Verification
+## Verify
 
 ```text
-config/effective_config.json
-runtime/config_compatibility_report.json
-runtime/iteration_context.json
-summary/scan_summary.json
-quality/quality_gate_report.json
+git/finalization_report.json
+git/command_log.json
+analysis/results_analysis.json
+analysis/iteration_llm_review.json
 ```

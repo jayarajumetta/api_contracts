@@ -1,5 +1,4 @@
 from qaira_semantic_compiler.core.context import AgentResult
-from qaira_semantic_compiler.core.llm_client import LLMClient
 
 class ResultsAnalyzerAgent:
     name="ResultsAnalyzerAgent"
@@ -22,10 +21,13 @@ class ResultsAnalyzerAgent:
             "issues":issues,
             "nextRemediations":self.remediations(issues),
             "summary":summary,
-            "reactSafety":{"strictJsonTransport":True,"malformedQuoteEscapeFailOpen":True}
+            "reactSafety":{"strictJsonTransport":True,"malformedQuoteEscapeFailOpen":True},
+            "llmReview":{
+                "networkCallExecuted":False,
+                "reason":"centralized_llm_review_only",
+                "reviewAgent":"IterationLLMReviewerAgent"
+            }
         }
-        llm=LLMClient(self.ctx,self.logger).review("ResultsAnalyzerAgent",result,default={"accepted":accepted,"suggestions":result["nextRemediations"]})
-        result["llmReview"]=llm
         self.ctx.state["analysis"]=result
         self.ctx.write_json("analysis/results_analysis.json",result)
         return AgentResult(self.name,"success",min(1,score/100),{"score":score,"issues":len(issues),"accepted":accepted},result)
