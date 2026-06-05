@@ -245,3 +245,49 @@ compatibility:
     - git_finalization.push
     - pull_request.enabled
     - pull_request.execute_network_calls
+
+
+self_healing:
+  enabled: true
+  evaluate_each_agent: true
+  llm_advisor_enabled: true
+  llm_call_policy: once_per_iteration_if_below_threshold_or_agent_failed
+  max_llm_calls_per_run: 1
+  generate_agent_specific_delta_plan: true
+  generate_agent_patch_files: true
+  apply_generated_agent_code: false
+  safe_patch_only: true
+  allowed_patch_agents:
+    - RouteDiscoveryAgent
+    - BodyDiscoveryAgent
+    - ParamsDiscoveryAgent
+    - ParamTypeDiscoveryAgent
+    - ImportGraphAgent
+    - ServiceGraphAgent
+    - ServiceBodyFieldAgent
+    - DbWriteFieldAgent
+    - ServiceBodyPropagationAgent
+    - InferredSchemaRegistryAgent
+    - TestGenerationAgent
+    - QualityGateAgent
+  blocked_patch_paths:
+    - orchestrator.py
+    - core/runner.py
+    - core/context.py
+    - core/llm_client.py
+
+artifact_quality:
+  enhanced_openapi_docs: true
+  include_examples: true
+  include_payload_references: true
+  include_markdown_docs: true
+  include_data_reference_file: true
+  postman_quality:
+    enabled: true
+    include_status_assertions: true
+    include_json_body_assertions: true
+    include_schema_presence_assertions: true
+    include_extractors: true
+    include_negative_tests: true
+    include_edge_tests: true
+    use_collection_variables: true

@@ -1,47 +1,73 @@
-# QAira Semantic Compiler — Final Config-Safe Git Routing Fix
+# QAira Semantic Compiler — Self-Healing + Premium Docs Runtime
 
-This patch fixes the issue seen in the latest run:
-
-```text
-git_push.enabled=true
-git_finalization.enabled=false
-```
-
-The old selector picked `git_finalization` first and disabled Git, even though `git_push` was enabled.
-
-## Fixed behavior
-
-Config priority is now:
+This version extends the successful baseline with:
 
 ```text
-1. git_push if git_push.enabled=true
-2. git_finalization if git_finalization.enabled=true
-3. git if git.enabled=true
-4. disabled
+AgentPerformanceEvaluatorAgent
+SelfHealingLLMAdvisorAgent
+SelfHealingCodeDeltaAgent
+ApiDocumentationAgent
+Enhanced TestGenerationAgent
 ```
 
-## LLM 429 fix
+## Self-healing design
 
-`ResultsAnalyzerAgent` no longer calls LLM directly.
-
-Only this agent can call LLM:
+Each run now produces:
 
 ```text
-IterationLLMReviewerAgent
+self_healing/agent_performance_report.json
+self_healing/llm_advice.json
+self_healing/code_delta_report.json
+codegen/agent_deltas/*.patch_plan.json
 ```
 
-and it uses:
+Workflow:
 
 ```text
-runtime/iteration_context.json
+each agent runs
+performance evaluator scores each agent
+one compact LLM advisor call, only if weak agent or score below threshold
+LLM suggestions are mapped to agent-specific delta plans
+safe patch plans generated
+optional future deterministic patch application
+final artifacts pushed after quality is satisfied
 ```
 
-with call budget control.
+For safety, arbitrary LLM code is **not blindly applied**. It creates reviewable agent-specific patch plans. You can enable deterministic patch library later.
+
+## Premium API docs and Postman
+
+Generated:
+
+```text
+docs/API_REFERENCE.md
+docs/api_reference_index.json
+generated/openapi.json
+generated/postman_collection.json
+generated/negative_tests.postman_collection.json
+generated/edge_tests.postman_collection.json
+generated/data_references.json
+generated/environment.postman_environment.json
+generated/qaira_tests.json
+```
+
+Postman now includes:
+
+```text
+status code assertions
+response time assertions
+response body checks
+extractors for id/token
+negative missing-required tests
+edge empty-value tests
+collection variables
+data reference payloads
+```
 
 ## Build
 
 ```bash
-docker build -t qaira/semantic-compiler:config-safe-gitfix .
+docker build -t qaira/semantic-compiler:self-healing-docs .
 ```
 
 ## Run
@@ -56,14 +82,5 @@ docker run --rm \
   -v /Users/jayarajumetta/Downloads/volume/output:/output \
   -v /Users/jayarajumetta/Downloads/volume/config.yaml:/config/config.yaml:ro \
   -v /Users/jayarajumetta/Downloads/volume/learning:/learning \
-  qaira/semantic-compiler:config-safe-gitfix
-```
-
-## Verify
-
-```text
-git/finalization_report.json
-git/command_log.json
-analysis/results_analysis.json
-analysis/iteration_llm_review.json
+  qaira/semantic-compiler:self-healing-docs
 ```
