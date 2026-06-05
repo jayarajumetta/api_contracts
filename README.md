@@ -1,50 +1,36 @@
-# QAira Semantic Compiler — Final Git + LLM Safe Runtime
+# QAira Semantic Compiler — Final Git Diagnostics Runtime
 
-This package keeps the stable final-compatible contract engine and fixes the two issues from the latest run:
+This patch keeps the stable contract engine unchanged and improves Git finalization diagnostics.
 
-```text
-1. git was missing inside Docker
-2. malformed quote/escape text in LLM/ReAct-style output should never crash the run
-```
+## Why
 
-## Docker Git fix
-
-The image now installs:
+Latest run showed:
 
 ```text
-git
-ca-certificates
-openssh-client
+git installed ✅
+commit created ✅
+push failed ❌ exit 128
+stderr not captured ❌
 ```
 
-So `git clone`, `git commit`, `git push`, and GitHub PR preparation can run when enabled.
+This package captures the exact reason.
 
-## LLM / ReAct safety fix
-
-LLM review now uses strict JSON transport:
+## Improvements
 
 ```text
-json.dumps prompt payload
-response_format json_object
-safe JSON parsing
-markdown/ReAct wrapper extraction
-malformed quote/escape fail-open
-raw LLM text saved
+git command stdout/stderr captured
+git/command_log.json added
+push uses git -c http.extraHeader=Authorization: Bearer <token>
+avoids token-in-URL escaping issues
+push uses -u origin <branch>
+PR body_file supported
+likely push cause classified
 ```
-
-If malformed output occurs:
-
-```text
-llm/responses/<agent>.json
-llm/raw/<agent>.txt
-```
-
-will capture it, and the run continues.
 
 ## Build
 
 ```bash
-docker build -t qaira/semantic-compiler:final-git-safe .
+docker build -t qaira/semantic-compiler:final-git-diagnostics .
 ```
 
 ## Run
@@ -59,31 +45,13 @@ docker run --rm \
   -v /Users/jayarajumetta/Downloads/volume/output:/output \
   -v /Users/jayarajumetta/Downloads/volume/config.yaml:/config/config.yaml:ro \
   -v /Users/jayarajumetta/Downloads/volume/learning:/learning \
-  qaira/semantic-compiler:final-git-safe
+  qaira/semantic-compiler:final-git-diagnostics
 ```
 
-## To actually push and create PR
-
-Your config must explicitly allow it:
-
-```yaml
-git_push:
-  enabled: true
-  execute_git: true
-  push: true
-
-pull_request:
-  enabled: true
-  execute_network_calls: true
-```
-
-## Verification files
+## Check after run
 
 ```text
-git/preflight_report.json
 git/finalization_report.json
-llm/prompts/
-llm/responses/
-llm/raw/
-runtime/final_run_report.json
+git/command_log.json
+git/preflight_report.json
 ```
