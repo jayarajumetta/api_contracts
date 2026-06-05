@@ -1,0 +1,7 @@
+{
+  "mode": "safe_delta_plan",
+  "safeDeltas": [],
+  "blockedDeltas": [],
+  "appliedCodeChanges": 0,
+  "reason": "runtime does not self-modify code unless deterministic patch library is implemented"
+}

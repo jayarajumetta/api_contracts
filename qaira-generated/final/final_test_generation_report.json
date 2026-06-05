@@ -1,0 +1,17 @@
+{
+  "generated": [
+    "openapi",
+    "postman",
+    "negative_postman",
+    "edge_postman",
+    "curl",
+    "qaira",
+    "data_references",
+    "environment"
+  ],
+  "contractCount": 241,
+  "negativeTests": 223,
+  "edgeTests": 99,
+  "componentSchemas": 97,
+  "dataReferenceRoutes": 118
+}

@@ -1,0 +1,3582 @@
+{
+  "info": {
+    "name": "Generated Edge API Tests",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "{{baseUrl}}"
+    },
+    {
+      "key": "authToken",
+      "value": "{{authToken}}"
+    }
+  ],
+  "item": [
+    {
+      "name": "EDGE_EMPTY_VALUES POST /projects/:project_id/knowledge",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/projects/:project_id/knowledge",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"app_type_id\": \"\",\n  \"asset_type\": \"\",\n  \"content\": \"\",\n  \"content_type\": \"\",\n  \"description\": \"\",\n  \"embedding\": \"\",\n  \"feature_name\": \"\",\n  \"is_active\": false,\n  \"item_status\": \"\",\n  \"item_version\": \"\",\n  \"linked_test_cases\": \"\",\n  \"metadata\": \"\",\n  \"module_name\": \"\",\n  \"priority\": \"\",\n  \"source\": \"\",\n  \"source_uri\": \"\",\n  \"title\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/aiKnowledge.routes.js:12"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES PUT /projects/:project_id/knowledge/:id",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/projects/:project_id/knowledge/:id",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"app_type_id\": \"\",\n  \"asset_type\": \"\",\n  \"content\": \"\",\n  \"content_type\": \"\",\n  \"description\": \"\",\n  \"embedding\": \"\",\n  \"feature_name\": \"\",\n  \"is_active\": false,\n  \"item_status\": \"\",\n  \"item_version\": \"\",\n  \"linked_test_cases\": \"\",\n  \"metadata\": \"\",\n  \"module_name\": \"\",\n  \"priority\": \"\",\n  \"source\": \"\",\n  \"source_uri\": \"\",\n  \"title\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/aiKnowledge.routes.js:19"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /projects/:project_id/knowledge/relations",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/projects/:project_id/knowledge/relations",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"metadata\": \"\",\n  \"relation_type\": \"\",\n  \"source_id\": \"\",\n  \"source_type\": \"\",\n  \"target_id\": \"\",\n  \"target_type\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/aiKnowledge.routes.js:60"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /ai-prompt-templates",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/ai-prompt-templates",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"app_type_id\": \"\",\n  \"created_by\": \"\",\n  \"project_id\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/aiPromptTemplates.routes.js:43"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES PUT /ai-prompt-templates/:id",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/ai-prompt-templates/:id",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"app_type_id\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/aiPromptTemplates.routes.js:71"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /app-types",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/app-types",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"is_unified\": false,\n  \"name\": \"\",\n  \"project_id\": \"\",\n  \"type\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/appTypes.routes.js:8"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES PUT /app-types/:id",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/app-types/:id",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"is_unified\": false,\n  \"name\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/appTypes.routes.js:50"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /automation-generator/internal/jobs/:id/run",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/automation-generator/internal/jobs/:id/run",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"additional_context\": \"\",\n  \"agent_plan\": \"\",\n  \"integration_id\": \"\",\n  \"job_id\": \"\",\n  \"llm_model\": \"\",\n  \"start_url\": \"\",\n  \"test_case_id\": \"\",\n  \"test_configuration_id\": \"\",\n  \"test_data_set_id\": \"\",\n  \"test_environment_id\": \"\",\n  \"title\": \"\",\n  \"worker_id\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/automationGenerator.routes.js:21"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /api/engine/runs/claim",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/api/engine/runs/claim",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"engine_id\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/engine.routes.js:4"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /api/engine/runs/:runId/heartbeat",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/api/engine/runs/:runId/heartbeat",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"engine_id\": \"\",\n  \"heartbeat_at\": \"\",\n  \"leased_by\": \"\",\n  \"updated_at\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/engine.routes.js:25"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /execution-results",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/execution-results",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"app_type_id\": \"\",\n  \"defects\": \"\",\n  \"duration_ms\": \"\",\n  \"error\": \"\",\n  \"executed_by\": \"\",\n  \"execution_id\": \"\",\n  \"external_references\": \"\",\n  \"logs\": \"\",\n  \"status\": \"\",\n  \"suite_id\": \"\",\n  \"suite_name\": \"\",\n  \"test_case_id\": \"\",\n  \"test_case_title\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/executionResults.routes.js:7"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES PUT /execution-results/:id",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/execution-results/:id",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"defects\": \"\",\n  \"duration_ms\": \"\",\n  \"error\": \"\",\n  \"executed_by\": \"\",\n  \"external_references\": \"\",\n  \"logs\": \"\",\n  \"status\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/executionResults.routes.js:49"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /execution-schedules",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/execution-schedules",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"app_type_id\": \"\",\n  \"assigned_to\": \"\",\n  \"cadence\": \"\",\n  \"created_by\": \"\",\n  \"is_active\": false,\n  \"name\": \"\",\n  \"next_run_at\": \"\",\n  \"project_id\": \"\",\n  \"suite_ids\": \"\",\n  \"test_case_ids\": \"\",\n  \"test_configuration_id\": \"\",\n  \"test_data_set_id\": \"\",\n  \"test_environment_id\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/executionSchedules.routes.js:5"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES PUT /execution-schedules/:id",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/execution-schedules/:id",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"app_type_id\": \"\",\n  \"assigned_to\": \"\",\n  \"cadence\": \"\",\n  \"name\": \"\",\n  \"next_run_at\": \"\",\n  \"project_id\": \"\",\n  \"suite_ids\": \"\",\n  \"test_case_ids\": \"\",\n  \"test_configuration_id\": \"\",\n  \"test_data_set_id\": \"\",\n  \"test_environment_id\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/executionSchedules.routes.js:51"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /executions/smart-plan-preview",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/executions/smart-plan-preview",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"additional_context\": \"\",\n  \"appType\": \"\",\n  \"app_type_id\": \"\",\n  \"cases\": \"\",\n  \"impacted_requirement_ids\": \"\",\n  \"integration_id\": \"\",\n  \"project_id\": \"\",\n  \"release_scope\": \"\",\n  \"testCases\": \"\",\n  \"test_cases\": \"\",\n  \"test_configuration_id\": \"\",\n  \"test_data_set_id\": \"\",\n  \"test_environment_id\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/executions.routes.js:11"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /executions/manual-run-suggestion",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/executions/manual-run-suggestion",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"additional_context\": \"\",\n  \"app_type_id\": \"\",\n  \"integration_id\": \"\",\n  \"project_id\": \"\",\n  \"selected_suite_ids\": \"\",\n  \"test_configuration_id\": \"\",\n  \"test_data_set_id\": \"\",\n  \"test_environment_id\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/executions.routes.js:46"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /executions",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/executions",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"app_type_id\": \"\",\n  \"assigned_to\": \"\",\n  \"created_by\": \"\",\n  \"execution_hooks\": \"\",\n  \"name\": \"\",\n  \"parallel_count\": 0,\n  \"parallel_enabled\": \"\",\n  \"project_id\": \"\",\n  \"status\": \"\",\n  \"test_configuration_id\": \"\",\n  \"test_configuration_name\": \"\",\n  \"test_configuration_snapshot\": \"\",\n  \"test_data_set_id\": \"\",\n  \"test_data_set_name\": \"\",\n  \"test_data_set_snapshot\": \"\",\n  \"test_environment_id\": \"\",\n  \"test_environment_name\": \"\",\n  \"test_environment_snapshot\": \"\",\n  \"trigger\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/executions.routes.js:80"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /executions/local-run",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/executions/local-run",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"created_by\": \"\",\n  \"ended_at\": \"\",\n  \"engine_base_url\": \"\",\n  \"name\": \"\",\n  \"project_id\": \"\",\n  \"status\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/executions.routes.js:107"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES PUT /executions/:id",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/executions/:id",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"assigned_to\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/executions.routes.js:165"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES PUT /executions/:id/cases/:testCaseId/assignment",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/executions/:id/cases/:testCaseId/assignment",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"assigned_to\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/executions.routes.js:178"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /executions/:id/rerun",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/executions/:id/rerun",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"app_type_id\": \"\",\n  \"assigned_to\": \"\",\n  \"created_by\": \"\",\n  \"name\": \"\",\n  \"project_id\": \"\",\n  \"status\": \"\",\n  \"test_configuration_id\": \"\",\n  \"test_configuration_name\": \"\",\n  \"test_configuration_snapshot\": \"\",\n  \"test_data_set_id\": \"\",\n  \"test_data_set_name\": \"\",\n  \"test_data_set_snapshot\": \"\",\n  \"test_environment_id\": \"\",\n  \"test_environment_name\": \"\",\n  \"test_environment_snapshot\": \"\",\n  \"trigger\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/executions.routes.js:191"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /executions/:id/start",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/executions/:id/start",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"engine_base_url\": \"\",\n  \"execution_mode\": \"\",\n  \"initiated_by\": \"\",\n  \"skip_testengine_dispatch\": \"\",\n  \"started_at\": \"\",\n  \"status\": \"\",\n  \"trigger\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/executions.routes.js:208"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /executions/:id/cases/:testCaseId/steps/:stepId/run",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/executions/:id/cases/:testCaseId/steps/:stepId/run",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"executed_by\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/executions.routes.js:220"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /executions/:id/cases/:testCaseId/ai-analysis",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/executions/:id/cases/:testCaseId/ai-analysis",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"execution\": \"\",\n  \"requestedBy\": \"\",\n  \"testCaseId\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/executions.routes.js:231"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /executions/:id/share-report",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/executions/:id/share-report",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"execution_id\": \"\",\n  \"recipients\": \"\",\n  \"requested_by\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/executions.routes.js:273"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /executions/:id/complete",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/executions/:id/complete",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"ended_at\": \"\",\n  \"status\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/executions.routes.js:292"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /feedback",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/feedback",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"message\": \"\",\n  \"status\": \"\",\n  \"title\": \"\",\n  \"user_id\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/feedback.routes.js:5"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES PUT /feedback/:id",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/feedback/:id",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"message\": \"\",\n  \"status\": \"\",\n  \"title\": \"\",\n  \"user_id\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/feedback.routes.js:28"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /integrations",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/integrations",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"api_key\": \"\",\n  \"base_url\": \"\",\n  \"config\": \"\",\n  \"is_active\": false,\n  \"model\": \"\",\n  \"name\": \"\",\n  \"project_key\": \"\",\n  \"type\": \"\",\n  \"updated_at\": \"\",\n  \"username\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/integrations.routes.js:130"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /integrations/test-connection",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/integrations/test-connection",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"api_key\": \"\",\n  \"base_url\": \"\",\n  \"config\": \"\",\n  \"type\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/integrations.routes.js:164"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES PUT /integrations/:id",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/integrations/:id",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"api_key\": \"\",\n  \"base_url\": \"\",\n  \"config\": \"\",\n  \"is_active\": false,\n  \"model\": \"\",\n  \"name\": \"\",\n  \"project_key\": \"\",\n  \"type\": \"\",\n  \"updated_at\": \"\",\n  \"username\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/integrations.routes.js:190"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /project-members",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/project-members",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"project_id\": \"\",\n  \"role_id\": \"\",\n  \"user_id\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/projectMembers.routes.js:4"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES PUT /project-members/:id",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/project-members/:id",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"project_id\": \"\",\n  \"role_id\": \"\",\n  \"user_id\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/projectMembers.routes.js:23"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /projects/:id/sync/:provider",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/projects/:id/sync/:provider",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"created_by\": \"\",\n  \"project_id\": \"\",\n  \"provider\": \"\",\n  \"trigger_mode\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/projectSync.routes.js:5"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /projects",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/projects",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"created_by\": \"\",\n  \"description\": \"\",\n  \"display_id\": \"\",\n  \"name\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/projects.routes.js:5"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES PUT /projects/:id",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/projects/:id",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"description\": \"\",\n  \"name\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/projects.routes.js:25"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES PUT /requirement-test-cases/replace",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/requirement-test-cases/replace",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"requirement_id\": \"\",\n  \"test_case_ids\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/requirementTestCases.routes.js:9"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /requirements",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/requirements",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"created_by\": \"\",\n  \"description\": \"\",\n  \"display_id\": \"\",\n  \"external_references\": \"\",\n  \"priority\": \"\",\n  \"project_id\": \"\",\n  \"status\": \"\",\n  \"title\": \"\",\n  \"updated_at\": \"\",\n  \"updated_by\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/requirements.routes.js:8"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /requirements/import",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/requirements/import",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"project_id\": \"\",\n  \"rows\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/requirements.routes.js:29"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES PUT /requirements/:id",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/requirements/:id",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"description\": \"\",\n  \"external_references\": \"\",\n  \"priority\": \"\",\n  \"project_id\": \"\",\n  \"status\": \"\",\n  \"title\": \"\",\n  \"updated_at\": \"\",\n  \"updated_by\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/requirements.routes.js:73"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /requirements/:id/ai-optimize-preview",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/requirements/:id/ai-optimize-preview",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"additional_context\": \"\",\n  \"integration_id\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/requirements.routes.js:95"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /requirements/:id/generate-test-cases",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/requirements/:id/generate-test-cases",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"additional_context\": \"\",\n  \"appType\": \"\",\n  \"app_type_id\": \"\",\n  \"external_links\": \"\",\n  \"images\": \"\",\n  \"integration_id\": \"\",\n  \"max_cases\": \"\",\n  \"requirement\": \"\",\n  \"status\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/requirements.routes.js:113"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /requirements/:id/design-test-cases-preview",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/requirements/:id/design-test-cases-preview",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"additional_context\": \"\",\n  \"appType\": \"\",\n  \"app_type_id\": \"\",\n  \"external_links\": \"\",\n  \"images\": \"\",\n  \"integration_id\": \"\",\n  \"max_cases\": \"\",\n  \"requirement\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/requirements.routes.js:147"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /requirements/:id/design-test-cases-accept",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/requirements/:id/design-test-cases-accept",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"appType\": \"\",\n  \"app_type_id\": \"\",\n  \"cases\": \"\",\n  \"requirement\": \"\",\n  \"status\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/requirements.routes.js:179"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /roles",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/roles",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/roles.routes.js:4"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES PUT /roles/:id/permissions",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/roles/:id/permissions",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"permission_codes\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/roles.routes.js:29"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES PUT /roles/:id",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/roles/:id",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"\",\n  \"permission_codes\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/roles.routes.js:37"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES PUT /settings/localization",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/settings/localization",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"key\": \"\",\n  \"strings\": \"\",\n  \"updated_at\": \"\",\n  \"value\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/settings.routes.js:11"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES PUT /settings/workspace-preferences",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/settings/workspace-preferences",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"key\": \"\",\n  \"preferences\": \"\",\n  \"updated_at\": \"\",\n  \"value\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/settings.routes.js:28"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /shared-step-groups",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/shared-step-groups",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"app_type_id\": \"\",\n  \"created_by\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/sharedStepGroups.routes.js:6"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES PUT /shared-step-groups/:id",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/shared-step-groups/:id",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"app_type_id\": \"\",\n  \"description\": \"\",\n  \"name\": \"\",\n  \"parameter_values\": \"\",\n  \"steps\": \"\",\n  \"updated_by\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/sharedStepGroups.routes.js:47"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES PUT /suite-test-cases/reorder",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/suite-test-cases/reorder",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"sort_order\": \"\",\n  \"suite_id\": \"\",\n  \"test_case_ids\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/suiteTestCases.routes.js:9"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /test-cases",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/test-cases",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"app_type_id\": \"\",\n  \"created_by\": \"\",\n  \"steps\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/testCases.routes.js:37"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /test-cases/import",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/test-cases/import",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"app_type_id\": \"\",\n  \"batches\": \"\",\n  \"created_by\": \"\",\n  \"rows\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/testCases.routes.js:69"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /test-cases/export",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/test-cases/export",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"app_type_id\": \"\",\n  \"created_by\": \"\",\n  \"test_case_ids\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/testCases.routes.js:111"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /test-cases/automation/learning-cache/import",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/test-cases/automation/learning-cache/import",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"app_type_id\": \"\",\n  \"entries\": \"\",\n  \"import_source\": \"\",\n  \"project_id\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/testCases.routes.js:187"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /test-cases/automation/learning-cache/extract-fields",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/test-cases/automation/learning-cache/extract-fields",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"app_type_id\": \"\",\n  \"fields\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/testCases.routes.js:211"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /test-cases/automation/learning-cache",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/test-cases/automation/learning-cache",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"app_type_id\": \"\",\n  \"confidence\": \"\",\n  \"dom_structure\": \"\",\n  \"fallback_strategy\": \"\",\n  \"locator\": \"\",\n  \"locator_intent\": \"\",\n  \"locator_kind\": \"\",\n  \"metadata\": \"\",\n  \"object_name\": \"\",\n  \"object_role\": \"\",\n  \"page_key\": 0,\n  \"page_url\": 0,\n  \"project_id\": \"\",\n  \"screen_dom_compressed\": \"\",\n  \"screen_name\": \"\",\n  \"screen_screenshot_url\": \"\",\n  \"screenshot_url\": \"\",\n  \"source\": \"\",\n  \"target_criteria\": \"\",\n  \"test_case_id\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/testCases.routes.js:303"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES PUT /test-cases/automation/learning-cache/screens/:screenName",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/test-cases/automation/learning-cache/screens/:screenName",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"app_type_id\": \"\",\n  \"new_name\": \"\",\n  \"screen_name\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/testCases.routes.js:390"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /test-cases/automation/learning-cache/:id/ai-improve",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/test-cases/automation/learning-cache/:id/ai-improve",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"guidance\": \"\",\n  \"integration_id\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/testCases.routes.js:412"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /test-cases/automation/build-batch",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/test-cases/automation/build-batch",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"app_type_id\": \"\",\n  \"created_by\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/testCases.routes.js:438"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /test-cases/:id/automation/build",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/test-cases/:id/automation/build",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"additional_context\": \"\",\n  \"captured_actions\": \"\",\n  \"captured_network\": \"\",\n  \"created_by\": \"\",\n  \"integration_id\": \"\",\n  \"start_url\": \"\",\n  \"test_case_id\": \"\",\n  \"test_configuration_id\": \"\",\n  \"test_data_set_id\": \"\",\n  \"test_environment_id\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/testCases.routes.js:486"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /test-cases/:id/automation/generator-jobs",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/test-cases/:id/automation/generator-jobs",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"additional_context\": \"\",\n  \"created_by\": \"\",\n  \"integration_id\": \"\",\n  \"start_url\": \"\",\n  \"test_case_id\": \"\",\n  \"test_configuration_id\": \"\",\n  \"test_data_set_id\": \"\",\n  \"test_environment_id\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/testCases.routes.js:521"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /test-cases/:id/automation/recorder-session",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/test-cases/:id/automation/recorder-session",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"created_by\": \"\",\n  \"engine_base_url\": \"\",\n  \"recorder_mode\": \"\",\n  \"recorder_public_base_url\": \"\",\n  \"recorder_target\": \"\",\n  \"reuse_existing\": \"\",\n  \"start_url\": \"\",\n  \"target_step_id\": \"\",\n  \"test_case_id\": \"\",\n  \"test_configuration_id\": \"\",\n  \"test_data_set_id\": \"\",\n  \"test_environment_id\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/testCases.routes.js:552"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /test-cases/:id/automation/recorder-session/:sessionId/finish",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/test-cases/:id/automation/recorder-session/:sessionId/finish",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"additional_context\": \"\",\n  \"created_by\": \"\",\n  \"engine_base_url\": \"\",\n  \"integration_id\": \"\",\n  \"recorder_mode\": \"\",\n  \"recorder_session_id\": \"\",\n  \"recorder_target\": \"\",\n  \"target_step_id\": \"\",\n  \"test_case_id\": \"\",\n  \"test_configuration_id\": \"\",\n  \"test_data_set_id\": \"\",\n  \"test_environment_id\": \"\",\n  \"transaction_id\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/testCases.routes.js:591"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /test-cases/design-test-cases-preview",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/test-cases/design-test-cases-preview",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"additional_context\": \"\",\n  \"appType\": \"\",\n  \"app_type_id\": \"\",\n  \"external_links\": \"\",\n  \"images\": \"\",\n  \"integration_id\": \"\",\n  \"max_cases\": \"\",\n  \"requirement_ids\": \"\",\n  \"requirements\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/testCases.routes.js:631"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /test-cases/ai-authoring-preview",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/test-cases/ai-authoring-preview",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"additional_context\": \"\",\n  \"appType\": \"\",\n  \"app_type_id\": \"\",\n  \"integration_id\": \"\",\n  \"requirement\": \"\",\n  \"requirement_id\": \"\",\n  \"test_case\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/testCases.routes.js:659"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /test-cases/ai-step-rephrase",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/test-cases/ai-step-rephrase",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"additional_context\": \"\",\n  \"appType\": \"\",\n  \"app_type_id\": \"\",\n  \"integration_id\": \"\",\n  \"project_id\": \"\",\n  \"requirement\": \"\",\n  \"requirement_id\": \"\",\n  \"step\": \"\",\n  \"test_case\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/testCases.routes.js:683"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /test-cases/design-test-cases-accept",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/test-cases/design-test-cases-accept",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"appType\": \"\",\n  \"app_type_id\": \"\",\n  \"cases\": \"\",\n  \"requirement_ids\": \"\",\n  \"requirements\": \"\",\n  \"status\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/testCases.routes.js:715"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /test-cases/ai-generation-jobs",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/test-cases/ai-generation-jobs",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"app_type_id\": \"\",\n  \"created_by\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/testCases.routes.js:756"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES PUT /test-cases/:id",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/test-cases/:id",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"app_type_id\": \"\",\n  \"automated\": \"\",\n  \"automation_status\": \"\",\n  \"description\": \"\",\n  \"external_references\": \"\",\n  \"parameter_values\": \"\",\n  \"priority\": \"\",\n  \"requirement_id\": \"\",\n  \"requirement_ids\": \"\",\n  \"steps\": \"\",\n  \"suite_id\": \"\",\n  \"suite_ids\": \"\",\n  \"title\": \"\",\n  \"updated_by\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/testCases.routes.js:782"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /test-configurations",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/test-configurations",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"app_type_id\": \"\",\n  \"browser\": \"\",\n  \"description\": \"\",\n  \"mobile_os\": \"\",\n  \"name\": \"\",\n  \"platform_version\": \"\",\n  \"project_id\": \"\",\n  \"variables\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/testConfigurations.routes.js:6"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES PUT /test-configurations/:id",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/test-configurations/:id",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"app_type_id\": \"\",\n  \"browser\": \"\",\n  \"description\": \"\",\n  \"mobile_os\": \"\",\n  \"name\": \"\",\n  \"platform_version\": \"\",\n  \"project_id\": \"\",\n  \"variables\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/testConfigurations.routes.js:54"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /test-data-sets",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/test-data-sets",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"app_type_id\": \"\",\n  \"columns\": \"\",\n  \"description\": \"\",\n  \"mode\": \"\",\n  \"name\": \"\",\n  \"project_id\": \"\",\n  \"rows\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/testDataSets.routes.js:7"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES PUT /test-data-sets/:id",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/test-data-sets/:id",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"app_type_id\": \"\",\n  \"columns\": \"\",\n  \"description\": \"\",\n  \"mode\": \"\",\n  \"name\": \"\",\n  \"project_id\": \"\",\n  \"rows\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/testDataSets.routes.js:54"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /api/testengine/callbacks/runs",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/api/testengine/callbacks/runs",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"artifact_bundle\": \"\",\n  \"case_result\": \"\",\n  \"deterministic_attempted\": \"\",\n  \"emitted_at\": \"\",\n  \"engine_run_id\": \"\",\n  \"event\": \"\",\n  \"healing_attempted\": \"\",\n  \"healing_succeeded\": \"\",\n  \"patch_proposals\": \"\",\n  \"payload\": \"\",\n  \"qaira_execution_id\": \"\",\n  \"qaira_run_id\": \"\",\n  \"qaira_test_case_id\": \"\",\n  \"rawPayload\": \"\",\n  \"state\": \"\",\n  \"step_outcomes\": \"\",\n  \"summary\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/testEngineCallbacks.routes.js:20"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /testengine/internal/jobs/:id/start",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/testengine/internal/jobs/:id/start",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"job_id\": \"\",\n  \"worker_id\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/testEngineInternal.routes.js:28"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /testengine/internal/jobs/:id/steps/:stepId/execute",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/testengine/internal/jobs/:id/steps/:stepId/execute",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"job_id\": \"\",\n  \"step_id\": \"\",\n  \"steps\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/testEngineInternal.routes.js:41"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /testengine/internal/jobs/:id/steps/:stepId/report",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/testengine/internal/jobs/:id/steps/:stepId/report",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"api_detail\": \"\",\n  \"automation_detail\": \"\",\n  \"captures\": \"\",\n  \"evidence\": \"\",\n  \"job_id\": \"\",\n  \"note\": \"\",\n  \"recovery_attempted\": \"\",\n  \"recovery_succeeded\": \"\",\n  \"step_id\": \"\",\n  \"steps\": \"\",\n  \"web_detail\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/testEngineInternal.routes.js:50"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /testengine/internal/jobs/:id/complete",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/testengine/internal/jobs/:id/complete",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"artifact_bundle\": \"\",\n  \"deterministic_attempted\": \"\",\n  \"error\": \"\",\n  \"healing_attempted\": \"\",\n  \"healing_succeeded\": \"\",\n  \"job_id\": \"\",\n  \"patch_proposals\": \"\",\n  \"steps\": \"\",\n  \"summary\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/testEngineInternal.routes.js:80"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /testengine/internal/jobs/:id/fail",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/testengine/internal/jobs/:id/fail",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"job_id\": \"\",\n  \"message\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/testEngineInternal.routes.js:107"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /test-environments",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/test-environments",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"app_type_id\": \"\",\n  \"base_url\": \"\",\n  \"browser\": \"\",\n  \"description\": \"\",\n  \"name\": \"\",\n  \"notes\": \"\",\n  \"project_id\": \"\",\n  \"variables\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/testEnvironments.routes.js:6"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES PUT /test-environments/:id",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/test-environments/:id",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"app_type_id\": \"\",\n  \"base_url\": \"\",\n  \"browser\": \"\",\n  \"description\": \"\",\n  \"name\": \"\",\n  \"notes\": \"\",\n  \"project_id\": \"\",\n  \"variables\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/testEnvironments.routes.js:54"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /test-steps/run-api-request",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/test-steps/run-api-request",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"api_request\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/testSteps.routes.js:30"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES PUT /test-steps/:id",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/test-steps/:id",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"action\": \"\",\n  \"api_request\": \"\",\n  \"automation_code\": \"\",\n  \"expected_result\": \"\",\n  \"group_id\": \"\",\n  \"group_kind\": \"\",\n  \"group_name\": \"\",\n  \"reusable_group_id\": \"\",\n  \"step_order\": \"\",\n  \"step_type\": \"\",\n  \"test_case_id\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/testSteps.routes.js:44"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES PUT /test-cases/:id/test-steps/reorder",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/test-cases/:id/test-steps/reorder",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"entries\": \"\",\n  \"indexOf\": \"\",\n  \"step_ids\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/testSteps.routes.js:109"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES PUT /test-steps/reorder",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/test-steps/reorder",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"entries\": \"\",\n  \"indexOf\": \"\",\n  \"step_ids\": \"\",\n  \"test_case_id\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/testSteps.routes.js:118"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /test-suites",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/test-suites",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"app_type_id\": \"\",\n  \"created_by\": \"\",\n  \"display_id\": \"\",\n  \"name\": \"\",\n  \"parallel_count\": 0,\n  \"parallel_enabled\": \"\",\n  \"parameter_values\": \"\",\n  \"parent_id\": \"\",\n  \"updated_at\": \"\",\n  \"updated_by\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/testSuites.routes.js:6"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES PUT /test-suites/:id",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/test-suites/:id",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"\",\n  \"parallel_count\": 0,\n  \"parallel_enabled\": \"\",\n  \"parameter_values\": \"\",\n  \"parent_id\": \"\",\n  \"updated_at\": \"\",\n  \"updated_by\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/testSuites.routes.js:49"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /test-suites/:id/assign-test-cases",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/test-suites/:id/assign-test-cases",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"test_case_ids\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/testSuites.routes.js:70"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /users",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/users",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"\",\n  \"is_workspace_admin\": false,\n  \"name\": \"\",\n  \"password\": \"\",\n  \"password_hash\": \"\",\n  \"project_id\": \"\",\n  \"role_id\": \"\",\n  \"user_id\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/users.js:12"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /users/import",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/users/import",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"rows\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/users.js:28"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES PUT /users/:id",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/users/:id",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"avatar_data_url\": \"\",\n  \"email\": \"\",\n  \"is_workspace_admin\": false,\n  \"name\": \"\",\n  \"password\": \"\",\n  \"password_hash\": \"\",\n  \"role_id\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/users.js:52"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES PUT /users/:id/password",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/users/:id/password",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"current_password\": \"\",\n  \"new_password\": \"\",\n  \"password_hash\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: backend/api/src/routes/users.js:76"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /api/v1/mobile/execute",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/api/v1/mobile/execute",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"objectRepository\": \"\",\n  \"object_repository\": \"\",\n  \"steps\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: local-run/mobile-engine/src/server.js:422"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /api/v1/mobile/recorder/sessions",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/api/v1/mobile/recorder/sessions",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"recorder_mode\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: local-run/mobile-engine/src/server.js:464"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /api/v1/mobile/recorder/sessions/:id/input",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/api/v1/mobile/recorder/sessions/:id/input",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"height\": \"\",\n  \"type\": \"\",\n  \"value\": \"\",\n  \"width\": \"\",\n  \"x\": \"\",\n  \"y\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: local-run/mobile-engine/src/server.js:555"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /api/v1/runs",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/api/v1/runs",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"automated\": \"\",\n  \"callback\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: testengine/backend/src/server.ts:207"
+    },
+    {
+      "name": "EDGE_EMPTY_VALUES POST /api/v1/recorder/sessions",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "disabled": false
+          }
+        ],
+        "url": "{{baseUrl}}/api/v1/recorder/sessions",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"locator\": \"\",\n  \"source\": \"\",\n  \"text\": \"\",\n  \"timestamp\": \"\",\n  \"type\": \"\",\n  \"url\": \"\",\n  \"value\": \"\",\n  \"x\": \"\",\n  \"y\": \"\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is expected for edge_empty_values', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });",
+              "let jsonData = {}; try { jsonData = pm.response.json(); } catch(e) {}",
+              "pm.test('response time acceptable', function () { pm.expect(pm.response.responseTime).to.be.below(5000); });"
+            ]
+          }
+        }
+      ],
+      "description": "Source: testengine/backend/src/lib/recorder.ts:2188"
+    }
+  ]
+}
