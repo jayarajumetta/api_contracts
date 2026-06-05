@@ -25,7 +25,7 @@ EXCLUDED_DIRS={".git","node_modules","dist","build","target","bin","obj","covera
 SOURCE_EXTENSIONS={".js",".jsx",".ts",".tsx",".json",".yaml",".yml",".prisma",".sql",".md",".env"}
 
 DEFAULT_CONFIG={
- "agent":{"name":"qaira-semantic-compiler-platform","version":"v55","mode":"prebuild"},
+ "agent":{"name":"qaira-semantic-compiler-platform","version":"v56","mode":"prebuild"},
  "paths":{"source_dir":"/repo","output_dir":"/output","learning_dir":"/learning","changed_files":""},
  "logging":{"verbose_console":True},
  "parsing":{"prefer_tree_sitter":True,"fallback_regex_parser":True,"max_file_size_kb":4096},
@@ -2776,7 +2776,7 @@ class ArtifactGenerator:
         store.text("generated/generated_curls.sh",self.curls(contracts))
         store.json("generated/openapi.json",self.openapi(contracts))
         store.json("generated/postman_collection.json",self.postman(contracts))
-        store.json("generated/qaira_api_repository.json",{"version":"55.0","apis":[safe_json(c) for c in contracts]})
+        store.json("generated/qaira_api_repository.json",{"version":"56.0","apis":[safe_json(c) for c in contracts]})
     def curls(self,contracts):
         lines=["#!/usr/bin/env bash","set -euo pipefail",': "${baseUrl:=http://localhost:3000}"',': "${token:=CHANGE_ME}"',""]
         for c in contracts: lines += [f"echo '### {c.method} {c.path}'",c.curl.replace("{{baseUrl}}","${baseUrl}").replace("{{token}}","${token}"),""]
@@ -2788,14 +2788,14 @@ class ArtifactGenerator:
             if c.request_body: op["requestBody"]={"required":bool(c.request_body.get("required")),"content":{"application/json":{"schema":c.request_body}}}
             if c.auth.get("required"): op["security"]=[{"bearerAuth":[]}]
             paths.setdefault(c.path,{})[c.method.lower()]=op
-        return {"openapi":"3.1.0","info":{"title":"QAira Semantic Compiler V55 API","version":"55.0.0"},"paths":paths,"components":{"securitySchemes":{"bearerAuth":{"type":"http","scheme":"bearer","bearerFormat":"JWT"}}}}
+        return {"openapi":"3.1.0","info":{"title":"QAira Semantic Compiler V56 API","version":"56.0.0"},"paths":paths,"components":{"securitySchemes":{"bearerAuth":{"type":"http","scheme":"bearer","bearerFormat":"JWT"}}}}
     def postman(self,contracts):
         items=[]
         for c in contracts:
             req={"method":c.method,"header":[{"key":k,"value":v} for k,v in headers(c.auth).items()],"url":{"raw":"{{baseUrl}}"+c.path,"host":["{{baseUrl}}"],"path":c.path.strip("/").split("/"),"query":[{"key":p.get("name"),"value":""} for p in (c.parameters or []) if p.get("in")=="query"]}}
             if c.request_body: req["body"]={"mode":"raw","raw":json.dumps(sample(c.request_body),indent=2),"options":{"raw":{"language":"json"}}}
             items.append({"name":c.api_id,"request":req})
-        return {"info":{"name":"QAira V55 API Collection","schema":"https://schema.getpostman.com/json/collection/v2.1.0/collection.json"},"variable":[{"key":"baseUrl","value":"http://localhost:3000"},{"key":"token","value":""}],"item":items}
+        return {"info":{"name":"QAira V56 API Collection","schema":"https://schema.getpostman.com/json/collection/v2.1.0/collection.json"},"variable":[{"key":"baseUrl","value":"http://localhost:3000"},{"key":"token","value":""}],"item":items}
 
 
 class V53Governance:
@@ -3092,7 +3092,7 @@ class TestGeneratorAgentV54:
                 lines.append(f"curl -X {c.method} \"$BASE_URL{path}\"")
         return "\n".join(lines)+"\n"
     def generate_qaira(self,contracts,relationship):
-        return json.dumps({"version":"v55","sequence":relationship.get("sequence",[]),"tests":[{"id":c.api_id,"method":c.method,"path":c.path,"payload":self.payload_for(c),"params":self.params_for(c)} for c in contracts]},indent=2)
+        return json.dumps({"version":"v56","sequence":relationship.get("sequence",[]),"tests":[{"id":c.api_id,"method":c.method,"path":c.path,"payload":self.payload_for(c),"params":self.params_for(c)} for c in contracts]},indent=2)
     def generate_rest_assured(self,contracts):
         body=["import io.restassured.RestAssured;","public class GeneratedApiTests {","  String baseUrl = System.getProperty(\"baseUrl\", \"http://localhost:3000\");"]
         for i,c in enumerate(contracts[:200]):
@@ -3356,6 +3356,282 @@ def now_iso_v55():
     return datetime.datetime.utcnow().isoformat()+"Z"
 
 
+
+class AgentConfidenceEngineV56:
+    def __init__(self,cfg,store):
+        self.cfg=cfg or {}
+        self.store=store
+        self.items=[]
+    def score_stage(self,stage,outcome):
+        stage_l=stage.lower()
+        score=0.5
+        reason="default"
+        try:
+            if "route" in stage_l or "inlinehandler" in stage_l:
+                routes=float(outcome.get("routes",0)); traces=float(outcome.get("requestTraces",0))
+                score=0.99 if routes and traces>=routes*0.95 else 0.55
+                reason="route_trace_ratio"
+            elif "module" in stage_l or "importregistry" in stage_l:
+                total=float(outcome.get("importsChecked",outcome.get("total",0)) or outcome.get("moduleResolutionAttempts",0) or 0)
+                resolved=float(outcome.get("hydrated",0) or outcome.get("resolved",0) or outcome.get("moduleResolutions",0) or 0)
+                score=round(resolved/max(total,1),2) if total else 0.35
+                reason="module_resolution_rate"
+            elif "dtoattachment" in stage_l:
+                checked=float(outcome.get("checked",0) or 0); attached=float(outcome.get("attached",0) or 0)
+                score=round(attached/max(checked,1),2) if checked else 0.30
+                reason="dto_attachment_rate"
+            elif "variablepropagation" in stage_l:
+                found=float(outcome.get("propagations",0) or 0)
+                score=0.85 if found>0 else 0.25
+                reason="variable_propagations"
+            elif "responsepropagation" in stage_l:
+                found=float(outcome.get("propagations",0) or 0)
+                score=0.85 if found>0 else 0.25
+                reason="response_propagations"
+            elif "testgenerator" in stage_l or "finaltest" in stage_l:
+                generated=outcome.get("generated",[])
+                score=0.95 if generated else 0.40
+                reason="test_outputs"
+            elif "diagnostic" in stage_l:
+                score=0.90
+                reason="diagnostic_classifier"
+            else:
+                score=0.80 if outcome else 0.30
+        except Exception as e:
+            score=0.20
+            reason="score_exception:"+str(e)
+        item={"stage":stage,"confidence":score,"reason":reason,"outcome":outcome}
+        self.items.append(item)
+        self.store.json("runtime/confidence_report.json",{"items":self.items})
+        return item
+
+class SelectiveLLMInvocationAgentV56:
+    def __init__(self,cfg,store):
+        self.cfg=cfg or {}
+        self.store=store
+        self.items=[]
+    def maybe_invoke(self,iteration,stage,status,confidence_item,evidence):
+        inv_cfg=self.cfg.get("llm_invocation") or {}
+        llm_cfg=self.cfg.get("llm") or {}
+        threshold=float(inv_cfg.get("confidence_threshold",0.80))
+        should=False
+        reason=[]
+        if status!="success" and inv_cfg.get("invoke_on_failure",True):
+            should=True; reason.append("failure")
+        if confidence_item.get("confidence",0)<threshold and inv_cfg.get("invoke_on_low_confidence",True):
+            should=True; reason.append("low_confidence")
+        if confidence_item.get("confidence",0)>=threshold and inv_cfg.get("invoke_on_high_confidence",False):
+            should=True; reason.append("high_confidence_review")
+        prompt={"iteration":iteration,"stage":stage,"status":status,"confidence":confidence_item,"evidence":evidence,"allowedTasks":inv_cfg.get("allowed_task_types",[]),"question":"Suggest deterministic next tasks only if needed."}
+        result={"iteration":iteration,"stage":stage,"shouldInvoke":should,"reason":reason,"llmEnabled":bool(llm_cfg.get("enabled",False) and inv_cfg.get("enabled",False)),"suggested_tasks":[]}
+        if should:
+            self.store.json(f"llm/selective_prompts/iteration_{iteration}_{safe_name_v56(stage)}.json",prompt)
+            if result["llmEnabled"]:
+                result["deferred"]=True
+                result["note"]="safe_runtime_records_prompt_only"
+        self.items.append(result)
+        self.store.json("runtime/selective_llm_invocation_report.json",{"items":self.items})
+        return result
+
+class RuntimeExecutionManagerV56:
+    def __init__(self,cfg,store,learning):
+        self.cfg=cfg or {}
+        self.store=store
+        self.learning=Path(learning)
+        self.conf=AgentConfidenceEngineV56(cfg,store)
+        self.llm=SelectiveLLMInvocationAgentV56(cfg,store)
+        self.worked=[]; self.failed=[]; self.iterations=[]
+    def stage(self,iteration,stage,status,outcome,evidence=None):
+        ci=self.conf.score_stage(stage,outcome or {})
+        li=self.llm.maybe_invoke(iteration,stage,status,ci,evidence or {})
+        item={"iteration":iteration,"stage":stage,"status":status,"outcome":outcome,"confidence":ci,"llm":li,"evidence":evidence or {}}
+        if status=="success": self.worked.append(item)
+        else: self.failed.append(item)
+        self._jsonl("agent_stage_log.jsonl",item)
+        self.store.json(f"runtime/iteration_{iteration}/stages/{safe_name_v56(stage)}.json",item)
+        return item
+    def analyse(self,iteration,summary):
+        threshold=float((self.cfg.get("runtime_execution") or {}).get("threshold_percent",100))
+        score=self.score(summary)
+        satisfied=score>=threshold
+        result={"iteration":iteration,"score":score,"threshold":threshold,"satisfied":satisfied,"summary":summary,"worked":len(self.worked),"failed":len(self.failed)}
+        self.iterations.append(result)
+        self.store.json(f"runtime/iteration_{iteration}/iteration_summary.json",result)
+        self.store.json("runtime/runtime_execution_report.json",{"iterations":self.iterations})
+        self.store.json("learning/worked_patterns.json",{"items":self.worked})
+        self.store.json("learning/failed_patterns.json",{"items":self.failed})
+        self.store.json("learning/llm_suggested_worked_patterns.json",{"items":[]})
+        try:
+            self.learning.mkdir(parents=True,exist_ok=True)
+            (self.learning/"worked_patterns.json").write_text(json.dumps({"items":self.worked},indent=2),encoding="utf-8")
+            (self.learning/"failed_patterns.json").write_text(json.dumps({"items":self.failed},indent=2),encoding="utf-8")
+        except Exception:
+            pass
+        self._jsonl("iteration_log.jsonl",result)
+        return result
+    def score(self,summary):
+        score=0; total=0
+        for key,weight in [("bodyDetectionRate",20),("bodyFieldKnownRate",20)]:
+            if key in summary:
+                score += min(float(summary.get(key,0)),100)*weight/100; total += weight
+        score += 15 if summary.get("falsePositiveGETBodies",0)==0 else 0; total += 15
+        actionable=float(summary.get("actionableUnresolvedRoutes",0) or 0)
+        score += 15 if actionable==0 else max(0,15-actionable); total += 15
+        attempts=float(summary.get("moduleResolutionAttempts",0) or 0)
+        if attempts:
+            score += min(100*float(summary.get("moduleResolutions",0))/max(attempts,1),100)*15/100; total += 15
+        score += 15 if summary.get("testsGenerated",False) else 0; total += 15
+        return round(score/max(total,1)*100,2)
+    def _jsonl(self,name,item):
+        try:
+            p=self.store.out/"verbose"/name
+            p.parent.mkdir(parents=True,exist_ok=True)
+            with p.open("a",encoding="utf-8") as f:
+                f.write(json.dumps(item,default=str)+"\n")
+        except Exception:
+            pass
+
+class RealRepoAgentV56:
+    def __init__(self,cfg,store):
+        self.cfg=cfg or {}; self.store=store
+    def clone_if_enabled(self,current_source):
+        repo=self.cfg.get("repo") or {}
+        if not repo.get("enabled",False):
+            report={"enabled":False,"sourceDir":str(current_source),"reason":"repo_clone_disabled"}
+            self.store.json("git/repo_clone_report.json",report)
+            return Path(current_source)
+        url=repo.get("url",""); clone_dir=Path(repo.get("clone_dir","/workspace/repo"))
+        branch=repo.get("default_branch","develop")
+        execute=bool(repo.get("execute_git",False))
+        user=os.environ.get(repo.get("username_env","GIT_USERNAME"),"")
+        token=os.environ.get(repo.get("token_env","GIT_TOKEN"),"")
+        report={"enabled":True,"urlConfigured":bool(url),"cloneDir":str(clone_dir),"branch":branch,"executeGit":execute,"cloned":False}
+        if not url: report["reason"]="repo_url_missing"
+        elif not user or not token: report["reason"]="git_credentials_env_missing"
+        elif not execute: report["reason"]="execute_git_false_safe_plan_only"
+        else:
+            # Intentionally guarded. In real Docker runtime can enable execute_git; here record plan.
+            report["reason"]="git_execution_guarded_in_generated_package"
+            report["intendedCommand"]="git clone --branch <branch> <repo_url> <clone_dir>"
+        self.store.json("git/repo_clone_report.json",report)
+        return Path(current_source)
+
+class VariablePropagationAgentV56:
+    def __init__(self,cfg,store):
+        self.cfg=cfg or {}; self.store=store; self.report=[]
+    def run(self,contracts):
+        for c in contracts:
+            raw=self.raw(c)
+            aliases=set(re.findall(r"(?:const|let|var)\s+([A-Za-z_$][\w$]*)\s*=\s*(?:req|request)\.body",raw))
+            aliases.update(["payload","body","data","input","dto"])
+            fields=set()
+            for a in aliases:
+                fields.update(re.findall(r"\b"+re.escape(a)+r"\.([A-Za-z_$][\w$]*)",raw))
+                for m in re.finditer(r"(?:const|let|var)\s*\{([^}]+)\}\s*=\s*"+re.escape(a),raw):
+                    for part in m.group(1).split(","):
+                        name=part.strip().split(":")[0].strip()
+                        if re.match(r"^[A-Za-z_$][\w$]*$",name): fields.add(name)
+            if fields:
+                self.report.append({"apiId":c.api_id,"path":c.path,"method":c.method,"aliases":sorted(aliases),"fields":sorted(fields)})
+                if c.method in {"POST","PUT","PATCH"} and (not c.request_body or not c.request_body.get("properties")):
+                    c.request_body={"type":"object","required":[],"properties":{f:{"type":"string","x-qaira-source":"variable_propagation"} for f in sorted(fields)}}
+        self.store.json("propagation/variable_propagation_report.json",{"items":self.report,"propagations":len(self.report)})
+        return {"propagations":len(self.report)}
+    def raw(self,c):
+        chunks=[]
+        for item in c.request_trace or []:
+            if isinstance(item,dict):
+                bi=item.get("bodyInfo") or {}
+                if isinstance(bi,dict) and bi.get("rawHandler"): chunks.append(bi.get("rawHandler"))
+        return "\n".join(chunks)
+
+class ResponsePropagationAgentV56:
+    def __init__(self,cfg,store):
+        self.cfg=cfg or {}; self.store=store; self.report=[]
+    def run(self,contracts):
+        for c in contracts:
+            raw=self.raw(c)
+            sends=re.findall(r"(?:reply|res|response)\.(?:send|json)\s*\(\s*([A-Za-z_$][\w$]*)",raw)
+            returns=re.findall(r"return\s+([A-Za-z_$][\w$]*)",raw)
+            vars_=list(dict.fromkeys(sends+returns))
+            if vars_:
+                self.report.append({"apiId":c.api_id,"path":c.path,"method":c.method,"responseVars":vars_})
+                if not c.response_body or c.response_body.get("properties",{})=={"id":{"type":"string","x-qaira-source":"fallback_minimal"}}:
+                    c.response_body={"type":"object","properties":{"id":{"type":"string","x-qaira-source":"response_propagation_placeholder"}}}
+        self.store.json("propagation/response_propagation_report.json",{"items":self.report,"propagations":len(self.report)})
+        return {"propagations":len(self.report)}
+    def raw(self,c):
+        chunks=[]
+        for item in c.response_trace or []:
+            if isinstance(item,dict):
+                chunks.append(json.dumps(item))
+        for item in c.request_trace or []:
+            if isinstance(item,dict):
+                bi=item.get("bodyInfo") or {}
+                if isinstance(bi,dict) and bi.get("rawHandler"): chunks.append(bi.get("rawHandler"))
+        return "\n".join(chunks)
+
+class DTOAttachmentAgentV56:
+    def __init__(self,cfg,store,validation_registry):
+        self.cfg=cfg or {}; self.store=store; self.validation=validation_registry or {"schemas":[]}; self.report=[]
+    def run(self,contracts):
+        checked=0; attached=0
+        for c in contracts:
+            if c.method in {"GET","HEAD","OPTIONS"}: continue
+            if c.request_body and c.request_body.get("properties"): continue
+            checked+=1
+            schema=self.best_schema(c)
+            if schema:
+                c.request_body=schema.get("schema")
+                attached+=1
+                self.report.append({"apiId":c.api_id,"path":c.path,"method":c.method,"schema":schema.get("name"),"strategy":"dto_attachment_similarity"})
+        self.store.json("propagation/dto_attachment_report.json",{"checked":checked,"attached":attached,"items":self.report})
+        return {"checked":checked,"attached":attached}
+    def best_schema(self,c):
+        tokens=set(re.findall(r"[a-zA-Z0-9]+",c.path.lower()))
+        best=None; best_score=0
+        for s in self.validation.get("schemas",[]):
+            name=s.get("name","").lower()
+            stokens=set(re.findall(r"[a-zA-Z0-9]+",name))
+            score=len(tokens & stokens)/max(len(tokens|stokens),1)
+            if score>best_score:
+                best_score=score; best=s
+        min_sim=float((self.cfg.get("dto_attachment") or {}).get("min_similarity",0.72))
+        return best if best and best_score>=min_sim else None
+
+class FinalTestGenerationAgentV56:
+    def __init__(self,cfg,store):
+        self.cfg=cfg or {}; self.store=store
+    def run(self,contracts,relationship):
+        report={"enabled":True,"generated":[]}
+        try:
+            generated=TestGeneratorAgentV54(self.cfg,self.store).run(contracts,relationship or {})
+            report["generated"]=list(generated.keys()) if isinstance(generated,dict) else []
+        except Exception as e:
+            report["error"]=str(e)
+        self.store.json("final/final_test_generation_report.json",report)
+        return report
+
+class GitCommitPushAgentV56:
+    def __init__(self,cfg,store):
+        self.cfg=cfg or {}; self.store=store
+    def run(self):
+        git=self.cfg.get("git_push") or {}; repo=self.cfg.get("repo") or {}
+        url=git.get("repo_url") or repo.get("url","")
+        report={"enabled":bool(git.get("enabled",False)),"repoUrlConfigured":bool(url),"targetBranch":git.get("target_branch",repo.get("default_branch","develop")),"committed":False,"pushed":False}
+        if not git.get("enabled",False): report["reason"]="git_push_disabled"
+        elif not url: report["reason"]="repo_url_missing"
+        elif not os.environ.get(git.get("username_env","GIT_USERNAME"),"") or not os.environ.get(git.get("token_env","GIT_TOKEN"),""): report["reason"]="git_credentials_env_missing"
+        elif not git.get("execute_git",False) or not git.get("push",False): report["reason"]="execute_git_or_push_false"
+        else: report["reason"]="git_execution_guarded_in_generated_package"
+        self.store.json("git/code_push_report.json",report)
+        self.store.json("git/pr_report.json",{"enabled":bool((self.cfg.get("pull_request") or {}).get("enabled",False)),"created":False,"reason":"safe_runtime_no_remote_pr_creation"})
+        return report
+
+def safe_name_v56(s):
+    return re.sub(r"[^a-zA-Z0-9_.-]+","_",str(s))[:120]
+
+
 class Orchestrator:
     def __init__(self,source,output,learning,changed_file,cfg,cfg_report):
         self.source=source.resolve(); self.output=output.resolve(); self.learning=learning.resolve()
@@ -3364,20 +3640,23 @@ class Orchestrator:
         self.fs=FS(self.source,changed,int(cfg.get("parsing",{}).get("max_file_size_kb",4096)))
         self.cfg=cfg; self.log=Logger(self.output,cfg); self.store=Store(self.output,self.log)
         self.store.json("config/effective_config.json",cfg); self.store.json("config/config_validation_report.json",cfg_report)
+        self.real_repo_agent_v56=RealRepoAgentV56(cfg,self.store)
+        self.runtime_v56=RuntimeExecutionManagerV56(cfg,self.store,self.learning)
         self.repo_clone_agent=RepoCloneAgentV55(cfg,self.store)
         self.active_runtime=ActiveIterationRuntimeV55(cfg,self.store,self.learning,self.source)
         self.v53=V53Governance(cfg,self.store,self.learning,self.source)
     def run(self):
         self.repo_clone_agent.run(self.source)
+        self.real_repo_agent_v56.clone_if_enabled(self.source)
         manifest,files=self.fs.fingerprint(); changed=[f["file"] for f in files if f["changed"]]
-        self.active_runtime.stage(1,"RepositoryFingerprint","success",{"files":len(files),"changed":len(changed)},{"sourceFiles":changed[:20]})
+        self.runtime_v56.stage(1,"RepositoryFingerprint","success",{"files":len(files),"changed":len(changed)},{"sourceFiles":changed[:20]})
         self.store.json("repository/repository_manifest.json",manifest); self.store.json("repository/file_registry.json",files)
         framework_harvest=FrameworkNativeContractHarvesterV54(self.cfg,self.store).run(self.fs)
-        self.active_runtime.stage(1,"FrameworkNativeContractHarvesterV54","success",{"contracts":len(framework_harvest.get("contracts",[])),"comments":len(framework_harvest.get("comments",[])),"constraints":len(framework_harvest.get("constraints",[]))},{"sourceFiles":[]})
+        self.runtime_v56.stage(1,"FrameworkNativeContractHarvesterV54","success",{"contracts":len(framework_harvest.get("contracts",[])),"comments":len(framework_harvest.get("comments",[])),"constraints":len(framework_harvest.get("constraints",[]))},{"sourceFiles":[]})
         orm_report,validation,orm_graph=OrmSinkAgent().run(self.fs)
         self.store.json("orm/orm_sink_report.json",orm_report); self.store.json("orm/validation_rule_inference.json",validation); self.store.json("graph/orm_graph.json",orm_graph)
         routes,graph,req_traces,res_traces,handler_report,body_report,parser_report=InlineHandlerCompiler().run(self.fs,self.cfg)
-        self.active_runtime.stage(1,"InlineHandlerCompiler","success",{"routes":len(routes),"requestTraces":len(req_traces)},{"sourceFiles":[r.get("file") for r in routes[:20]]})
+        self.runtime_v56.stage(1,"InlineHandlerCompiler","success",{"routes":len(routes),"requestTraces":len(req_traces)},{"sourceFiles":[r.get("file") for r in routes[:20]]})
         validation_registry,dto_registry,type_registry,validation_plugin_report=ValidationSchemaEngine(self.cfg).run(self.fs)
         validation_registry["typeRegistry"]=type_registry
         signature_registry=FunctionSignatureRegistry(self.cfg).run(self.fs)
@@ -3442,13 +3721,19 @@ class Orchestrator:
         auth_graph,auth=AuthScopeCompiler().run(self.fs,routes); self.store.json("graph/auth_graph.json",auth_graph); self.store.json("auth/effective_auth_report.json",auth)
         request_context_engine=RequestContextEngine(self.cfg)
         contracts=ContractBuilder(request_context_engine).run(routes,req_traces,res_traces,auth)
-        self.active_runtime.stage(1,"ContractBuilder","success",{"contracts":len(contracts)},{"sourceFiles":[]})
+        vp_result=VariablePropagationAgentV56(self.cfg,self.store).run(contracts)
+        self.runtime_v56.stage(1,"VariablePropagationAgentV56","success" if vp_result.get("propagations",0)>0 else "failure",vp_result,{"sourceFiles":[]})
+        rp_result=ResponsePropagationAgentV56(self.cfg,self.store).run(contracts)
+        self.runtime_v56.stage(1,"ResponsePropagationAgentV56","success" if rp_result.get("propagations",0)>0 else "failure",rp_result,{"sourceFiles":[]})
+        dto_attach_result=DTOAttachmentAgentV56(self.cfg,self.store,validation_registry).run(contracts)
+        self.runtime_v56.stage(1,"DTOAttachmentAgentV56","success" if dto_attach_result.get("attached",0)>0 else "failure",dto_attach_result,{"sourceFiles":[]})
+        self.runtime_v56.stage(1,"ContractBuilder","success",{"contracts":len(contracts)},{"sourceFiles":[]})
         relationship_result=RequestRelationshipEngineV54(self.cfg,self.store).run(contracts)
         summary_relationship_confidence=relationship_result.get("confidence",0)
-        self.active_runtime.stage(1,"RequestRelationshipEngineV54","success",{"sequence":len(relationship_result.get("sequence",[])),"confidence":relationship_result.get("confidence")},{"sourceFiles":[]})
-        self.active_runtime.stage(1,"RequestRelationshipEngineV54","success",{"sequence":len(relationship_result.get("sequence",[])),"confidence":relationship_result.get("confidence")},{"sourceFiles":[]})
+        self.runtime_v56.stage(1,"RequestRelationshipEngineV54","success",{"sequence":len(relationship_result.get("sequence",[])),"confidence":relationship_result.get("confidence")},{"sourceFiles":[]})
+        self.runtime_v56.stage(1,"RequestRelationshipEngineV54","success",{"sequence":len(relationship_result.get("sequence",[])),"confidence":relationship_result.get("confidence")},{"sourceFiles":[]})
         test_generation_result=TestGeneratorAgentV54(self.cfg,self.store).run(contracts,relationship_result)
-        self.active_runtime.stage(1,"TestGeneratorAgentV54","success",{"generated":list(test_generation_result.keys()) if isinstance(test_generation_result,dict) else []},{"sourceFiles":[]})
+        self.runtime_v56.stage(1,"TestGeneratorAgentV54","success",{"generated":list(test_generation_result.keys()) if isinstance(test_generation_result,dict) else []},{"sourceFiles":[]})
         self.store.json("validation/request_context_report.json",request_context_engine.report)
         self.store.json("validation/query_param_registry.json",{"items":[r for r in request_context_engine.report if r.get("counts",{}).get("query",0)>0]})
         self.store.json("validation/path_param_registry.json",{"items":[r for r in request_context_engine.report if r.get("counts",{}).get("path",0)>0]})
@@ -3462,7 +3747,7 @@ class Orchestrator:
         self.store.json("diagnostics/schema_attachment_diagnostics.json",schema_attachment_resolver.diagnostics)
         unresolved_investigator=UnresolvedRouteInvestigator(self.cfg,validation_registry,signature_registry,import_registry)
         unresolved_summary,recovered_contracts=unresolved_investigator.run(contracts,self.fs)
-        self.active_runtime.stage(1,"UnresolvedRouteInvestigator","success",unresolved_summary,{"sourceFiles":[]})
+        self.runtime_v56.stage(1,"UnresolvedRouteInvestigator","success",unresolved_summary,{"sourceFiles":[]})
         self.store.json("validation/unresolved_routes.json",{"items":[safe_json(c) for c in contracts if c.method not in {"GET","HEAD","OPTIONS"} and (not c.request_body or not (c.request_body.get("properties") or {}))]})
         self.store.json("validation/unresolved_route_investigation_report.json",unresolved_summary)
         self.store.json("validation/validation_chain_report.json",unresolved_investigator.validation_resolver.report)
@@ -3471,7 +3756,7 @@ class Orchestrator:
         self.store.json("diagnostics/unresolved_route_diagnostics.json",unresolved_summary)
         diagnostic_classifier=DiagnosticClassifier(self.cfg)
         route_classification_report=diagnostic_classifier.run(contracts)
-        self.active_runtime.stage(1,"DiagnosticClassifier","success",route_classification_report.get("summary",{}),{"sourceFiles":[]})
+        self.runtime_v56.stage(1,"DiagnosticClassifier","success",route_classification_report.get("summary",{}),{"sourceFiles":[]})
         next_action_report=NextActionReportBuilder().run(route_classification_report)
         self.store.json("diagnostics/route_classification_report.json",route_classification_report)
         self.store.json("diagnostics/unresolved_classification_report.json",route_classification_report)
@@ -3482,7 +3767,7 @@ class Orchestrator:
         import_aware_service_resolver=ImportAwareServiceResolverV49(self.cfg,import_registry,service_implementation_registry)
         actionable_recovery=ActionableRecoveryEngineV48(self.cfg,validation_registry,signature_registry,import_registry,import_aware_service_resolver)
         actionable_recovery_report,recovered_actionable_contracts=actionable_recovery.run(contracts,route_classification_report,self.fs)
-        self.active_runtime.stage(1,"ActionableRecoveryEngineV48","success" if actionable_recovery_report.get("recovered",0)>0 else "failure",actionable_recovery_report,{"sourceFiles":[]})
+        self.runtime_v56.stage(1,"ActionableRecoveryEngineV48","success" if actionable_recovery_report.get("recovered",0)>0 else "failure",actionable_recovery_report,{"sourceFiles":[]})
         self.store.json("validation/export_resolution_report.json",export_resolver_v49.report)
         self.store.json("validation/service_implementation_registry.json",{"items":export_resolver_v49.registry})
         self.store.json("validation/import_aware_service_resolution_report.json",import_aware_service_resolver.report)
@@ -3518,6 +3803,13 @@ class Orchestrator:
         body_fields_known=len([c for c in contracts if c.method in {"POST","PUT","PATCH"} and c.request_body and (c.request_body.get("properties") or {})])
         summary={"apiContracts":len(contracts),"bodyExpected":body_expected,"bodyDetected":body_detected,"bodyFieldsKnown":body_fields_known,"bodyDetectionRate":round((body_detected/body_expected)*100,2) if body_expected else 100,"bodyFieldKnownRate":round((body_fields_known/body_expected)*100,2) if body_expected else 100,"validationSchemasDiscovered":len(validation_registry.get("schemas",[])),"functionSignaturesDiscovered":len(signature_registry.get("signatures",[])),"typedFunctionSignatures":len([s for s in signature_registry.get("signatures",[]) if any(p.get("type") for p in s.get("params",[]))]),"typesDiscovered":len(type_registry.get("types",[])),"typeResolutions":len([x for x in enricher.type_engine.report if x.get("status","").startswith("resolved")]),"importsDiscovered":len(import_registry.get("imports",[])),"exportsDiscovered":len(import_registry.get("exports",[])),"commonJsImports":len([i for i in import_registry.get("imports",[]) if str(i.get("kind","")).startswith("commonjs")]),"commonJsExports":len([e for e in import_registry.get("exports",[]) if str(e.get("kind","")).startswith("commonjs")]),"serviceResolutions":len(enricher.service_resolver.resolution_report),"objectShapesFound":len(enricher.object_shape_analyzer.shape_registry),"shapePropagations":len(enricher.object_shape_analyzer.propagation_report),"functionReturnPropagations":len([x for x in enricher.object_shape_analyzer.propagation_report if "builder" in x.get("type","")]),"shapeMerges":len(enricher.object_shape_analyzer.merge_report),"falsePositiveGETBodies":len([c for c in contracts if c.method in {"GET","HEAD","OPTIONS"} and c.request_body]),"schemaAttachmentsResolved":schema_attachment_resolver.diagnostics.get("schemasResolved",0),"schemaAttachmentsFound":schema_attachment_resolver.diagnostics.get("attachmentsFound",0),"unresolvedRecovered":unresolved_summary.get("recovered",0),"unresolvedAfterInvestigation":unresolved_summary.get("unresolvedAfter",0),"bodyNotExpectedRoutes":diagnostic_classifier.summary.get("body_not_expected",0),"realUnresolvedPayloadRoutes":diagnostic_classifier.summary.get("real_unresolved",0),"actionableUnresolvedRoutes":diagnostic_classifier.summary.get("actionableUnresolvedRoutes",0),"v52HydratedImports":import_registry_hydrator.diagnostics.get("hydrated",0),"v52StillUnresolvedImports":import_registry_hydrator.diagnostics.get("stillUnresolved",0),"moduleResolutions":len([x for x in (getattr(self.fs,"_enterprise_module_resolver",None).registry if getattr(self.fs,"_enterprise_module_resolver",None) else []) if x.get("resolved")]),"moduleResolutionAttempts":len((getattr(self.fs,"_enterprise_module_resolver",None).registry if getattr(self.fs,"_enterprise_module_resolver",None) else [])),"v49ServiceImplementations":len(export_resolver_v49.registry),"v49ImportAwareResolutions":len([x for x in import_aware_service_resolver.report if x.get("resolved")]),"v48ActionableRecovered":actionable_recovery_report.get("recovered",0),"v48ActionableUnrecovered":actionable_recovery_report.get("unrecovered",0),"queryParamsDiscovered":sum(r.get("counts",{}).get("query",0) for r in request_context_engine.report),"pathParamsDiscovered":sum(r.get("counts",{}).get("path",0) for r in request_context_engine.report),"headersDiscovered":sum(r.get("counts",{}).get("header",0) for r in request_context_engine.report),"cookiesDiscovered":sum(r.get("counts",{}).get("cookie",0) for r in request_context_engine.report),"treeSitterAvailable":TREE_SITTER_AVAILABLE,"llmFallbackPrepared":len(llm_requests)}
         self.store.json("summary/scan_summary.json",summary)
+        try:
+            summary["testsGenerated"]=bool(locals().get("test_generation_result",{}))
+        except Exception:
+            pass
+        runtime_analysis_v56=self.runtime_v56.analyse(1,summary)
+        final_tests_v56=FinalTestGenerationAgentV56(self.cfg,self.store).run(contracts,locals().get("relationship_result",{}))
+        GitCommitPushAgentV56(self.cfg,self.store).run()
         try:
             summary["relationshipConfidence"]=locals().get("summary_relationship_confidence",0)
             summary["testsGenerated"]=bool(locals().get("test_generation_result",{}))
@@ -3632,6 +3924,12 @@ class Orchestrator:
 - `learning/worked_patterns.json`
 - `learning/failed_patterns.json`
 - `git/code_push_report.json`
+- `runtime/runtime_execution_report.json`
+- `runtime/confidence_report.json`
+- `runtime/selective_llm_invocation_report.json`
+- `propagation/variable_propagation_report.json`
+- `propagation/response_propagation_report.json`
+- `propagation/dto_attachment_report.json`
 - `repo/repo_clone_report.json`
 - `final/final_test_generation_report.json`
 - `llm/stage_decision_prompts/*.json`

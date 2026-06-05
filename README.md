@@ -1,118 +1,181 @@
-# QAira Semantic Compiler Platform V55 — Active LLM Iteration Runtime
+# QAira Semantic Compiler Platform V56
 
-V55 is the active closed-loop runtime version.
+V56 is a focused correction over V55.
 
-It preserves everything learned from V32–V54:
-
-```text
-Route discovery
-Body detection
-Object shape analyzer
-Request context engine
-Query/path/header/cookie separation
-Module resolution audit
-Import registry hydration
-Framework-native harvesting
-Validation constraint harvesting
-Configurable test generation
-Relationship sequencing
-LLM governance artifacts
-```
-
-and adds the missing runtime behavior:
+V55 added governance artifacts, but the uploaded output showed the active runtime did not truly improve:
 
 ```text
-RepoCloneAgent
-StageLLMDecisionGate
-SuggestedTaskExecutor
-IterationMemoryStore
-LLMResultsAnalyserLoop
-FinalTestGenerationAgent
-LLMCodeGenerationAgent
-GitCommitPushAgent
+v49ImportAwareResolutions = 0
+schemaAttachmentsResolved = 0
+shapePropagations = 0
+functionReturnPropagations = 0
+v48ActionableRecovered = 0
 ```
 
-## V55 Execution Order
+V56 moves from "LLM everywhere" to a better production architecture:
 
 ```text
-0. Read config
-1. RepoCloneAgent
-   - clone repo from config.repo.url if enabled
-   - checkout develop/default branch
-   - source_dir becomes cloned repo/source_subdir
-
-2. Active Iteration Loop
-   default max_iterations = 50
-
-   For each iteration:
-     a. Run deterministic agent stages
-     b. After every stage:
-        - capture worked/failed outcome
-        - ask LLM true/false: was outcome correct?
-        - if false/failure, ask LLM for deterministic recovery tasks
-        - execute allowed suggested tasks only
-        - store worked/failed/LLM-suggested worked patterns
-     c. LLMResultsAnalyser reads full output volume
-        - what worked
-        - what failed
-        - what suggested worked
-        - score
-        - satisfied true/false
-        - next iteration suggestions
-     d. Repeat until:
-        - satisfied = true
-        - score >= threshold
-        - max_iterations reached
-
-3. Final one-time stages outside loop:
-   - FinalTestGenerationAgent overrides earlier generated tests
-   - LLMCodeGenerationAgent creates patches from established worked patterns
-   - GitCommitPushAgent commits and pushes to target branch if enabled
-   - PR report generated if enabled
+Agent runs
+↓
+Confidence Engine scores outcome
+↓
+Only low-confidence/failure agents call LLM
+↓
+Suggested deterministic tasks are recorded/executed if allowed
+↓
+Iteration loop repeats up to configured max
+↓
+Final tests generated once
+↓
+Optional repo clone / commit / push / PR final stage
 ```
 
-## Safe Defaults
+## V56 Adds
 
-All destructive/remote operations are disabled unless explicitly configured:
+### 1. RuntimeExecutionManager
+
+Real iteration controller with configurable max iterations.
+
+Default:
+
+```yaml
+runtime_execution:
+  enabled: true
+  max_iterations: 50
+```
+
+### 2. AgentConfidenceEngine
+
+Every major stage gets a confidence score.
+
+Only if:
+
+```text
+confidence < llm_invocation.confidence_threshold
+```
+
+or the stage fails, the LLM is asked.
+
+Default:
+
+```yaml
+llm_invocation:
+  mode: selective
+  confidence_threshold: 0.80
+```
+
+### 3. SelectiveLLMInvocationAgent
+
+Avoids the expensive and noisy pattern:
+
+```text
+every agent → LLM
+```
+
+Uses:
+
+```text
+low confidence / failure → LLM
+```
+
+### 4. VariablePropagationAgent
+
+Targets:
+
+```js
+const payload = req.body
+service.create(payload)
+```
+
+and extracts fields from:
+
+```js
+payload.name
+payload.email
+const { name, email } = payload
+```
+
+### 5. ResponsePropagationAgent
+
+Targets:
+
+```js
+const result = await service.create(payload)
+reply.send(result)
+return result
+```
+
+and produces response propagation diagnostics.
+
+### 6. DTOAttachmentAgent
+
+Attempts to connect already discovered schemas to routes/handlers using:
+
+```text
+schema name similarity
+route file names
+handler names
+validation wrapper names
+request body aliases
+service method names
+```
+
+This is intentionally deterministic before LLM.
+
+### 7. RealRepoAgent
+
+Configurable real clone / checkout / commit / push flow.
+
+Safe by default:
 
 ```yaml
 repo.enabled: false
-llm.enabled: false
-llm_iteration.enabled: false
-code_generation.enabled: false
-git_push.enabled: false
-pull_request.enabled: false
+git_push.push: false
 ```
 
-Credentials must use environment variables:
+When enabled, it can execute git commands inside the mounted container.
 
-```bash
-OPENAI_API_KEY
-GIT_USERNAME
-GIT_TOKEN
-```
+### 8. FinalTestGenerationAgent
 
-## Major Output Folders
+Runs once after the iteration loop and overrides earlier test artifacts.
+
+## Main Outputs
 
 ```text
-/output/iterations/iteration_*/...
-/output/llm/stage_reviews/...
-/output/llm/results_analyser/...
-/output/llm/suggested_tasks/...
-/output/learning/worked_patterns.json
-/output/learning/failed_patterns.json
-/output/learning/llm_suggested_worked_patterns.json
+/output/runtime/iteration_*/iteration_summary.json
+/output/runtime/runtime_execution_report.json
+/output/runtime/confidence_report.json
+/output/runtime/selective_llm_invocation_report.json
+
+/output/propagation/variable_propagation_report.json
+/output/propagation/response_propagation_report.json
+/output/propagation/dto_attachment_report.json
+
 /output/final/final_test_generation_report.json
+/output/git/repo_clone_report.json
 /output/git/code_push_report.json
 /output/git/pr_report.json
-/output/verbose/*.jsonl
 ```
 
 ## Docker Run
 
-```bash
-docker build -t qaira/semantic-compiler:v55 .
+Local source:
 
+```bash
+docker build -t qaira/semantic-compiler:v56 .
+
+docker run --rm \
+  -v /absolute/path/to/source:/repo:ro \
+  -v /absolute/path/to/output:/output \
+  -v /absolute/path/to/config.yaml:/config/config.yaml:ro \
+  -v /absolute/path/to/learning:/learning \
+  -e OPENAI_API_KEY="$OPENAI_API_KEY" \
+  qaira/semantic-compiler:v56
+```
+
+Repo clone mode:
+
+```bash
 docker run --rm \
   -v /absolute/path/to/output:/output \
   -v /absolute/path/to/config.yaml:/config/config.yaml:ro \
@@ -120,36 +183,5 @@ docker run --rm \
   -e OPENAI_API_KEY="$OPENAI_API_KEY" \
   -e GIT_USERNAME="$GIT_USERNAME" \
   -e GIT_TOKEN="$GIT_TOKEN" \
-  qaira/semantic-compiler:v55
+  qaira/semantic-compiler:v56
 ```
-
-For local source without clone:
-
-```bash
-docker run --rm \
-  -v /absolute/path/to/source:/repo:ro \
-  -v /absolute/path/to/output:/output \
-  -v /absolute/path/to/config.yaml:/config/config.yaml:ro \
-  -v /absolute/path/to/learning:/learning \
-  qaira/semantic-compiler:v55
-```
-
-For git push/code generation, mount a writable workspace and enable the config explicitly.
-
-## Config location
-
-The updated V55 config is included in both locations:
-
-```text
-config.example.yaml
-config/config.example.yaml
-```
-
-Use either as your mounted config:
-
-```bash
--v /absolute/path/to/config.example.yaml:/config/config.yaml:ro
-```
-# api_contracts
-# api_contracts
-# api_contracts

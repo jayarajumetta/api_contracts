@@ -1,7 +1,7 @@
 agent:
   name: qaira-semantic-compiler-platform
-  version: v55
-  mode: active-iteration-runtime
+  version: v56
+  mode: active-runtime-confidence-gated
 
 repo:
   enabled: false
@@ -12,6 +12,7 @@ repo:
   clean_clone: true
   username_env: GIT_USERNAME
   token_env: GIT_TOKEN
+  execute_git: false
 
 paths:
   source_dir: /repo
@@ -22,6 +23,26 @@ paths:
 logging:
   verbose_console: true
   verbose_files: true
+
+runtime_execution:
+  enabled: true
+  max_iterations: 50
+  stop_when_satisfied: true
+  threshold_percent: 100
+  write_iteration_snapshots: true
+
+agent_confidence:
+  enabled: true
+  thresholds:
+    route_discovery: 0.95
+    body_detection: 0.90
+    module_resolution: 0.80
+    import_aware_resolution: 0.80
+    dto_attachment: 0.80
+    variable_propagation: 0.80
+    response_propagation: 0.80
+    relationship_engine: 0.80
+    test_generation: 0.90
 
 llm:
   enabled: false
@@ -37,14 +58,13 @@ llm:
   allow_full_file_context: false
   allow_full_repo_context: false
 
-llm_iteration:
+llm_invocation:
+  mode: selective
   enabled: false
-  max_iterations: 50
-  threshold_percent: 100
-  stop_when_satisfied: true
-  stage_llm_review: true
-  execute_llm_suggested_tasks: true
-  retry_failed_suggested_tasks: true
+  confidence_threshold: 0.80
+  invoke_on_failure: true
+  invoke_on_low_confidence: true
+  invoke_on_high_confidence: false
   allowed_task_types:
     - inspect_output_file
     - inspect_source_slice
@@ -63,19 +83,7 @@ llm_results_analyser:
   enabled: false
   threshold_percent: 100
   stop_when_llm_says_satisfied: true
-  read_full_output_volume: true
   include_previous_iterations: true
-  score_keys:
-    - route_discovery_rate
-    - body_detection_rate
-    - body_field_known_rate
-    - false_positive_get_bodies
-    - actionable_unresolved_routes
-    - module_resolution_rate
-    - import_aware_resolution_rate
-    - schema_attachment_rate
-    - relationship_confidence
-    - test_generation_completion
 
 framework_harvesting:
   enabled: true
@@ -110,6 +118,35 @@ validation_engine:
   response_propagation: true
   dto_attachment: true
   diagnostic_classifier: true
+
+propagation:
+  variable_propagation:
+    enabled: true
+    aliases:
+      - payload
+      - body
+      - data
+      - input
+      - dto
+      - requestBody
+  response_propagation:
+    enabled: true
+    sinks:
+      - reply.send
+      - response.send
+      - res.send
+      - res.json
+      - return
+
+dto_attachment:
+  enabled: true
+  strategies:
+    - route_name_schema_similarity
+    - handler_name_schema_similarity
+    - service_method_schema_similarity
+    - validation_wrapper_schema_name
+    - file_local_schema_name
+  min_similarity: 0.72
 
 relationship_engine:
   enabled: true
@@ -173,6 +210,7 @@ git_push:
   create_branch_prefix: qaira-agent
   commit_message: "chore: apply QAira agent learned patterns"
   push: false
+  execute_git: false
 
 pull_request:
   enabled: false
