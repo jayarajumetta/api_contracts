@@ -1,5 +1,7 @@
 from qaira_semantic_compiler.core.context import AgentResult
 
+BODY_METHODS={"POST","PUT","PATCH"}
+
 class InferredSchemaRegistryAgent:
     name="InferredSchemaRegistryAgent"
 
@@ -9,13 +11,18 @@ class InferredSchemaRegistryAgent:
 
     def run(self):
         schemas=[]
+        body_details={b["routeId"]:b for b in self.ctx.state.get("bodyDetails",[])}
+
         for route in self.ctx.state.get("routes",[]):
             body=route.get("requestBody")
             if not body:
                 continue
+            if route["method"] not in BODY_METHODS and not body_details.get(route["id"],{}).get("hasBody"):
+                continue
             props=body.get("properties") or {}
             if not props:
                 continue
+
             name=self.schema_name(route)
             schema={
                 "name":name,
@@ -23,10 +30,11 @@ class InferredSchemaRegistryAgent:
                 "method":route["method"],
                 "path":route["path"],
                 "schema":{"type":"object","properties":props,"required":[]},
-                "source":"inferred_pattern_registry"
+                "source":"precision_inferred_pattern_registry"
             }
             schemas.append(schema)
             body["schemaRef"]=name
+
         self.ctx.state["inferredSchemas"]=schemas
         self.ctx.write_json("validation/inferred_schema_registry.json",{
             "count":len(schemas),

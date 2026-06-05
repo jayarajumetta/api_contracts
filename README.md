@@ -1,42 +1,33 @@
-# QAira Semantic Compiler — Field Inference Runtime
+# QAira Semantic Compiler — Precision Field Inference
 
-Continues from pattern-establishment.
+This package fixes over-propagation from the field-inference run.
 
-## Fix focus
+## Problem fixed
 
-The last run was stable:
+Previous run found strong patterns but over-counted:
 
 ```text
-apiContracts        241
-bodyDetected        114
-bodyFieldsKnown     58
-serviceEdges        959
-inferredSchemas     58
-quality             84.23
+bodyExpected        123
+bodyFieldsKnown     210
+bodyFieldKnownRate  170%
 ```
 
-Remaining weak points:
+That is impossible.
+
+## Corrections
 
 ```text
-ServiceBodyPatterns 1
-DbWritePatterns     0
-```
-
-This package improves:
-
-```text
-service call argument capture
-service method parameter mapping
-body alias propagation
-SQL INSERT/UPDATE field extraction
-Prisma/Knex/repository object write extraction
-false field filtering such as equals/length
+DB write fields scoped to called service method only
+No requestBody added to GET/DELETE unless req.body is explicitly used
+Inferred schemas only for POST/PUT/PATCH or confirmed body routes
+Quality rates capped at 100%
+bodyFieldsKnown counted only across body-expected routes
 ```
 
 ## Build
 
 ```bash
-docker build -t qaira/semantic-compiler:field-inference .
+docker build -t qaira/semantic-compiler:precision-fields .
 ```
 
 ## Run
@@ -51,5 +42,5 @@ docker run --rm \
   -v /Users/jayarajumetta/Downloads/volume/output:/output \
   -v /Users/jayarajumetta/Downloads/volume/config.yaml:/config/config.yaml:ro \
   -v /Users/jayarajumetta/Downloads/volume/learning:/learning \
-  qaira/semantic-compiler:field-inference
+  qaira/semantic-compiler:precision-fields
 ```
