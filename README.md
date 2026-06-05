@@ -1,36 +1,29 @@
-# QAira Semantic Compiler — Final Git Diagnostics Runtime
+# QAira Semantic Compiler — Final Git Auth Runtime
 
-This patch keeps the stable contract engine unchanged and improves Git finalization diagnostics.
-
-## Why
-
-Latest run showed:
+This patch fixes the latest Git clone failure:
 
 ```text
-git installed ✅
-commit created ✅
-push failed ❌ exit 128
-stderr not captured ❌
+fatal: could not read Username for 'https://github.com'
 ```
 
-This package captures the exact reason.
+## Root cause
 
-## Improvements
+`http.extraHeader=Authorization: Bearer ...` was not reliable for `git clone` in this environment.
+
+## Fix
+
+GitHub standard token-auth URL is now used:
 
 ```text
-git command stdout/stderr captured
-git/command_log.json added
-push uses git -c http.extraHeader=Authorization: Bearer <token>
-avoids token-in-URL escaping issues
-push uses -u origin <branch>
-PR body_file supported
-likely push cause classified
+https://x-access-token:<TOKEN>@github.com/org/repo.git
 ```
+
+The token is URL-encoded and redacted from all logs.
 
 ## Build
 
 ```bash
-docker build -t qaira/semantic-compiler:final-git-diagnostics .
+docker build -t qaira/semantic-compiler:final-git-auth .
 ```
 
 ## Run
@@ -45,13 +38,23 @@ docker run --rm \
   -v /Users/jayarajumetta/Downloads/volume/output:/output \
   -v /Users/jayarajumetta/Downloads/volume/config.yaml:/config/config.yaml:ro \
   -v /Users/jayarajumetta/Downloads/volume/learning:/learning \
-  qaira/semantic-compiler:final-git-diagnostics
+  qaira/semantic-compiler:final-git-auth
 ```
 
-## Check after run
+## Verify
 
 ```text
 git/finalization_report.json
 git/command_log.json
-git/preflight_report.json
+runtime/final_run_report.json
+```
+
+If this still fails, `likelyCause` will tell whether it is:
+
+```text
+invalid token
+missing repo access
+no write permission
+protected branch
+repo not found
 ```

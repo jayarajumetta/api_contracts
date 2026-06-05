@@ -1,6 +1,7 @@
 from qaira_semantic_compiler.core.context import AgentResult
 from pathlib import Path
 import os, shutil, subprocess, datetime, json, urllib.request, re
+from urllib.parse import quote
 
 class GitFinalizationAgent:
     name="GitFinalizationAgent"
@@ -66,23 +67,33 @@ class GitFinalizationAgent:
             suffix=datetime.datetime.utcnow().strftime("%Y%m%d%H%M%S")
             work_branch=f"{cfg.get('branch_prefix',cfg.get('create_branch_prefix','qaira-agent'))}-{suffix}"
 
+        auth_url=self.github_https_token_url(repo_url, token, username)
+        report["authMode"]="https_token_url_redacted"
+        report["repoUrl"]=self.redact(auth_url, token)
+
         try:
             if clone_dir.exists():
                 shutil.rmtree(clone_dir)
 
-            # Safer auth: do not embed token in URL. Use extraHeader.
-            # This avoids malformed URLs when tokens contain special characters.
-            auth_header=f"Authorization: Bearer {token}"
-            self.run_cmd(["git","-c",f"http.extraHeader={auth_header}","clone",repo_url,str(clone_dir)], timeout=600, redact_token=token)
+            env=self.git_env()
+            clone=self.run_cmd(["git","clone",auth_url,str(clone_dir)], timeout=600, redact_token=token, env=env, check=False)
+            if clone["returncode"] != 0:
+                report["reason"]="git_clone_failed"
+                report["cloneReturnCode"]=clone["returncode"]
+                report["cloneStdout"]=clone.get("stdout","")[-2000:]
+                report["cloneStderr"]=clone.get("stderr","")[-4000:]
+                report["likelyCause"]=self.likely_git_cause(clone.get("stderr","")+clone.get("stdout",""))
+                self.finish(report)
+                return AgentResult(self.name,"failed_open",0.35,report,report)
+
             report["gitExecuted"]=True
 
-            # Checkout target branch. If missing locally, try origin/base_branch.
-            checkout=self.run_cmd(["git","checkout",base_branch],cwd=clone_dir,check=False,timeout=120, redact_token=token)
+            checkout=self.run_cmd(["git","checkout",base_branch],cwd=clone_dir,check=False,timeout=120,redact_token=token,env=env)
             if checkout["returncode"] != 0:
-                self.run_cmd(["git","checkout","-B",base_branch,f"origin/{base_branch}"],cwd=clone_dir,check=False,timeout=120, redact_token=token)
+                self.run_cmd(["git","checkout","-B",base_branch,f"origin/{base_branch}"],cwd=clone_dir,check=False,timeout=120,redact_token=token,env=env)
 
             if work_branch != base_branch:
-                self.run_cmd(["git","checkout","-B",work_branch],cwd=clone_dir,timeout=120, redact_token=token)
+                self.run_cmd(["git","checkout","-B",work_branch],cwd=clone_dir,timeout=120,redact_token=token,env=env)
 
             copied=[]
             for rel in cfg.get("copy_artifacts_to",["generated/","final/","summary/","quality/","analysis/"]):
@@ -97,22 +108,22 @@ class GitFinalizationAgent:
                         shutil.copy2(src,dst)
                     copied.append(rel)
 
-            self.run_cmd(["git","add","qaira-generated"],cwd=clone_dir,timeout=120, redact_token=token)
-            status=self.run_cmd(["git","status","--porcelain"],cwd=clone_dir,timeout=120, redact_token=token, check=False)
+            self.run_cmd(["git","add","qaira-generated"],cwd=clone_dir,timeout=120,redact_token=token,env=env)
+            status=self.run_cmd(["git","status","--porcelain"],cwd=clone_dir,timeout=120,redact_token=token,check=False,env=env)
             report["copied"]=copied
             report["branch"]=work_branch
 
             if not status.get("stdout","").strip():
                 report["reason"]="no_changes_to_commit"
             else:
-                self.run_cmd(["git","config","user.email","qaira-agent@example.local"],cwd=clone_dir,timeout=30, redact_token=token)
-                self.run_cmd(["git","config","user.name","QAira Agent"],cwd=clone_dir,timeout=30, redact_token=token)
-                self.run_cmd(["git","commit","-m",cfg.get("commit_message","chore: update generated QAira artifacts")],cwd=clone_dir,timeout=120, redact_token=token)
+                self.run_cmd(["git","config","user.email","qaira-agent@example.local"],cwd=clone_dir,timeout=30,redact_token=token,env=env)
+                self.run_cmd(["git","config","user.name","QAira Agent"],cwd=clone_dir,timeout=30,redact_token=token,env=env)
+                self.run_cmd(["git","commit","-m",cfg.get("commit_message","chore: update generated QAira artifacts")],cwd=clone_dir,timeout=120,redact_token=token,env=env)
                 report["committed"]=True
 
                 if cfg.get("push",False):
-                    push_cmd=["git","-c",f"http.extraHeader={auth_header}","push","-u","origin",work_branch]
-                    push=self.run_cmd(push_cmd,cwd=clone_dir,check=False,timeout=300,redact_token=token)
+                    # Push using explicit authenticated URL to avoid remote config losing credentials.
+                    push=self.run_cmd(["git","push","-u",auth_url,work_branch],cwd=clone_dir,check=False,timeout=300,redact_token=token,env=env)
                     if push["returncode"] == 0:
                         report["pushed"]=True
                         if pr_cfg.get("enabled",False):
@@ -124,7 +135,7 @@ class GitFinalizationAgent:
                         report["pushReturnCode"]=push["returncode"]
                         report["pushStdout"]=push.get("stdout","")[-2000:]
                         report["pushStderr"]=push.get("stderr","")[-4000:]
-                        report["likelyCause"]=self.likely_push_cause(push.get("stderr","")+push.get("stdout",""))
+                        report["likelyCause"]=self.likely_git_cause(push.get("stderr","")+push.get("stdout",""))
                 else:
                     report["reason"]="committed_locally_push_false"
 
@@ -134,17 +145,31 @@ class GitFinalizationAgent:
         self.finish(report)
         return AgentResult(
             self.name,
-            "success" if not report.get("error") and report.get("reason") not in {"git_push_failed"} else "failed_open",
-            0.9 if report.get("pushed") or report.get("committed") or report.get("reason") in {"no_changes_to_commit","execute_git_false","committed_locally_push_false"} else 0.4,
+            "success" if not report.get("error") and report.get("reason") not in {"git_push_failed","git_clone_failed"} else "failed_open",
+            0.95 if report.get("pushed") else 0.9 if report.get("committed") or report.get("reason") in {"no_changes_to_commit","execute_git_false","committed_locally_push_false"} else 0.4,
             report,
             report
         )
 
-    def run_cmd(self,cmd,cwd=None,timeout=120,check=True,redact_token=""):
-        safe_cmd=[c.replace(redact_token,"<redacted>") if redact_token else c for c in cmd]
+    def github_https_token_url(self, repo_url, token, username=""):
+        # GitHub standard token auth format:
+        # https://x-access-token:<TOKEN>@github.com/org/repo.git
+        if not repo_url.startswith("https://"):
+            return repo_url
+        user=quote(username or "x-access-token", safe="")
+        tok=quote(token, safe="")
+        return repo_url.replace("https://", f"https://{user}:{tok}@")
+
+    def git_env(self):
+        env=os.environ.copy()
+        env["GIT_TERMINAL_PROMPT"]="0"
+        return env
+
+    def run_cmd(self,cmd,cwd=None,timeout=120,check=True,redact_token="",env=None):
+        safe_cmd=[self.redact(c,redact_token) for c in cmd]
         item={"cmd":safe_cmd,"cwd":str(cwd) if cwd else None}
         try:
-            p=subprocess.run(cmd,cwd=cwd,timeout=timeout,capture_output=True,text=True)
+            p=subprocess.run(cmd,cwd=cwd,timeout=timeout,capture_output=True,text=True,env=env)
             item.update({
                 "returncode":p.returncode,
                 "stdout":self.redact(p.stdout,redact_token),
@@ -164,9 +189,13 @@ class GitFinalizationAgent:
             return item
 
     def redact(self,text,token):
-        if not text: return ""
+        if text is None:
+            return ""
+        text=str(text)
         if token:
             text=text.replace(token,"<redacted>")
+            # encoded token may appear too
+            text=text.replace(quote(token,safe=""),"<redacted>")
         return text
 
     def git_preflight(self):
@@ -176,10 +205,10 @@ class GitFinalizationAgent:
         except Exception as e:
             return {"gitBinaryAvailable":False,"gitVersion":"","gitError":str(e)}
 
-    def likely_push_cause(self,text):
+    def likely_git_cause(self,text):
         t=(text or "").lower()
-        if "authentication failed" in t or "could not read username" in t:
-            return "authentication_failed_or_token_not_accepted"
+        if "authentication failed" in t or "could not read username" in t or "terminal prompts disabled" in t:
+            return "authentication_failed_token_missing_invalid_or_not_accepted"
         if "permission" in t or "403" in t or "write access" in t:
             return "token_lacks_repo_write_permission"
         if "protected branch" in t or "gh006" in t:
@@ -195,7 +224,6 @@ class GitFinalizationAgent:
     def create_pr(self,repo_url,token,head,base_branch,pr_cfg):
         if not pr_cfg.get("execute_network_calls",False):
             return {"created":False,"reason":"pr_execute_network_calls_false"}
-
         m=re.search(r"github\.com[:/](.+?)/(.+?)(?:\.git)?$",repo_url)
         if not m:
             return {"created":False,"reason":"unsupported_repo_url"}
