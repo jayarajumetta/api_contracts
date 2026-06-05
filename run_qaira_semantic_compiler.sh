@@ -25,4 +25,5 @@ if [ -n "$CHANGED_FILES" ] && [ -f "$CHANGED_FILES" ]; then
   ARGS+=(--changed-files "$CHANGED_FILES")
 fi
 
-python3 "$SCRIPT_DIR/src/qaira_semantic_compiler/main.py" "${ARGS[@]}"
+export PYTHONUNBUFFERED="${PYTHONUNBUFFERED:-1}"
+python3 "$SCRIPT_DIR/src/qaira_semantic_compiler/orchestrator_v59.py" "${ARGS[@]}"

@@ -1,7 +1,7 @@
 agent:
   name: qaira-semantic-compiler-platform
-  version: v58
-  mode: llm-safe-guarded-runtime
+  version: v59
+  mode: modular-orchestrated-runtime
 
 repo:
   enabled: false
@@ -13,6 +13,7 @@ repo:
   username_env: GIT_USERNAME
   token_env: GIT_TOKEN
   execute_git: false
+  fail_open: true
 
 paths:
   source_dir: /repo
@@ -27,8 +28,13 @@ logging:
   heartbeat_every_seconds: 10
   stage_start_end_logs: true
   flush_console: true
+  jsonl_trace: true
+  write_agent_logs: true
+  log_level: INFO
 
 scan:
+  use_repository_index: true
+  build_index_once: true
   exclude_dirs:
     - node_modules
     - .git
@@ -52,26 +58,48 @@ scan:
     - "*.zip"
     - "*.tar"
     - "*.gz"
+  max_file_size_kb: 4096
 
 runtime_execution:
   enabled: true
+  architecture: modular_agents
   max_iterations: 3
   stop_when_satisfied: true
   threshold_percent: 100
-  write_iteration_snapshots: true
   fail_open_on_agent_error: true
   fail_open_on_llm_error: true
+  write_iteration_snapshots: true
+  continue_from_last_success: true
+
+orchestrator:
+  stage_timeout_seconds: 900
+  agent_timeout_seconds: 300
+  continue_on_stage_failure: true
+  capture_exception_trace: true
+  write_stage_input_output: true
+  write_stage_metrics: true
+  stages:
+    - repo_clone
+    - repository_index
+    - legacy_semantic_compiler
+    - output_analyzer
+    - llm_results_analyzer
+    - final_test_generation
+    - code_generation
+    - git_commit_push
 
 agent_confidence:
   enabled: true
   thresholds:
+    repository_index: 0.90
     route_discovery: 0.95
     body_detection: 0.90
-    import_hydration: 0.80
-    service_call_graph: 0.80
-    shape_propagation: 0.80
-    return_propagation: 0.80
+    module_resolution: 0.80
+    import_aware_resolution: 0.80
     dto_attachment: 0.80
+    variable_propagation: 0.80
+    response_propagation: 0.80
+    relationship_engine: 0.80
     test_generation: 0.90
 
 llm:
@@ -120,6 +148,7 @@ llm_results_analyser:
   enabled: true
   threshold_percent: 100
   stop_when_llm_says_satisfied: true
+  read_full_output_volume: true
   include_previous_iterations: true
   continue_on_timeout: true
   continue_on_error: true
@@ -154,6 +183,7 @@ validation_engine:
 
 graph_completion:
   enabled: true
+  use_repository_index: true
   import_hydration:
     enabled: true
   service_call_graph:
@@ -192,23 +222,45 @@ test_generation:
 
 pattern_learning:
   enabled: true
+  store_worked_patterns: true
+  store_failed_patterns: true
+  store_llm_suggested_worked_patterns: true
 
 code_generation:
-  enabled: false
+  enabled: true
   generate_from_worked_patterns: true
   require_llm_results_threshold: true
   min_threshold_percent: 100
   generate_patch_only: true
   apply_patch: false
+  fail_open: true
+  allowed_paths:
+    - src/
+    - docs/
+    - config.example.yaml
+  blocked_paths:
+    - .env
+    - secrets/
+    - credentials/
+    - node_modules/
+    - .git/
 
 git_push:
-  enabled: false
-  repo_url: ""
+  enabled: true
+  repo_url: "https://github.com/jayarajumetta/api_contracts.git"
   username_env: GIT_USERNAME
   token_env: GIT_TOKEN
   target_branch: develop
+  create_branch_prefix: qaira-agent
+  commit_message: "chore: apply QAira agent learned patterns"
   push: false
   execute_git: false
+  fail_open: true
 
 pull_request:
-  enabled: false
+  enabled: true
+  provider: github
+  base_branch: main
+  title: "QAira agent learned pattern updates"
+  body_file: /output/git/pr_body.md
+  fail_open: true
