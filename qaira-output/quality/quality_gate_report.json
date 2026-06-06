@@ -1,0 +1,25 @@
+{
+  "score": 10.0,
+  "passed": false,
+  "summary": {
+    "apiContracts": 0,
+    "bodyExpected": 0,
+    "bodyDetected": 0,
+    "bodyFieldsKnown": 0,
+    "bodyDetectionRate": 0.0,
+    "bodyFieldKnownRate": 0.0,
+    "pathParamsDiscovered": 0,
+    "queryParamsDiscovered": 0,
+    "headersDiscovered": 0,
+    "serviceEdges": 0,
+    "schemasDiscovered": 852,
+    "inferredSchemas": 0,
+    "declaredSchemaAttachments": 0,
+    "inferredSchemaAttachments": 0,
+    "serviceBodyPatterns": 0,
+    "dbWritePatterns": 0,
+    "testsGenerated": true,
+    "negativeTestsGenerated": true,
+    "edgeTestsGenerated": true
+  }
+}

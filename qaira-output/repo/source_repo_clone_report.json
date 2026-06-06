@@ -1,0 +1,11 @@
+{
+  "enabled": true,
+  "repoUrlProvided": true,
+  "repoUrl": "https://github.com/microsoft/playwright.git",
+  "branch": "default",
+  "cloneDir": "/workspace/source-repo",
+  "cloned": true,
+  "sourceDirBefore": "/workspace/source-repo",
+  "sourceDirAfter": "/workspace/source-repo",
+  "reason": "source_repo_cloned_and_selected"
+}

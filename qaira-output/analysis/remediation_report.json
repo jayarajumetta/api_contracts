@@ -1,0 +1,16 @@
+{
+  "requested": [
+    "enable_balanced_route_fallback_scan_all_js_ts",
+    "relax_body_presence_detection_and_service_arg_detection",
+    "enable_service_and_db_field_pattern_propagation",
+    "enable_import_resolution_and_call_argument_capture",
+    "enable_inferred_schema_registry"
+  ],
+  "applied": [
+    "enable_balanced_route_fallback_scan_all_js_ts",
+    "relax_body_presence_detection_and_service_arg_detection",
+    "enable_service_and_db_field_pattern_propagation",
+    "enable_import_resolution_and_call_argument_capture",
+    "enable_inferred_schema_registry"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "commands": [
+    {
+      "cmd": [
+        "git",
+        "clone",
+        "--depth",
+        "1",
+        "https://jayarajumetta:<redacted>@github.com/microsoft/playwright.git",
+        "/workspace/source-repo"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "Cloning into '/workspace/source-repo'...\n"
+    }
+  ]
+}

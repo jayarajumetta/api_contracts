@@ -1,0 +1,17 @@
+{
+  "info": {
+    "name": "Generated Negative API Tests",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "{{baseUrl}}"
+    },
+    {
+      "key": "authToken",
+      "value": "{{authToken}}"
+    }
+  ],
+  "item": []
+}

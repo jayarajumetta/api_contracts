@@ -1,0 +1,370 @@
+{
+  "instruction": "You are reviewing ONE compact iteration_context for an API contract discovery agent. Do not ask for logs. Rank root cause issues. Suggest only deterministic remediations mapped to a specific agent file. Return JSON keys: accepted, score, issues, suggestedAgentDeltas. suggestedAgentDeltas items must include agentName, reason, changeType, patchIntent, confidence.",
+  "name": "SelfHealingLLMAdvisorAgent",
+  "payload": {
+    "instruction": "Review agent performance. Suggest repo-specific input adjustments and safe code deltas for specific agent files only.",
+    "quality": {
+      "score": 10.0,
+      "passed": false,
+      "summary": {
+        "apiContracts": 0,
+        "bodyExpected": 0,
+        "bodyDetected": 0,
+        "bodyFieldsKnown": 0,
+        "bodyDetectionRate": 0.0,
+        "bodyFieldKnownRate": 0.0,
+        "pathParamsDiscovered": 0,
+        "queryParamsDiscovered": 0,
+        "headersDiscovered": 0,
+        "serviceEdges": 0,
+        "schemasDiscovered": 852,
+        "inferredSchemas": 0,
+        "declaredSchemaAttachments": 0,
+        "inferredSchemaAttachments": 0,
+        "serviceBodyPatterns": 0,
+        "dbWritePatterns": 0,
+        "testsGenerated": true,
+        "negativeTestsGenerated": true,
+        "edgeTestsGenerated": true
+      }
+    },
+    "agentPerformance": {
+      "overallScore": 10.0,
+      "overallPassed": false,
+      "agentScores": [
+        {
+          "agent": "RouteDiscoveryAgent",
+          "score": 0.0,
+          "threshold": 95.0,
+          "passed": false,
+          "evidence": {
+            "apiContracts": 0
+          },
+          "repoSpecificHints": [
+            "scan route/controller files",
+            "fallback all JS/TS route calls",
+            "balanced call parser"
+          ],
+          "suggestedInputForNextRun": {
+            "action": "llm_review_agent_specific_delta",
+            "evidence": {
+              "apiContracts": 0
+            }
+          }
+        },
+        {
+          "agent": "BodyDiscoveryAgent",
+          "score": 0.0,
+          "threshold": 90.0,
+          "passed": false,
+          "evidence": {
+            "bodyExpected": 0,
+            "bodyDetected": 0,
+            "bodyDetectionRate": 0.0
+          },
+          "repoSpecificHints": [
+            "req.body",
+            "request.body",
+            "payload aliases",
+            "service call body arguments"
+          ],
+          "suggestedInputForNextRun": {
+            "action": "expand_body_alias_patterns",
+            "inputs": [
+              "route handlers",
+              "service call args",
+              "req.body aliases"
+            ],
+            "evidence": {
+              "bodyExpected": 0,
+              "bodyDetected": 0,
+              "bodyDetectionRate": 0.0
+            }
+          }
+        },
+        {
+          "agent": "ServiceGraphAgent",
+          "score": 20.0,
+          "threshold": 90.0,
+          "passed": false,
+          "evidence": {
+            "serviceEdges": 0
+          },
+          "repoSpecificHints": [
+            "import resolution",
+            "service.method(args)",
+            "call argument capture"
+          ],
+          "suggestedInputForNextRun": {
+            "action": "llm_review_agent_specific_delta",
+            "evidence": {
+              "serviceEdges": 0
+            }
+          }
+        },
+        {
+          "agent": "ServiceBodyFieldAgent",
+          "score": 0.0,
+          "threshold": 80.0,
+          "passed": false,
+          "evidence": {
+            "bodyFieldsKnown": 0,
+            "bodyFieldKnownRate": 0.0,
+            "serviceBodyPatterns": 0
+          },
+          "repoSpecificHints": [
+            "map route arg position to service param",
+            "body alias fields",
+            "destructured body fields"
+          ],
+          "suggestedInputForNextRun": {
+            "action": "improve_service_param_mapping",
+            "inputs": [
+              "serviceEdges.args",
+              "service method params",
+              "body alias usage"
+            ],
+            "evidence": {
+              "bodyFieldsKnown": 0,
+              "bodyFieldKnownRate": 0.0,
+              "serviceBodyPatterns": 0
+            }
+          }
+        },
+        {
+          "agent": "DbWriteFieldAgent",
+          "score": 30.0,
+          "threshold": 60.0,
+          "passed": false,
+          "evidence": {
+            "dbWritePatterns": 0
+          },
+          "repoSpecificHints": [
+            "SQL insert/update",
+            "Prisma data",
+            "Knex insert/update",
+            "repository create/save"
+          ],
+          "suggestedInputForNextRun": {
+            "action": "expand_db_write_extractors",
+            "inputs": [
+              "called service method body only",
+              "SQL/ORM writes"
+            ],
+            "evidence": {
+              "dbWritePatterns": 0
+            }
+          }
+        },
+        {
+          "agent": "InferredSchemaRegistryAgent",
+          "score": 20.0,
+          "threshold": 90.0,
+          "passed": false,
+          "evidence": {
+            "inferredSchemas": 0,
+            "inferredSchemaAttachments": 0
+          },
+          "repoSpecificHints": [
+            "generate schema from propagated body fields"
+          ],
+          "suggestedInputForNextRun": {
+            "action": "llm_review_agent_specific_delta",
+            "evidence": {
+              "inferredSchemas": 0,
+              "inferredSchemaAttachments": 0
+            }
+          }
+        },
+        {
+          "agent": "TestGenerationAgent",
+          "score": 100.0,
+          "threshold": 90.0,
+          "passed": true,
+          "evidence": {
+            "testsGenerated": true,
+            "negativeTestsGenerated": true,
+            "edgeTestsGenerated": true
+          },
+          "repoSpecificHints": [
+            "status assertions",
+            "body assertions",
+            "extractors",
+            "data references"
+          ],
+          "suggestedInputForNextRun": {
+            "action": "keep_current_logic",
+            "reason": "agent passed threshold"
+          }
+        }
+      ],
+      "weakAgents": [
+        {
+          "agent": "RouteDiscoveryAgent",
+          "score": 0.0,
+          "threshold": 95.0,
+          "passed": false,
+          "evidence": {
+            "apiContracts": 0
+          },
+          "repoSpecificHints": [
+            "scan route/controller files",
+            "fallback all JS/TS route calls",
+            "balanced call parser"
+          ],
+          "suggestedInputForNextRun": {
+            "action": "llm_review_agent_specific_delta",
+            "evidence": {
+              "apiContracts": 0
+            }
+          }
+        },
+        {
+          "agent": "BodyDiscoveryAgent",
+          "score": 0.0,
+          "threshold": 90.0,
+          "passed": false,
+          "evidence": {
+            "bodyExpected": 0,
+            "bodyDetected": 0,
+            "bodyDetectionRate": 0.0
+          },
+          "repoSpecificHints": [
+            "req.body",
+            "request.body",
+            "payload aliases",
+            "service call body arguments"
+          ],
+          "suggestedInputForNextRun": {
+            "action": "expand_body_alias_patterns",
+            "inputs": [
+              "route handlers",
+              "service call args",
+              "req.body aliases"
+            ],
+            "evidence": {
+              "bodyExpected": 0,
+              "bodyDetected": 0,
+              "bodyDetectionRate": 0.0
+            }
+          }
+        },
+        {
+          "agent": "ServiceGraphAgent",
+          "score": 20.0,
+          "threshold": 90.0,
+          "passed": false,
+          "evidence": {
+            "serviceEdges": 0
+          },
+          "repoSpecificHints": [
+            "import resolution",
+            "service.method(args)",
+            "call argument capture"
+          ],
+          "suggestedInputForNextRun": {
+            "action": "llm_review_agent_specific_delta",
+            "evidence": {
+              "serviceEdges": 0
+            }
+          }
+        },
+        {
+          "agent": "ServiceBodyFieldAgent",
+          "score": 0.0,
+          "threshold": 80.0,
+          "passed": false,
+          "evidence": {
+            "bodyFieldsKnown": 0,
+            "bodyFieldKnownRate": 0.0,
+            "serviceBodyPatterns": 0
+          },
+          "repoSpecificHints": [
+            "map route arg position to service param",
+            "body alias fields",
+            "destructured body fields"
+          ],
+          "suggestedInputForNextRun": {
+            "action": "improve_service_param_mapping",
+            "inputs": [
+              "serviceEdges.args",
+              "service method params",
+              "body alias usage"
+            ],
+            "evidence": {
+              "bodyFieldsKnown": 0,
+              "bodyFieldKnownRate": 0.0,
+              "serviceBodyPatterns": 0
+            }
+          }
+        },
+        {
+          "agent": "DbWriteFieldAgent",
+          "score": 30.0,
+          "threshold": 60.0,
+          "passed": false,
+          "evidence": {
+            "dbWritePatterns": 0
+          },
+          "repoSpecificHints": [
+            "SQL insert/update",
+            "Prisma data",
+            "Knex insert/update",
+            "repository create/save"
+          ],
+          "suggestedInputForNextRun": {
+            "action": "expand_db_write_extractors",
+            "inputs": [
+              "called service method body only",
+              "SQL/ORM writes"
+            ],
+            "evidence": {
+              "dbWritePatterns": 0
+            }
+          }
+        },
+        {
+          "agent": "InferredSchemaRegistryAgent",
+          "score": 20.0,
+          "threshold": 90.0,
+          "passed": false,
+          "evidence": {
+            "inferredSchemas": 0,
+            "inferredSchemaAttachments": 0
+          },
+          "repoSpecificHints": [
+            "generate schema from propagated body fields"
+          ],
+          "suggestedInputForNextRun": {
+            "action": "llm_review_agent_specific_delta",
+            "evidence": {
+              "inferredSchemas": 0,
+              "inferredSchemaAttachments": 0
+            }
+          }
+        }
+      ],
+      "llmInputPurpose": "Feed this compact report to LLM once, asking for repo-specific agent delta suggestions only."
+    },
+    "rules": {
+      "doNotModify": [
+        "orchestrator.py",
+        "core/runner.py",
+        "core/context.py",
+        "core/llm_client.py"
+      ],
+      "outputFormat": {
+        "accepted": "boolean",
+        "suggestedAgentDeltas": [
+          {
+            "agentName": "SpecificAgentName",
+            "reason": "why",
+            "repoSpecificInput": "what evidence/input this agent should use next iteration",
+            "patchIntent": "what logic to change",
+            "confidence": 0.0
+          }
+        ]
+      }
+    }
+  }
+}

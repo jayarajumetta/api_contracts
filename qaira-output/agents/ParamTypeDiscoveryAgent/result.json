@@ -1,0 +1,12 @@
+{
+  "name": "ParamTypeDiscoveryAgent",
+  "status": "success",
+  "confidence": 0.85,
+  "metrics": {
+    "inferred": 0
+  },
+  "outputs": {},
+  "errors": [],
+  "started_at": "2026-06-06T02:43:18.762914Z",
+  "ended_at": "2026-06-06T02:43:18.762922Z"
+}

@@ -1,0 +1,10 @@
+{
+  "node": true,
+  "typescript": true,
+  "python": true,
+  "java": true,
+  "dotnet": true,
+  "frameworkHints": [
+    "zod"
+  ]
+}

@@ -1,0 +1,2341 @@
+{
+  "instruction": "You are reviewing ONE compact iteration_context for an API contract discovery agent. Do not ask for logs. Rank root cause issues. Suggest only deterministic remediations mapped to a specific agent file. Return JSON keys: accepted, score, issues, suggestedAgentDeltas. suggestedAgentDeltas items must include agentName, reason, changeType, patchIntent, confidence.",
+  "name": "IterationLLMReviewerAgent",
+  "payload": {
+    "createdAt": "2026-06-06T02:43:04.355162Z",
+    "purpose": "single compact context for LLM review and deterministic remediation",
+    "iterations": [
+      {
+        "iteration": 1,
+        "score": 10.0,
+        "passed": false,
+        "summary": {
+          "apiContracts": 0,
+          "bodyExpected": 0,
+          "bodyDetected": 0,
+          "bodyFieldsKnown": 0,
+          "bodyDetectionRate": 0.0,
+          "bodyFieldKnownRate": 0.0,
+          "pathParamsDiscovered": 0,
+          "queryParamsDiscovered": 0,
+          "headersDiscovered": 0,
+          "serviceEdges": 0,
+          "schemasDiscovered": 852,
+          "inferredSchemas": 0,
+          "declaredSchemaAttachments": 0,
+          "inferredSchemaAttachments": 0,
+          "serviceBodyPatterns": 0,
+          "dbWritePatterns": 0,
+          "testsGenerated": true,
+          "negativeTestsGenerated": true,
+          "edgeTestsGenerated": true
+        },
+        "agents": [
+          {
+            "name": "SourceRepoCloneAgent",
+            "status": "success",
+            "confidence": 0.95,
+            "metrics": {
+              "enabled": true,
+              "repoUrlProvided": true,
+              "repoUrl": "https://github.com/microsoft/playwright.git",
+              "branch": "default",
+              "cloneDir": "/workspace/source-repo",
+              "cloned": true,
+              "sourceDirBefore": "/workspace/source-repo",
+              "sourceDirAfter": "/workspace/source-repo",
+              "reason": "source_repo_cloned_and_selected"
+            },
+            "errors": []
+          },
+          {
+            "name": "RepositoryIndexAgent",
+            "status": "success",
+            "confidence": 0.95,
+            "metrics": {
+              "fileCount": 1740,
+              "byKind": {
+                "routes": 19,
+                "controllers": 6,
+                "services": 2,
+                "schemas": 6,
+                "dtos": 0,
+                "repositories": 0
+              },
+              "names": 1434
+            },
+            "errors": []
+          },
+          {
+            "name": "SourceDetectionAgent",
+            "status": "success",
+            "confidence": 0.95,
+            "metrics": {
+              "node": true,
+              "typescript": true,
+              "python": true,
+              "java": true,
+              "dotnet": true,
+              "frameworkHints": [
+                "zod"
+              ]
+            },
+            "errors": []
+          },
+          {
+            "name": "RouteDiscoveryAgent",
+            "status": "failed_open",
+            "confidence": 0.0,
+            "metrics": {
+              "routes": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "BodyDiscoveryAgent",
+            "status": "failed_open",
+            "confidence": 0.0,
+            "metrics": {
+              "detected": 0,
+              "fieldsKnown": 0,
+              "expected": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "ParamsDiscoveryAgent",
+            "status": "success",
+            "confidence": 0.9,
+            "metrics": {
+              "pathParams": 0,
+              "queryParams": 0,
+              "headers": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "ParamTypeDiscoveryAgent",
+            "status": "success",
+            "confidence": 0.85,
+            "metrics": {
+              "inferred": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "ValidationSchemaAgent",
+            "status": "success",
+            "confidence": 0.9,
+            "metrics": {
+              "schemas": 852
+            },
+            "errors": []
+          },
+          {
+            "name": "ImportGraphAgent",
+            "status": "success",
+            "confidence": 0.3,
+            "metrics": {
+              "imports": 0,
+              "resolved": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "ServiceGraphAgent",
+            "status": "success",
+            "confidence": 0.2,
+            "metrics": {
+              "edges": 0,
+              "resolved": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "ServiceBodyFieldAgent",
+            "status": "failed_open",
+            "confidence": 0.25,
+            "metrics": {
+              "patterns": 0,
+              "routes": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "DbWriteFieldAgent",
+            "status": "failed_open",
+            "confidence": 0.25,
+            "metrics": {
+              "patterns": 0,
+              "routes": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "ServiceBodyPropagationAgent",
+            "status": "failed_open",
+            "confidence": 0.3,
+            "metrics": {
+              "propagatedRoutes": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "InferredSchemaRegistryAgent",
+            "status": "failed_open",
+            "confidence": 0.2,
+            "metrics": {
+              "schemas": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "SchemaAttachmentAgent",
+            "status": "failed_open",
+            "confidence": 0.0,
+            "metrics": {
+              "declaredSchemaAttachments": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "RequiredFieldConfidenceAgent",
+            "status": "failed_open",
+            "confidence": 0.3,
+            "metrics": {
+              "enrichedRoutes": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "ResponseDiscoveryAgent",
+            "status": "success",
+            "confidence": 0.4,
+            "metrics": {
+              "routesWithResponseVars": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "ContractBuilderAgent",
+            "status": "success",
+            "confidence": 0.0,
+            "metrics": {
+              "contracts": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "RelationshipAgent",
+            "status": "success",
+            "confidence": 0.75,
+            "metrics": {
+              "sequence": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "TestGenerationAgent",
+            "status": "success",
+            "confidence": 0,
+            "metrics": {
+              "generated": 8,
+              "contracts": 0,
+              "negativeTests": 0,
+              "edgeTests": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "QualityGateAgent",
+            "status": "failed_open",
+            "confidence": 0.1,
+            "metrics": {
+              "score": 10.0,
+              "passed": false,
+              "summary": {
+                "apiContracts": 0,
+                "bodyExpected": 0,
+                "bodyDetected": 0,
+                "bodyFieldsKnown": 0,
+                "bodyDetectionRate": 0.0,
+                "bodyFieldKnownRate": 0.0,
+                "pathParamsDiscovered": 0,
+                "queryParamsDiscovered": 0,
+                "headersDiscovered": 0,
+                "serviceEdges": 0,
+                "schemasDiscovered": 852,
+                "inferredSchemas": 0,
+                "declaredSchemaAttachments": 0,
+                "inferredSchemaAttachments": 0,
+                "serviceBodyPatterns": 0,
+                "dbWritePatterns": 0,
+                "testsGenerated": true,
+                "negativeTestsGenerated": true,
+                "edgeTestsGenerated": true
+              }
+            },
+            "errors": []
+          },
+          {
+            "name": "AgentPerformanceEvaluatorAgent",
+            "status": "success",
+            "confidence": 0.95,
+            "metrics": {
+              "weakAgents": 6
+            },
+            "errors": []
+          },
+          {
+            "name": "SelfHealingLLMAdvisorAgent",
+            "status": "success",
+            "confidence": 0.9,
+            "metrics": {
+              "llmSkipped": false
+            },
+            "errors": []
+          },
+          {
+            "name": "SelfHealingCodeDeltaAgent",
+            "status": "success",
+            "confidence": 0.85,
+            "metrics": {
+              "generated": 0,
+              "blocked": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "PatchLibraryAgent",
+            "status": "success",
+            "confidence": 0.9,
+            "metrics": {
+              "applied": 0,
+              "blocked": 5
+            },
+            "errors": []
+          },
+          {
+            "name": "PatchEffectivenessAgent",
+            "status": "success",
+            "confidence": 0.7,
+            "metrics": {
+              "compared": false
+            },
+            "errors": []
+          },
+          {
+            "name": "ApiDocumentationAgent",
+            "status": "success",
+            "confidence": 0.0,
+            "metrics": {
+              "contractsDocumented": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "LLMGatewayAgent",
+            "status": "success",
+            "confidence": 0.9,
+            "metrics": {
+              "enabled": true,
+              "mode": "selective_fail_open",
+              "networkCallsExecuted": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "ArtifactManifestAgent",
+            "status": "success",
+            "confidence": 0.95,
+            "metrics": {
+              "artifacts": 75
+            },
+            "errors": []
+          },
+          {
+            "name": "ResultsAnalyzerAgent",
+            "status": "success",
+            "confidence": 0.1,
+            "metrics": {
+              "score": 10.0,
+              "issues": 5,
+              "accepted": false
+            },
+            "errors": []
+          }
+        ],
+        "analysis": {
+          "accepted": false,
+          "score": 10.0,
+          "threshold": 90.0,
+          "issues": [
+            {
+              "rank": 1,
+              "key": "route_discovery",
+              "severity": "critical",
+              "message": "No API contracts discovered."
+            },
+            {
+              "rank": 2,
+              "key": "body_detection",
+              "severity": "high",
+              "message": "Body detection below 90%."
+            },
+            {
+              "rank": 3,
+              "key": "body_fields_known",
+              "severity": "medium",
+              "message": "Body field inference below 80%."
+            },
+            {
+              "rank": 4,
+              "key": "service_graph",
+              "severity": "high",
+              "message": "Service graph not connected."
+            },
+            {
+              "rank": 5,
+              "key": "schema_attachment",
+              "severity": "medium",
+              "message": "No inferred schema attachments."
+            }
+          ],
+          "nextRemediations": [
+            "enable_balanced_route_fallback_scan_all_js_ts",
+            "relax_body_presence_detection_and_service_arg_detection",
+            "enable_service_and_db_field_pattern_propagation",
+            "enable_import_resolution_and_call_argument_capture",
+            "enable_inferred_schema_registry"
+          ]
+        }
+      },
+      {
+        "iteration": 2,
+        "score": 10.0,
+        "passed": false,
+        "summary": {
+          "apiContracts": 0,
+          "bodyExpected": 0,
+          "bodyDetected": 0,
+          "bodyFieldsKnown": 0,
+          "bodyDetectionRate": 0.0,
+          "bodyFieldKnownRate": 0.0,
+          "pathParamsDiscovered": 0,
+          "queryParamsDiscovered": 0,
+          "headersDiscovered": 0,
+          "serviceEdges": 0,
+          "schemasDiscovered": 852,
+          "inferredSchemas": 0,
+          "declaredSchemaAttachments": 0,
+          "inferredSchemaAttachments": 0,
+          "serviceBodyPatterns": 0,
+          "dbWritePatterns": 0,
+          "testsGenerated": true,
+          "negativeTestsGenerated": true,
+          "edgeTestsGenerated": true
+        },
+        "agents": [
+          {
+            "name": "SourceRepoCloneAgent",
+            "status": "success",
+            "confidence": 0.95,
+            "metrics": {
+              "enabled": true,
+              "repoUrlProvided": true,
+              "repoUrl": "https://github.com/microsoft/playwright.git",
+              "branch": "default",
+              "cloneDir": "/workspace/source-repo",
+              "cloned": true,
+              "sourceDirBefore": "/workspace/source-repo",
+              "sourceDirAfter": "/workspace/source-repo",
+              "reason": "source_repo_cloned_and_selected"
+            },
+            "errors": []
+          },
+          {
+            "name": "RepositoryIndexAgent",
+            "status": "success",
+            "confidence": 0.95,
+            "metrics": {
+              "fileCount": 1740,
+              "byKind": {
+                "routes": 19,
+                "controllers": 6,
+                "services": 2,
+                "schemas": 6,
+                "dtos": 0,
+                "repositories": 0
+              },
+              "names": 1434
+            },
+            "errors": []
+          },
+          {
+            "name": "SourceDetectionAgent",
+            "status": "success",
+            "confidence": 0.95,
+            "metrics": {
+              "node": true,
+              "typescript": true,
+              "python": true,
+              "java": true,
+              "dotnet": true,
+              "frameworkHints": [
+                "zod"
+              ]
+            },
+            "errors": []
+          },
+          {
+            "name": "RouteDiscoveryAgent",
+            "status": "failed_open",
+            "confidence": 0.0,
+            "metrics": {
+              "routes": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "BodyDiscoveryAgent",
+            "status": "failed_open",
+            "confidence": 0.0,
+            "metrics": {
+              "detected": 0,
+              "fieldsKnown": 0,
+              "expected": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "ParamsDiscoveryAgent",
+            "status": "success",
+            "confidence": 0.9,
+            "metrics": {
+              "pathParams": 0,
+              "queryParams": 0,
+              "headers": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "ParamTypeDiscoveryAgent",
+            "status": "success",
+            "confidence": 0.85,
+            "metrics": {
+              "inferred": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "ValidationSchemaAgent",
+            "status": "success",
+            "confidence": 0.9,
+            "metrics": {
+              "schemas": 852
+            },
+            "errors": []
+          },
+          {
+            "name": "ImportGraphAgent",
+            "status": "success",
+            "confidence": 0.3,
+            "metrics": {
+              "imports": 0,
+              "resolved": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "ServiceGraphAgent",
+            "status": "success",
+            "confidence": 0.2,
+            "metrics": {
+              "edges": 0,
+              "resolved": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "ServiceBodyFieldAgent",
+            "status": "failed_open",
+            "confidence": 0.25,
+            "metrics": {
+              "patterns": 0,
+              "routes": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "DbWriteFieldAgent",
+            "status": "failed_open",
+            "confidence": 0.25,
+            "metrics": {
+              "patterns": 0,
+              "routes": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "ServiceBodyPropagationAgent",
+            "status": "failed_open",
+            "confidence": 0.3,
+            "metrics": {
+              "propagatedRoutes": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "InferredSchemaRegistryAgent",
+            "status": "failed_open",
+            "confidence": 0.2,
+            "metrics": {
+              "schemas": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "SchemaAttachmentAgent",
+            "status": "failed_open",
+            "confidence": 0.0,
+            "metrics": {
+              "declaredSchemaAttachments": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "RequiredFieldConfidenceAgent",
+            "status": "failed_open",
+            "confidence": 0.3,
+            "metrics": {
+              "enrichedRoutes": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "ResponseDiscoveryAgent",
+            "status": "success",
+            "confidence": 0.4,
+            "metrics": {
+              "routesWithResponseVars": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "ContractBuilderAgent",
+            "status": "success",
+            "confidence": 0.0,
+            "metrics": {
+              "contracts": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "RelationshipAgent",
+            "status": "success",
+            "confidence": 0.75,
+            "metrics": {
+              "sequence": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "TestGenerationAgent",
+            "status": "success",
+            "confidence": 0,
+            "metrics": {
+              "generated": 8,
+              "contracts": 0,
+              "negativeTests": 0,
+              "edgeTests": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "QualityGateAgent",
+            "status": "failed_open",
+            "confidence": 0.1,
+            "metrics": {
+              "score": 10.0,
+              "passed": false,
+              "summary": {
+                "apiContracts": 0,
+                "bodyExpected": 0,
+                "bodyDetected": 0,
+                "bodyFieldsKnown": 0,
+                "bodyDetectionRate": 0.0,
+                "bodyFieldKnownRate": 0.0,
+                "pathParamsDiscovered": 0,
+                "queryParamsDiscovered": 0,
+                "headersDiscovered": 0,
+                "serviceEdges": 0,
+                "schemasDiscovered": 852,
+                "inferredSchemas": 0,
+                "declaredSchemaAttachments": 0,
+                "inferredSchemaAttachments": 0,
+                "serviceBodyPatterns": 0,
+                "dbWritePatterns": 0,
+                "testsGenerated": true,
+                "negativeTestsGenerated": true,
+                "edgeTestsGenerated": true
+              }
+            },
+            "errors": []
+          },
+          {
+            "name": "AgentPerformanceEvaluatorAgent",
+            "status": "success",
+            "confidence": 0.95,
+            "metrics": {
+              "weakAgents": 6
+            },
+            "errors": []
+          },
+          {
+            "name": "SelfHealingLLMAdvisorAgent",
+            "status": "success",
+            "confidence": 0.9,
+            "metrics": {
+              "llmSkipped": false
+            },
+            "errors": []
+          },
+          {
+            "name": "SelfHealingCodeDeltaAgent",
+            "status": "success",
+            "confidence": 0.85,
+            "metrics": {
+              "generated": 0,
+              "blocked": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "PatchLibraryAgent",
+            "status": "success",
+            "confidence": 0.9,
+            "metrics": {
+              "applied": 0,
+              "blocked": 5
+            },
+            "errors": []
+          },
+          {
+            "name": "PatchEffectivenessAgent",
+            "status": "success",
+            "confidence": 0.7,
+            "metrics": {
+              "compared": false
+            },
+            "errors": []
+          },
+          {
+            "name": "ApiDocumentationAgent",
+            "status": "success",
+            "confidence": 0.0,
+            "metrics": {
+              "contractsDocumented": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "LLMGatewayAgent",
+            "status": "success",
+            "confidence": 0.9,
+            "metrics": {
+              "enabled": true,
+              "mode": "selective_fail_open",
+              "networkCallsExecuted": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "ArtifactManifestAgent",
+            "status": "success",
+            "confidence": 0.95,
+            "metrics": {
+              "artifacts": 75
+            },
+            "errors": []
+          },
+          {
+            "name": "ResultsAnalyzerAgent",
+            "status": "success",
+            "confidence": 0.1,
+            "metrics": {
+              "score": 10.0,
+              "issues": 5,
+              "accepted": false
+            },
+            "errors": []
+          },
+          {
+            "name": "IterationLLMReviewerAgent",
+            "status": "success",
+            "confidence": 0.9,
+            "metrics": {
+              "score": 10.0,
+              "llmSkipped": false
+            },
+            "errors": []
+          },
+          {
+            "name": "CodeDeltaGenerationAgent",
+            "status": "success",
+            "confidence": 0.85,
+            "metrics": {
+              "safeDeltas": 0,
+              "blockedDeltas": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "RemediationAgent",
+            "status": "success",
+            "confidence": 0.85,
+            "metrics": {
+              "requested": 5,
+              "applied": 5
+            },
+            "errors": []
+          },
+          {
+            "name": "SourceRepoCloneAgent",
+            "status": "success",
+            "confidence": 0.95,
+            "metrics": {
+              "enabled": true,
+              "repoUrlProvided": true,
+              "repoUrl": "https://github.com/microsoft/playwright.git",
+              "branch": "default",
+              "cloneDir": "/workspace/source-repo",
+              "cloned": true,
+              "sourceDirBefore": "/workspace/source-repo",
+              "sourceDirAfter": "/workspace/source-repo",
+              "reason": "source_repo_cloned_and_selected"
+            },
+            "errors": []
+          },
+          {
+            "name": "RepositoryIndexAgent",
+            "status": "success",
+            "confidence": 0.95,
+            "metrics": {
+              "fileCount": 1740,
+              "byKind": {
+                "routes": 19,
+                "controllers": 6,
+                "services": 2,
+                "schemas": 6,
+                "dtos": 0,
+                "repositories": 0
+              },
+              "names": 1434
+            },
+            "errors": []
+          },
+          {
+            "name": "SourceDetectionAgent",
+            "status": "success",
+            "confidence": 0.95,
+            "metrics": {
+              "node": true,
+              "typescript": true,
+              "python": true,
+              "java": true,
+              "dotnet": true,
+              "frameworkHints": [
+                "zod"
+              ]
+            },
+            "errors": []
+          },
+          {
+            "name": "RouteDiscoveryAgent",
+            "status": "failed_open",
+            "confidence": 0.0,
+            "metrics": {
+              "routes": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "BodyDiscoveryAgent",
+            "status": "failed_open",
+            "confidence": 0.0,
+            "metrics": {
+              "detected": 0,
+              "fieldsKnown": 0,
+              "expected": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "ParamsDiscoveryAgent",
+            "status": "success",
+            "confidence": 0.9,
+            "metrics": {
+              "pathParams": 0,
+              "queryParams": 0,
+              "headers": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "ParamTypeDiscoveryAgent",
+            "status": "success",
+            "confidence": 0.85,
+            "metrics": {
+              "inferred": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "ValidationSchemaAgent",
+            "status": "success",
+            "confidence": 0.9,
+            "metrics": {
+              "schemas": 852
+            },
+            "errors": []
+          },
+          {
+            "name": "ImportGraphAgent",
+            "status": "success",
+            "confidence": 0.3,
+            "metrics": {
+              "imports": 0,
+              "resolved": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "ServiceGraphAgent",
+            "status": "success",
+            "confidence": 0.2,
+            "metrics": {
+              "edges": 0,
+              "resolved": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "ServiceBodyFieldAgent",
+            "status": "failed_open",
+            "confidence": 0.25,
+            "metrics": {
+              "patterns": 0,
+              "routes": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "DbWriteFieldAgent",
+            "status": "failed_open",
+            "confidence": 0.25,
+            "metrics": {
+              "patterns": 0,
+              "routes": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "ServiceBodyPropagationAgent",
+            "status": "failed_open",
+            "confidence": 0.3,
+            "metrics": {
+              "propagatedRoutes": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "InferredSchemaRegistryAgent",
+            "status": "failed_open",
+            "confidence": 0.2,
+            "metrics": {
+              "schemas": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "SchemaAttachmentAgent",
+            "status": "failed_open",
+            "confidence": 0.0,
+            "metrics": {
+              "declaredSchemaAttachments": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "RequiredFieldConfidenceAgent",
+            "status": "failed_open",
+            "confidence": 0.3,
+            "metrics": {
+              "enrichedRoutes": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "ResponseDiscoveryAgent",
+            "status": "success",
+            "confidence": 0.4,
+            "metrics": {
+              "routesWithResponseVars": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "ContractBuilderAgent",
+            "status": "success",
+            "confidence": 0.0,
+            "metrics": {
+              "contracts": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "RelationshipAgent",
+            "status": "success",
+            "confidence": 0.75,
+            "metrics": {
+              "sequence": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "TestGenerationAgent",
+            "status": "success",
+            "confidence": 0,
+            "metrics": {
+              "generated": 8,
+              "contracts": 0,
+              "negativeTests": 0,
+              "edgeTests": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "QualityGateAgent",
+            "status": "failed_open",
+            "confidence": 0.1,
+            "metrics": {
+              "score": 10.0,
+              "passed": false,
+              "summary": {
+                "apiContracts": 0,
+                "bodyExpected": 0,
+                "bodyDetected": 0,
+                "bodyFieldsKnown": 0,
+                "bodyDetectionRate": 0.0,
+                "bodyFieldKnownRate": 0.0,
+                "pathParamsDiscovered": 0,
+                "queryParamsDiscovered": 0,
+                "headersDiscovered": 0,
+                "serviceEdges": 0,
+                "schemasDiscovered": 852,
+                "inferredSchemas": 0,
+                "declaredSchemaAttachments": 0,
+                "inferredSchemaAttachments": 0,
+                "serviceBodyPatterns": 0,
+                "dbWritePatterns": 0,
+                "testsGenerated": true,
+                "negativeTestsGenerated": true,
+                "edgeTestsGenerated": true
+              }
+            },
+            "errors": []
+          },
+          {
+            "name": "AgentPerformanceEvaluatorAgent",
+            "status": "success",
+            "confidence": 0.95,
+            "metrics": {
+              "weakAgents": 6
+            },
+            "errors": []
+          },
+          {
+            "name": "SelfHealingLLMAdvisorAgent",
+            "status": "success",
+            "confidence": 0.9,
+            "metrics": {
+              "llmSkipped": false
+            },
+            "errors": []
+          },
+          {
+            "name": "SelfHealingCodeDeltaAgent",
+            "status": "success",
+            "confidence": 0.85,
+            "metrics": {
+              "generated": 0,
+              "blocked": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "PatchLibraryAgent",
+            "status": "success",
+            "confidence": 0.9,
+            "metrics": {
+              "applied": 0,
+              "blocked": 5
+            },
+            "errors": []
+          },
+          {
+            "name": "PatchEffectivenessAgent",
+            "status": "success",
+            "confidence": 0.7,
+            "metrics": {
+              "compared": false
+            },
+            "errors": []
+          },
+          {
+            "name": "ApiDocumentationAgent",
+            "status": "success",
+            "confidence": 0.0,
+            "metrics": {
+              "contractsDocumented": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "LLMGatewayAgent",
+            "status": "success",
+            "confidence": 0.9,
+            "metrics": {
+              "enabled": true,
+              "mode": "selective_fail_open",
+              "networkCallsExecuted": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "ArtifactManifestAgent",
+            "status": "success",
+            "confidence": 0.95,
+            "metrics": {
+              "artifacts": 91
+            },
+            "errors": []
+          },
+          {
+            "name": "ResultsAnalyzerAgent",
+            "status": "success",
+            "confidence": 0.1,
+            "metrics": {
+              "score": 10.0,
+              "issues": 5,
+              "accepted": false
+            },
+            "errors": []
+          }
+        ],
+        "analysis": {
+          "accepted": false,
+          "score": 10.0,
+          "threshold": 90.0,
+          "issues": [
+            {
+              "rank": 1,
+              "key": "route_discovery",
+              "severity": "critical",
+              "message": "No API contracts discovered."
+            },
+            {
+              "rank": 2,
+              "key": "body_detection",
+              "severity": "high",
+              "message": "Body detection below 90%."
+            },
+            {
+              "rank": 3,
+              "key": "body_fields_known",
+              "severity": "medium",
+              "message": "Body field inference below 80%."
+            },
+            {
+              "rank": 4,
+              "key": "service_graph",
+              "severity": "high",
+              "message": "Service graph not connected."
+            },
+            {
+              "rank": 5,
+              "key": "schema_attachment",
+              "severity": "medium",
+              "message": "No inferred schema attachments."
+            }
+          ],
+          "nextRemediations": [
+            "enable_balanced_route_fallback_scan_all_js_ts",
+            "relax_body_presence_detection_and_service_arg_detection",
+            "enable_service_and_db_field_pattern_propagation",
+            "enable_import_resolution_and_call_argument_capture",
+            "enable_inferred_schema_registry"
+          ]
+        }
+      },
+      {
+        "iteration": 3,
+        "score": 10.0,
+        "passed": false,
+        "summary": {
+          "apiContracts": 0,
+          "bodyExpected": 0,
+          "bodyDetected": 0,
+          "bodyFieldsKnown": 0,
+          "bodyDetectionRate": 0.0,
+          "bodyFieldKnownRate": 0.0,
+          "pathParamsDiscovered": 0,
+          "queryParamsDiscovered": 0,
+          "headersDiscovered": 0,
+          "serviceEdges": 0,
+          "schemasDiscovered": 852,
+          "inferredSchemas": 0,
+          "declaredSchemaAttachments": 0,
+          "inferredSchemaAttachments": 0,
+          "serviceBodyPatterns": 0,
+          "dbWritePatterns": 0,
+          "testsGenerated": true,
+          "negativeTestsGenerated": true,
+          "edgeTestsGenerated": true
+        },
+        "agents": [
+          {
+            "name": "SourceRepoCloneAgent",
+            "status": "success",
+            "confidence": 0.95,
+            "metrics": {
+              "enabled": true,
+              "repoUrlProvided": true,
+              "repoUrl": "https://github.com/microsoft/playwright.git",
+              "branch": "default",
+              "cloneDir": "/workspace/source-repo",
+              "cloned": true,
+              "sourceDirBefore": "/workspace/source-repo",
+              "sourceDirAfter": "/workspace/source-repo",
+              "reason": "source_repo_cloned_and_selected"
+            },
+            "errors": []
+          },
+          {
+            "name": "RepositoryIndexAgent",
+            "status": "success",
+            "confidence": 0.95,
+            "metrics": {
+              "fileCount": 1740,
+              "byKind": {
+                "routes": 19,
+                "controllers": 6,
+                "services": 2,
+                "schemas": 6,
+                "dtos": 0,
+                "repositories": 0
+              },
+              "names": 1434
+            },
+            "errors": []
+          },
+          {
+            "name": "SourceDetectionAgent",
+            "status": "success",
+            "confidence": 0.95,
+            "metrics": {
+              "node": true,
+              "typescript": true,
+              "python": true,
+              "java": true,
+              "dotnet": true,
+              "frameworkHints": [
+                "zod"
+              ]
+            },
+            "errors": []
+          },
+          {
+            "name": "RouteDiscoveryAgent",
+            "status": "failed_open",
+            "confidence": 0.0,
+            "metrics": {
+              "routes": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "BodyDiscoveryAgent",
+            "status": "failed_open",
+            "confidence": 0.0,
+            "metrics": {
+              "detected": 0,
+              "fieldsKnown": 0,
+              "expected": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "ParamsDiscoveryAgent",
+            "status": "success",
+            "confidence": 0.9,
+            "metrics": {
+              "pathParams": 0,
+              "queryParams": 0,
+              "headers": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "ParamTypeDiscoveryAgent",
+            "status": "success",
+            "confidence": 0.85,
+            "metrics": {
+              "inferred": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "ValidationSchemaAgent",
+            "status": "success",
+            "confidence": 0.9,
+            "metrics": {
+              "schemas": 852
+            },
+            "errors": []
+          },
+          {
+            "name": "ImportGraphAgent",
+            "status": "success",
+            "confidence": 0.3,
+            "metrics": {
+              "imports": 0,
+              "resolved": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "ServiceGraphAgent",
+            "status": "success",
+            "confidence": 0.2,
+            "metrics": {
+              "edges": 0,
+              "resolved": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "ServiceBodyFieldAgent",
+            "status": "failed_open",
+            "confidence": 0.25,
+            "metrics": {
+              "patterns": 0,
+              "routes": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "DbWriteFieldAgent",
+            "status": "failed_open",
+            "confidence": 0.25,
+            "metrics": {
+              "patterns": 0,
+              "routes": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "ServiceBodyPropagationAgent",
+            "status": "failed_open",
+            "confidence": 0.3,
+            "metrics": {
+              "propagatedRoutes": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "InferredSchemaRegistryAgent",
+            "status": "failed_open",
+            "confidence": 0.2,
+            "metrics": {
+              "schemas": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "SchemaAttachmentAgent",
+            "status": "failed_open",
+            "confidence": 0.0,
+            "metrics": {
+              "declaredSchemaAttachments": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "RequiredFieldConfidenceAgent",
+            "status": "failed_open",
+            "confidence": 0.3,
+            "metrics": {
+              "enrichedRoutes": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "ResponseDiscoveryAgent",
+            "status": "success",
+            "confidence": 0.4,
+            "metrics": {
+              "routesWithResponseVars": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "ContractBuilderAgent",
+            "status": "success",
+            "confidence": 0.0,
+            "metrics": {
+              "contracts": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "RelationshipAgent",
+            "status": "success",
+            "confidence": 0.75,
+            "metrics": {
+              "sequence": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "TestGenerationAgent",
+            "status": "success",
+            "confidence": 0,
+            "metrics": {
+              "generated": 8,
+              "contracts": 0,
+              "negativeTests": 0,
+              "edgeTests": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "QualityGateAgent",
+            "status": "failed_open",
+            "confidence": 0.1,
+            "metrics": {
+              "score": 10.0,
+              "passed": false,
+              "summary": {
+                "apiContracts": 0,
+                "bodyExpected": 0,
+                "bodyDetected": 0,
+                "bodyFieldsKnown": 0,
+                "bodyDetectionRate": 0.0,
+                "bodyFieldKnownRate": 0.0,
+                "pathParamsDiscovered": 0,
+                "queryParamsDiscovered": 0,
+                "headersDiscovered": 0,
+                "serviceEdges": 0,
+                "schemasDiscovered": 852,
+                "inferredSchemas": 0,
+                "declaredSchemaAttachments": 0,
+                "inferredSchemaAttachments": 0,
+                "serviceBodyPatterns": 0,
+                "dbWritePatterns": 0,
+                "testsGenerated": true,
+                "negativeTestsGenerated": true,
+                "edgeTestsGenerated": true
+              }
+            },
+            "errors": []
+          },
+          {
+            "name": "AgentPerformanceEvaluatorAgent",
+            "status": "success",
+            "confidence": 0.95,
+            "metrics": {
+              "weakAgents": 6
+            },
+            "errors": []
+          },
+          {
+            "name": "SelfHealingLLMAdvisorAgent",
+            "status": "success",
+            "confidence": 0.9,
+            "metrics": {
+              "llmSkipped": false
+            },
+            "errors": []
+          },
+          {
+            "name": "SelfHealingCodeDeltaAgent",
+            "status": "success",
+            "confidence": 0.85,
+            "metrics": {
+              "generated": 0,
+              "blocked": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "PatchLibraryAgent",
+            "status": "success",
+            "confidence": 0.9,
+            "metrics": {
+              "applied": 0,
+              "blocked": 5
+            },
+            "errors": []
+          },
+          {
+            "name": "PatchEffectivenessAgent",
+            "status": "success",
+            "confidence": 0.7,
+            "metrics": {
+              "compared": false
+            },
+            "errors": []
+          },
+          {
+            "name": "ApiDocumentationAgent",
+            "status": "success",
+            "confidence": 0.0,
+            "metrics": {
+              "contractsDocumented": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "LLMGatewayAgent",
+            "status": "success",
+            "confidence": 0.9,
+            "metrics": {
+              "enabled": true,
+              "mode": "selective_fail_open",
+              "networkCallsExecuted": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "ArtifactManifestAgent",
+            "status": "success",
+            "confidence": 0.95,
+            "metrics": {
+              "artifacts": 75
+            },
+            "errors": []
+          },
+          {
+            "name": "ResultsAnalyzerAgent",
+            "status": "success",
+            "confidence": 0.1,
+            "metrics": {
+              "score": 10.0,
+              "issues": 5,
+              "accepted": false
+            },
+            "errors": []
+          },
+          {
+            "name": "IterationLLMReviewerAgent",
+            "status": "success",
+            "confidence": 0.9,
+            "metrics": {
+              "score": 10.0,
+              "llmSkipped": false
+            },
+            "errors": []
+          },
+          {
+            "name": "CodeDeltaGenerationAgent",
+            "status": "success",
+            "confidence": 0.85,
+            "metrics": {
+              "safeDeltas": 0,
+              "blockedDeltas": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "RemediationAgent",
+            "status": "success",
+            "confidence": 0.85,
+            "metrics": {
+              "requested": 5,
+              "applied": 5
+            },
+            "errors": []
+          },
+          {
+            "name": "SourceRepoCloneAgent",
+            "status": "success",
+            "confidence": 0.95,
+            "metrics": {
+              "enabled": true,
+              "repoUrlProvided": true,
+              "repoUrl": "https://github.com/microsoft/playwright.git",
+              "branch": "default",
+              "cloneDir": "/workspace/source-repo",
+              "cloned": true,
+              "sourceDirBefore": "/workspace/source-repo",
+              "sourceDirAfter": "/workspace/source-repo",
+              "reason": "source_repo_cloned_and_selected"
+            },
+            "errors": []
+          },
+          {
+            "name": "RepositoryIndexAgent",
+            "status": "success",
+            "confidence": 0.95,
+            "metrics": {
+              "fileCount": 1740,
+              "byKind": {
+                "routes": 19,
+                "controllers": 6,
+                "services": 2,
+                "schemas": 6,
+                "dtos": 0,
+                "repositories": 0
+              },
+              "names": 1434
+            },
+            "errors": []
+          },
+          {
+            "name": "SourceDetectionAgent",
+            "status": "success",
+            "confidence": 0.95,
+            "metrics": {
+              "node": true,
+              "typescript": true,
+              "python": true,
+              "java": true,
+              "dotnet": true,
+              "frameworkHints": [
+                "zod"
+              ]
+            },
+            "errors": []
+          },
+          {
+            "name": "RouteDiscoveryAgent",
+            "status": "failed_open",
+            "confidence": 0.0,
+            "metrics": {
+              "routes": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "BodyDiscoveryAgent",
+            "status": "failed_open",
+            "confidence": 0.0,
+            "metrics": {
+              "detected": 0,
+              "fieldsKnown": 0,
+              "expected": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "ParamsDiscoveryAgent",
+            "status": "success",
+            "confidence": 0.9,
+            "metrics": {
+              "pathParams": 0,
+              "queryParams": 0,
+              "headers": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "ParamTypeDiscoveryAgent",
+            "status": "success",
+            "confidence": 0.85,
+            "metrics": {
+              "inferred": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "ValidationSchemaAgent",
+            "status": "success",
+            "confidence": 0.9,
+            "metrics": {
+              "schemas": 852
+            },
+            "errors": []
+          },
+          {
+            "name": "ImportGraphAgent",
+            "status": "success",
+            "confidence": 0.3,
+            "metrics": {
+              "imports": 0,
+              "resolved": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "ServiceGraphAgent",
+            "status": "success",
+            "confidence": 0.2,
+            "metrics": {
+              "edges": 0,
+              "resolved": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "ServiceBodyFieldAgent",
+            "status": "failed_open",
+            "confidence": 0.25,
+            "metrics": {
+              "patterns": 0,
+              "routes": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "DbWriteFieldAgent",
+            "status": "failed_open",
+            "confidence": 0.25,
+            "metrics": {
+              "patterns": 0,
+              "routes": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "ServiceBodyPropagationAgent",
+            "status": "failed_open",
+            "confidence": 0.3,
+            "metrics": {
+              "propagatedRoutes": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "InferredSchemaRegistryAgent",
+            "status": "failed_open",
+            "confidence": 0.2,
+            "metrics": {
+              "schemas": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "SchemaAttachmentAgent",
+            "status": "failed_open",
+            "confidence": 0.0,
+            "metrics": {
+              "declaredSchemaAttachments": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "RequiredFieldConfidenceAgent",
+            "status": "failed_open",
+            "confidence": 0.3,
+            "metrics": {
+              "enrichedRoutes": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "ResponseDiscoveryAgent",
+            "status": "success",
+            "confidence": 0.4,
+            "metrics": {
+              "routesWithResponseVars": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "ContractBuilderAgent",
+            "status": "success",
+            "confidence": 0.0,
+            "metrics": {
+              "contracts": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "RelationshipAgent",
+            "status": "success",
+            "confidence": 0.75,
+            "metrics": {
+              "sequence": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "TestGenerationAgent",
+            "status": "success",
+            "confidence": 0,
+            "metrics": {
+              "generated": 8,
+              "contracts": 0,
+              "negativeTests": 0,
+              "edgeTests": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "QualityGateAgent",
+            "status": "failed_open",
+            "confidence": 0.1,
+            "metrics": {
+              "score": 10.0,
+              "passed": false,
+              "summary": {
+                "apiContracts": 0,
+                "bodyExpected": 0,
+                "bodyDetected": 0,
+                "bodyFieldsKnown": 0,
+                "bodyDetectionRate": 0.0,
+                "bodyFieldKnownRate": 0.0,
+                "pathParamsDiscovered": 0,
+                "queryParamsDiscovered": 0,
+                "headersDiscovered": 0,
+                "serviceEdges": 0,
+                "schemasDiscovered": 852,
+                "inferredSchemas": 0,
+                "declaredSchemaAttachments": 0,
+                "inferredSchemaAttachments": 0,
+                "serviceBodyPatterns": 0,
+                "dbWritePatterns": 0,
+                "testsGenerated": true,
+                "negativeTestsGenerated": true,
+                "edgeTestsGenerated": true
+              }
+            },
+            "errors": []
+          },
+          {
+            "name": "AgentPerformanceEvaluatorAgent",
+            "status": "success",
+            "confidence": 0.95,
+            "metrics": {
+              "weakAgents": 6
+            },
+            "errors": []
+          },
+          {
+            "name": "SelfHealingLLMAdvisorAgent",
+            "status": "success",
+            "confidence": 0.9,
+            "metrics": {
+              "llmSkipped": false
+            },
+            "errors": []
+          },
+          {
+            "name": "SelfHealingCodeDeltaAgent",
+            "status": "success",
+            "confidence": 0.85,
+            "metrics": {
+              "generated": 0,
+              "blocked": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "PatchLibraryAgent",
+            "status": "success",
+            "confidence": 0.9,
+            "metrics": {
+              "applied": 0,
+              "blocked": 5
+            },
+            "errors": []
+          },
+          {
+            "name": "PatchEffectivenessAgent",
+            "status": "success",
+            "confidence": 0.7,
+            "metrics": {
+              "compared": false
+            },
+            "errors": []
+          },
+          {
+            "name": "ApiDocumentationAgent",
+            "status": "success",
+            "confidence": 0.0,
+            "metrics": {
+              "contractsDocumented": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "LLMGatewayAgent",
+            "status": "success",
+            "confidence": 0.9,
+            "metrics": {
+              "enabled": true,
+              "mode": "selective_fail_open",
+              "networkCallsExecuted": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "ArtifactManifestAgent",
+            "status": "success",
+            "confidence": 0.95,
+            "metrics": {
+              "artifacts": 91
+            },
+            "errors": []
+          },
+          {
+            "name": "ResultsAnalyzerAgent",
+            "status": "success",
+            "confidence": 0.1,
+            "metrics": {
+              "score": 10.0,
+              "issues": 5,
+              "accepted": false
+            },
+            "errors": []
+          },
+          {
+            "name": "IterationLLMReviewerAgent",
+            "status": "success",
+            "confidence": 0.9,
+            "metrics": {
+              "score": 10.0,
+              "llmSkipped": false
+            },
+            "errors": []
+          },
+          {
+            "name": "CodeDeltaGenerationAgent",
+            "status": "success",
+            "confidence": 0.85,
+            "metrics": {
+              "safeDeltas": 0,
+              "blockedDeltas": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "RemediationAgent",
+            "status": "success",
+            "confidence": 0.85,
+            "metrics": {
+              "requested": 5,
+              "applied": 5
+            },
+            "errors": []
+          },
+          {
+            "name": "SourceRepoCloneAgent",
+            "status": "success",
+            "confidence": 0.95,
+            "metrics": {
+              "enabled": true,
+              "repoUrlProvided": true,
+              "repoUrl": "https://github.com/microsoft/playwright.git",
+              "branch": "default",
+              "cloneDir": "/workspace/source-repo",
+              "cloned": true,
+              "sourceDirBefore": "/workspace/source-repo",
+              "sourceDirAfter": "/workspace/source-repo",
+              "reason": "source_repo_cloned_and_selected"
+            },
+            "errors": []
+          },
+          {
+            "name": "RepositoryIndexAgent",
+            "status": "success",
+            "confidence": 0.95,
+            "metrics": {
+              "fileCount": 1740,
+              "byKind": {
+                "routes": 19,
+                "controllers": 6,
+                "services": 2,
+                "schemas": 6,
+                "dtos": 0,
+                "repositories": 0
+              },
+              "names": 1434
+            },
+            "errors": []
+          },
+          {
+            "name": "SourceDetectionAgent",
+            "status": "success",
+            "confidence": 0.95,
+            "metrics": {
+              "node": true,
+              "typescript": true,
+              "python": true,
+              "java": true,
+              "dotnet": true,
+              "frameworkHints": [
+                "zod"
+              ]
+            },
+            "errors": []
+          },
+          {
+            "name": "RouteDiscoveryAgent",
+            "status": "failed_open",
+            "confidence": 0.0,
+            "metrics": {
+              "routes": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "BodyDiscoveryAgent",
+            "status": "failed_open",
+            "confidence": 0.0,
+            "metrics": {
+              "detected": 0,
+              "fieldsKnown": 0,
+              "expected": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "ParamsDiscoveryAgent",
+            "status": "success",
+            "confidence": 0.9,
+            "metrics": {
+              "pathParams": 0,
+              "queryParams": 0,
+              "headers": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "ParamTypeDiscoveryAgent",
+            "status": "success",
+            "confidence": 0.85,
+            "metrics": {
+              "inferred": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "ValidationSchemaAgent",
+            "status": "success",
+            "confidence": 0.9,
+            "metrics": {
+              "schemas": 852
+            },
+            "errors": []
+          },
+          {
+            "name": "ImportGraphAgent",
+            "status": "success",
+            "confidence": 0.3,
+            "metrics": {
+              "imports": 0,
+              "resolved": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "ServiceGraphAgent",
+            "status": "success",
+            "confidence": 0.2,
+            "metrics": {
+              "edges": 0,
+              "resolved": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "ServiceBodyFieldAgent",
+            "status": "failed_open",
+            "confidence": 0.25,
+            "metrics": {
+              "patterns": 0,
+              "routes": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "DbWriteFieldAgent",
+            "status": "failed_open",
+            "confidence": 0.25,
+            "metrics": {
+              "patterns": 0,
+              "routes": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "ServiceBodyPropagationAgent",
+            "status": "failed_open",
+            "confidence": 0.3,
+            "metrics": {
+              "propagatedRoutes": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "InferredSchemaRegistryAgent",
+            "status": "failed_open",
+            "confidence": 0.2,
+            "metrics": {
+              "schemas": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "SchemaAttachmentAgent",
+            "status": "failed_open",
+            "confidence": 0.0,
+            "metrics": {
+              "declaredSchemaAttachments": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "RequiredFieldConfidenceAgent",
+            "status": "failed_open",
+            "confidence": 0.3,
+            "metrics": {
+              "enrichedRoutes": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "ResponseDiscoveryAgent",
+            "status": "success",
+            "confidence": 0.4,
+            "metrics": {
+              "routesWithResponseVars": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "ContractBuilderAgent",
+            "status": "success",
+            "confidence": 0.0,
+            "metrics": {
+              "contracts": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "RelationshipAgent",
+            "status": "success",
+            "confidence": 0.75,
+            "metrics": {
+              "sequence": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "TestGenerationAgent",
+            "status": "success",
+            "confidence": 0,
+            "metrics": {
+              "generated": 8,
+              "contracts": 0,
+              "negativeTests": 0,
+              "edgeTests": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "QualityGateAgent",
+            "status": "failed_open",
+            "confidence": 0.1,
+            "metrics": {
+              "score": 10.0,
+              "passed": false,
+              "summary": {
+                "apiContracts": 0,
+                "bodyExpected": 0,
+                "bodyDetected": 0,
+                "bodyFieldsKnown": 0,
+                "bodyDetectionRate": 0.0,
+                "bodyFieldKnownRate": 0.0,
+                "pathParamsDiscovered": 0,
+                "queryParamsDiscovered": 0,
+                "headersDiscovered": 0,
+                "serviceEdges": 0,
+                "schemasDiscovered": 852,
+                "inferredSchemas": 0,
+                "declaredSchemaAttachments": 0,
+                "inferredSchemaAttachments": 0,
+                "serviceBodyPatterns": 0,
+                "dbWritePatterns": 0,
+                "testsGenerated": true,
+                "negativeTestsGenerated": true,
+                "edgeTestsGenerated": true
+              }
+            },
+            "errors": []
+          },
+          {
+            "name": "AgentPerformanceEvaluatorAgent",
+            "status": "success",
+            "confidence": 0.95,
+            "metrics": {
+              "weakAgents": 6
+            },
+            "errors": []
+          },
+          {
+            "name": "SelfHealingLLMAdvisorAgent",
+            "status": "success",
+            "confidence": 0.9,
+            "metrics": {
+              "llmSkipped": false
+            },
+            "errors": []
+          },
+          {
+            "name": "SelfHealingCodeDeltaAgent",
+            "status": "success",
+            "confidence": 0.85,
+            "metrics": {
+              "generated": 0,
+              "blocked": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "PatchLibraryAgent",
+            "status": "success",
+            "confidence": 0.9,
+            "metrics": {
+              "applied": 0,
+              "blocked": 5
+            },
+            "errors": []
+          },
+          {
+            "name": "PatchEffectivenessAgent",
+            "status": "success",
+            "confidence": 0.9,
+            "metrics": {
+              "scoreDelta": 0.0,
+              "improved": true
+            },
+            "errors": []
+          },
+          {
+            "name": "ApiDocumentationAgent",
+            "status": "success",
+            "confidence": 0.0,
+            "metrics": {
+              "contractsDocumented": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "LLMGatewayAgent",
+            "status": "success",
+            "confidence": 0.9,
+            "metrics": {
+              "enabled": true,
+              "mode": "selective_fail_open",
+              "networkCallsExecuted": 0
+            },
+            "errors": []
+          },
+          {
+            "name": "ArtifactManifestAgent",
+            "status": "success",
+            "confidence": 0.95,
+            "metrics": {
+              "artifacts": 94
+            },
+            "errors": []
+          },
+          {
+            "name": "ResultsAnalyzerAgent",
+            "status": "success",
+            "confidence": 0.1,
+            "metrics": {
+              "score": 10.0,
+              "issues": 5,
+              "accepted": false
+            },
+            "errors": []
+          }
+        ],
+        "analysis": {
+          "accepted": false,
+          "score": 10.0,
+          "threshold": 90.0,
+          "issues": [
+            {
+              "rank": 1,
+              "key": "route_discovery",
+              "severity": "critical",
+              "message": "No API contracts discovered."
+            },
+            {
+              "rank": 2,
+              "key": "body_detection",
+              "severity": "high",
+              "message": "Body detection below 90%."
+            },
+            {
+              "rank": 3,
+              "key": "body_fields_known",
+              "severity": "medium",
+              "message": "Body field inference below 80%."
+            },
+            {
+              "rank": 4,
+              "key": "service_graph",
+              "severity": "high",
+              "message": "Service graph not connected."
+            },
+            {
+              "rank": 5,
+              "key": "schema_attachment",
+              "severity": "medium",
+              "message": "No inferred schema attachments."
+            }
+          ],
+          "nextRemediations": [
+            "enable_balanced_route_fallback_scan_all_js_ts",
+            "relax_body_presence_detection_and_service_arg_detection",
+            "enable_service_and_db_field_pattern_propagation",
+            "enable_import_resolution_and_call_argument_capture",
+            "enable_inferred_schema_registry"
+          ]
+        }
+      }
+    ],
+    "llmCalls": [],
+    "best": {
+      "iteration": 1,
+      "score": 10.0,
+      "summary": {
+        "apiContracts": 0,
+        "bodyExpected": 0,
+        "bodyDetected": 0,
+        "bodyFieldsKnown": 0,
+        "bodyDetectionRate": 0.0,
+        "bodyFieldKnownRate": 0.0,
+        "pathParamsDiscovered": 0,
+        "queryParamsDiscovered": 0,
+        "headersDiscovered": 0,
+        "serviceEdges": 0,
+        "schemasDiscovered": 852,
+        "inferredSchemas": 0,
+        "declaredSchemaAttachments": 0,
+        "inferredSchemaAttachments": 0,
+        "serviceBodyPatterns": 0,
+        "dbWritePatterns": 0,
+        "testsGenerated": true,
+        "negativeTestsGenerated": true,
+        "edgeTestsGenerated": true
+      }
+    }
+  }
+}

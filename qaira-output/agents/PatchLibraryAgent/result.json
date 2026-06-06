@@ -1,0 +1,188 @@
+{
+  "name": "PatchLibraryAgent",
+  "status": "success",
+  "confidence": 0.9,
+  "metrics": {
+    "applied": 0,
+    "blocked": 5
+  },
+  "outputs": {
+    "enabled": true,
+    "selected": [
+      {
+        "source": "deterministic_weak_agent_mapping",
+        "action": {
+          "action_id": "ROUTE_ENABLE_GLOBAL_JS_TS_SCAN",
+          "agent": "RouteDiscoveryAgent",
+          "description": "Scan all JS/TS files when route/controller hints miss routes.",
+          "risk": "low",
+          "config_path": [
+            "patch_runtime",
+            "route_discovery",
+            "global_scan"
+          ],
+          "value": true,
+          "expected_metric": "apiContracts"
+        },
+        "confidence": 0.85
+      },
+      {
+        "source": "deterministic_weak_agent_mapping",
+        "action": {
+          "action_id": "ROUTE_ENABLE_BALANCED_CALL_SCANNER",
+          "agent": "RouteDiscoveryAgent",
+          "description": "Use balanced parenthesis route-call scanner.",
+          "risk": "low",
+          "config_path": [
+            "patch_runtime",
+            "route_discovery",
+            "balanced_scanner"
+          ],
+          "value": true,
+          "expected_metric": "apiContracts"
+        },
+        "confidence": 0.85
+      },
+      {
+        "source": "deterministic_weak_agent_mapping",
+        "action": {
+          "action_id": "BODY_ADD_COMMON_ALIASES",
+          "agent": "BodyDiscoveryAgent",
+          "description": "Add common body aliases from pattern registry.",
+          "risk": "low",
+          "config_path": [
+            "patch_runtime",
+            "body_discovery",
+            "common_aliases"
+          ],
+          "value": true,
+          "expected_metric": "bodyDetected"
+        },
+        "confidence": 0.85
+      },
+      {
+        "source": "deterministic_weak_agent_mapping",
+        "action": {
+          "action_id": "BODY_ENABLE_SERVICE_ARG_BODY_DETECTION",
+          "agent": "BodyDiscoveryAgent",
+          "description": "Treat service call arguments containing req.body/body aliases as body evidence.",
+          "risk": "low",
+          "config_path": [
+            "patch_runtime",
+            "body_discovery",
+            "service_arg_body"
+          ],
+          "value": true,
+          "expected_metric": "bodyDetected"
+        },
+        "confidence": 0.85
+      },
+      {
+        "source": "deterministic_weak_agent_mapping",
+        "action": {
+          "action_id": "BODY_ENABLE_DESTRUCTURING_DETECTION",
+          "agent": "BodyDiscoveryAgent",
+          "description": "Detect const {x} = req.body / alias patterns.",
+          "risk": "low",
+          "config_path": [
+            "patch_runtime",
+            "body_discovery",
+            "destructuring"
+          ],
+          "value": true,
+          "expected_metric": "bodyFieldsKnown"
+        },
+        "confidence": 0.85
+      }
+    ],
+    "applied": [],
+    "blocked": [
+      {
+        "action": {
+          "action_id": "ROUTE_ENABLE_GLOBAL_JS_TS_SCAN",
+          "agent": "RouteDiscoveryAgent",
+          "description": "Scan all JS/TS files when route/controller hints miss routes.",
+          "risk": "low",
+          "config_path": [
+            "patch_runtime",
+            "route_discovery",
+            "global_scan"
+          ],
+          "value": true,
+          "expected_metric": "apiContracts"
+        },
+        "reason": "not_approved_by_config"
+      },
+      {
+        "action": {
+          "action_id": "ROUTE_ENABLE_BALANCED_CALL_SCANNER",
+          "agent": "RouteDiscoveryAgent",
+          "description": "Use balanced parenthesis route-call scanner.",
+          "risk": "low",
+          "config_path": [
+            "patch_runtime",
+            "route_discovery",
+            "balanced_scanner"
+          ],
+          "value": true,
+          "expected_metric": "apiContracts"
+        },
+        "reason": "not_approved_by_config"
+      },
+      {
+        "action": {
+          "action_id": "BODY_ADD_COMMON_ALIASES",
+          "agent": "BodyDiscoveryAgent",
+          "description": "Add common body aliases from pattern registry.",
+          "risk": "low",
+          "config_path": [
+            "patch_runtime",
+            "body_discovery",
+            "common_aliases"
+          ],
+          "value": true,
+          "expected_metric": "bodyDetected"
+        },
+        "reason": "not_approved_by_config"
+      },
+      {
+        "action": {
+          "action_id": "BODY_ENABLE_SERVICE_ARG_BODY_DETECTION",
+          "agent": "BodyDiscoveryAgent",
+          "description": "Treat service call arguments containing req.body/body aliases as body evidence.",
+          "risk": "low",
+          "config_path": [
+            "patch_runtime",
+            "body_discovery",
+            "service_arg_body"
+          ],
+          "value": true,
+          "expected_metric": "bodyDetected"
+        },
+        "reason": "not_approved_by_config"
+      },
+      {
+        "action": {
+          "action_id": "BODY_ENABLE_DESTRUCTURING_DETECTION",
+          "agent": "BodyDiscoveryAgent",
+          "description": "Detect const {x} = req.body / alias patterns.",
+          "risk": "low",
+          "config_path": [
+            "patch_runtime",
+            "body_discovery",
+            "destructuring"
+          ],
+          "value": true,
+          "expected_metric": "bodyFieldsKnown"
+        },
+        "reason": "not_approved_by_config"
+      }
+    ],
+    "beforeConfigSnapshotSaved": true,
+    "afterPatchRuntime": {},
+    "note": "Patches mutate runtime config/pattern behavior for next iteration. Arbitrary LLM code is not executed."
+  },
+  "errors": [],
+  "started_at": "2026-06-06T02:43:22.529068Z",
+  "ended_at": "2026-06-06T02:43:22.529081Z"
+}

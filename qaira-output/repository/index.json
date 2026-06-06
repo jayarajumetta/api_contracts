@@ -1,0 +1,12 @@
+{
+  "fileCount": 1740,
+  "byKind": {
+    "routes": 19,
+    "controllers": 6,
+    "services": 2,
+    "schemas": 6,
+    "dtos": 0,
+    "repositories": 0
+  },
+  "names": 1434
+}

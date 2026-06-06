@@ -1,0 +1,18 @@
+{
+  "name": "ParamsDiscoveryAgent",
+  "status": "success",
+  "confidence": 0.9,
+  "metrics": {
+    "pathParams": 0,
+    "queryParams": 0,
+    "headers": 0
+  },
+  "outputs": {
+    "pathParams": 0,
+    "queryParams": 0,
+    "headers": 0
+  },
+  "errors": [],
+  "started_at": "2026-06-06T02:43:18.749428Z",
+  "ended_at": "2026-06-06T02:43:18.749432Z"
+}

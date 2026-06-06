@@ -1,0 +1,9 @@
+{
+  "accepted": false,
+  "score": 10.0,
+  "suggestedAgentDeltas": [],
+  "llmEnabled": true,
+  "networkCallExecuted": false,
+  "error": "llm_failed_or_rate_limited",
+  "failOpen": true
+}

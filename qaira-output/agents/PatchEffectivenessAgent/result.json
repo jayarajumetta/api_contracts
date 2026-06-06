@@ -1,0 +1,43 @@
+{
+  "name": "PatchEffectivenessAgent",
+  "status": "success",
+  "confidence": 0.9,
+  "metrics": {
+    "scoreDelta": 0.0,
+    "improved": true
+  },
+  "outputs": {
+    "enoughIterations": true,
+    "previousIteration": 1,
+    "currentIteration": 2,
+    "previousScore": 10.0,
+    "currentScore": 10.0,
+    "scoreDelta": 0.0,
+    "improved": true,
+    "metricDelta": {
+      "apiContracts": 0,
+      "bodyExpected": 0,
+      "bodyDetected": 0,
+      "bodyFieldsKnown": 0,
+      "bodyDetectionRate": 0.0,
+      "bodyFieldKnownRate": 0.0,
+      "pathParamsDiscovered": 0,
+      "queryParamsDiscovered": 0,
+      "headersDiscovered": 0,
+      "serviceEdges": 0,
+      "schemasDiscovered": 0,
+      "inferredSchemas": 0,
+      "declaredSchemaAttachments": 0,
+      "inferredSchemaAttachments": 0,
+      "serviceBodyPatterns": 0,
+      "dbWritePatterns": 0,
+      "testsGenerated": 0,
+      "negativeTestsGenerated": 0,
+      "edgeTestsGenerated": 0
+    },
+    "rollbackRecommended": false
+  },
+  "errors": [],
+  "started_at": "2026-06-06T02:43:22.544876Z",
+  "ended_at": "2026-06-06T02:43:22.544896Z"
+}

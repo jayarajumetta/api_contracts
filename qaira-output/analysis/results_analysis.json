@@ -1,0 +1,74 @@
+{
+  "score": 10.0,
+  "threshold": 90.0,
+  "accepted": false,
+  "issues": [
+    {
+      "rank": 1,
+      "key": "route_discovery",
+      "severity": "critical",
+      "message": "No API contracts discovered."
+    },
+    {
+      "rank": 2,
+      "key": "body_detection",
+      "severity": "high",
+      "message": "Body detection below 90%."
+    },
+    {
+      "rank": 3,
+      "key": "body_fields_known",
+      "severity": "medium",
+      "message": "Body field inference below 80%."
+    },
+    {
+      "rank": 4,
+      "key": "service_graph",
+      "severity": "high",
+      "message": "Service graph not connected."
+    },
+    {
+      "rank": 5,
+      "key": "schema_attachment",
+      "severity": "medium",
+      "message": "No inferred schema attachments."
+    }
+  ],
+  "nextRemediations": [
+    "enable_balanced_route_fallback_scan_all_js_ts",
+    "relax_body_presence_detection_and_service_arg_detection",
+    "enable_service_and_db_field_pattern_propagation",
+    "enable_import_resolution_and_call_argument_capture",
+    "enable_inferred_schema_registry"
+  ],
+  "summary": {
+    "apiContracts": 0,
+    "bodyExpected": 0,
+    "bodyDetected": 0,
+    "bodyFieldsKnown": 0,
+    "bodyDetectionRate": 0.0,
+    "bodyFieldKnownRate": 0.0,
+    "pathParamsDiscovered": 0,
+    "queryParamsDiscovered": 0,
+    "headersDiscovered": 0,
+    "serviceEdges": 0,
+    "schemasDiscovered": 852,
+    "inferredSchemas": 0,
+    "declaredSchemaAttachments": 0,
+    "inferredSchemaAttachments": 0,
+    "serviceBodyPatterns": 0,
+    "dbWritePatterns": 0,
+    "testsGenerated": true,
+    "negativeTestsGenerated": true,
+    "edgeTestsGenerated": true
+  },
+  "reactSafety": {
+    "strictJsonTransport": true,
+    "malformedQuoteEscapeFailOpen": true
+  },
+  "llmReview": {
+    "networkCallExecuted": false,
+    "reason": "centralized_llm_review_only",
+    "reviewAgent": "IterationLLMReviewerAgent"
+  }
+}

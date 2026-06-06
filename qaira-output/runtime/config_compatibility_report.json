@@ -1,0 +1,11 @@
+{
+  "acceptedLegacySections": [
+    "agentic_runtime",
+    "git_push",
+    "llm",
+    "llm_invocation"
+  ],
+  "autoIterationSource": "auto_iteration_or_agentic_runtime",
+  "gitSource": "git_finalization_or_git_push",
+  "llmSource": "llm_review_or_llm"
+}
