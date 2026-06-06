@@ -1,81 +1,58 @@
-# QAira Semantic Compiler — Self-Healing Patch Library Runtime
+# QAira Semantic Compiler — Public Repo Trial Runtime
 
-This version implements the mature self-healing layer.
+Try QAira against a public GitHub repository without mounting source code or config.
 
-## What is new
-
-```text
-PatchLibrary
-PatchLibraryAgent
-PatchEffectivenessAgent
-AgentPerformanceEvaluatorAgent integration
-SelfHealingLLMAdvisorAgent integration
-SelfHealingCodeDeltaAgent integration
-```
-
-## How it self-heals
+## Required env vars
 
 ```text
-1. Agents run
-2. Quality + agent performance are scored
-3. Weak agents are identified
-4. LLM can suggest repo-specific deltas, but only once and only with compact context
-5. PatchLibrary maps weak agents / LLM deltas to approved deterministic patch actions
-6. Patch actions mutate runtime config/pattern registry, not arbitrary code
-7. Next iteration reruns agents with patched behavior
-8. Patch effectiveness is measured
-9. If quality is satisfied, artifacts/docs/tests are generated and pushed
+QAIRA_REPO_URL   Public Git repo URL to analyze
+OPENAI_API_KEY   OpenAI API key for one compact LLM advisory call
+GIT_TOKEN        GitHub token for push / PR
 ```
 
-## Why this is mature
-
-It does not blindly execute LLM-generated Python code.
-
-Instead:
+Optional:
 
 ```text
-LLM suggestion -> approved action id -> deterministic runtime patch -> rerun -> measure score
+QAIRA_REPO_BRANCH  branch/tag to clone
+GIT_USERNAME       defaults to x-access-token if omitted
 ```
 
-## Patch outputs
+## Flow
 
 ```text
-self_healing/patch_library_registry.json
-self_healing/patch_library_report.json
-self_healing/patch_effectiveness_report.json
-self_healing/pre_patch_config_snapshot.json
-self_healing/post_patch_effective_config.json
-codegen/agent_deltas/*.patch_plan.json
+SourceRepoCloneAgent clones QAIRA_REPO_URL into /workspace/source-repo
+The checkout becomes source dir
+Compiler generates contracts, docs, Postman tests, curl, data refs
+Self-healing/patch-library evaluates and plans safe improvements
+Generated artifacts are committed to develop
+PR is created to main when push succeeds
 ```
 
-## Build
+## Run with output in present directory
 
 ```bash
-docker build -t qaira/semantic-compiler:patch-library .
-```
+mkdir -p qaira-output qaira-learning
 
-## Run
-
-```bash
 docker run --rm \
   -e PYTHONUNBUFFERED=1 \
+  -e QAIRA_REPO_URL="https://github.com/<owner>/<repo>.git" \
   -e OPENAI_API_KEY="$OPENAI_API_KEY" \
-  -e GIT_USERNAME="$GIT_USERNAME" \
   -e GIT_TOKEN="$GIT_TOKEN" \
-  -v /Users/jayarajumetta/MJ/qaira:/repo:ro \
-  -v /Users/jayarajumetta/Downloads/volume/output:/output \
-  -v /Users/jayarajumetta/Downloads/volume/config.yaml:/config/config.yaml:ro \
-  -v /Users/jayarajumetta/Downloads/volume/learning:/learning \
-  qaira/semantic-compiler:patch-library
+  -v "$PWD/qaira-output:/output" \
+  -v "$PWD/qaira-learning:/learning" \
+  qaira/semantic-compiler:public-repo-trial
 ```
 
-## Important
+## Verify outputs
 
-For safety:
-
-```yaml
-patch_library:
-  allow_source_file_modification: false
+```text
+qaira-output/repo/source_repo_clone_report.json
+qaira-output/summary/scan_summary.json
+qaira-output/quality/quality_gate_report.json
+qaira-output/generated/openapi.json
+qaira-output/generated/postman_collection.json
+qaira-output/docs/API_REFERENCE.md
+qaira-output/git/finalization_report.json
 ```
 
-This can later be upgraded to deterministic source transformations only after patch actions are proven.
+If the public repo does not allow your token to push, the run still completes and writes Git diagnostics.

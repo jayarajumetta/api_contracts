@@ -7,6 +7,7 @@ from qaira_semantic_compiler.core.logger import Logger
 from qaira_semantic_compiler.core.runner import AgentRunner
 from qaira_semantic_compiler.core.iteration_context import IterationContextStore
 
+from qaira_semantic_compiler.agents.source_repo_clone_agent import SourceRepoCloneAgent
 from qaira_semantic_compiler.agents.repository_index_agent import RepositoryIndexAgent
 from qaira_semantic_compiler.agents.source_detection_agent import SourceDetectionAgent
 from qaira_semantic_compiler.agents.route_discovery_agent import RouteDiscoveryAgent
@@ -90,6 +91,7 @@ class Orchestrator:
 
     def discovery_agents(self):
         return [
+            SourceRepoCloneAgent,
             RepositoryIndexAgent,
             SourceDetectionAgent,
             RouteDiscoveryAgent,

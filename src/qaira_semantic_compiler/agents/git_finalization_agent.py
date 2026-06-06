@@ -75,7 +75,7 @@ class GitFinalizationAgent:
             self.finish(report)
             return AgentResult(self.name,"failed_open",0.25,report,report)
 
-        repo_url=cfg.get("repo_url","")
+        repo_url=cfg.get("repo_url","") or self.ctx.state.get("inputRepoUrl","")
         token=os.environ.get(cfg.get("token_env","GIT_TOKEN"),"")
         username=os.environ.get(cfg.get("username_env","GIT_USERNAME"),"")
 
@@ -129,7 +129,7 @@ class GitFinalizationAgent:
                 report["workBranchBase"]=base_branch
 
             copied=[]
-            for rel in cfg.get("copy_artifacts_to",["generated/","final/","summary/","quality/","analysis/","codegen/","docs/","self_healing/"]):
+            for rel in cfg.get("copy_artifacts_to",["generated/","final/","summary/","quality/","analysis/","codegen/","docs/","self_healing/","repo/"]):
                 src=self.ctx.output/rel
                 if src.exists():
                     dst=clone_dir/"qaira-generated"/rel
