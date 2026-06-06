@@ -1,8 +1,0 @@
-{
-  "mode": "safe_agent_specific_delta_generation",
-  "generatedPatchPlans": [],
-  "blockedDeltas": [],
-  "applied": [],
-  "applyGeneratedAgentCode": false,
-  "note": "Arbitrary LLM code is not directly applied. Patch plans are generated and committed for review unless deterministic patch library is added."
-}
